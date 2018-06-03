@@ -1,0 +1,30 @@
+.closeIcon {
+    color: red;
+    cursor: pointer;
+}
+.closeIcon:hover {
+    color: tomato;
+}
+
+.color-green{
+    color: green;
+}
+.color-green:hover{
+    cursor: pointer;
+    color: blue;
+}
+.box-border{
+    border-left: 1px solid rgb(233, 232, 232);
+    border-right: 1px solid rgb(233, 232, 232);
+    /* border-bottom: 2px solid gray; */
+}
+.ng-valid.ng-dirty.ng-touched{
+    border-color: blue;
+  }
+  .ng-dirty.ng-invalid.ng-touched {
+    border-color: red
+  }
+  
+  .ng-pristine.ng-invalid.ng-touched{
+    border-color: red;
+  }

@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-lg-push-2 col-lg-8 col-md-push-1 col-md-10 col-sm-12 col-xs-12">
+    <h4 class="text-center"><strong>ເມືອງໄຊທານີ</strong></h4>
+    <div class="box box-success">
+      <div class="box-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="text-right" *ngIf="!checkInsert">
+                <a href="javascript:event" class="color-green" (click)="checkInsert=true"><i class="fa fa-plus"></i> ເພີ່ມບ້ານໃໝ່</a>
+              </div>
+              <form novalidate role="form" [formGroup]="villageForm" *ngIf="checkInsert" (submit)="saveVillage()">
+                <table class="table table-condensed">
+                  <tr>
+                    <th>ຊື່ບ້ານ</th>
+                    <th style="width: 40px"></th>
+                    <th style="width: 40px"></th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="att_type_name" formControlName="att_village" placeholder="ຊື່ບ້ານ">
+                      </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="cancelSave()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" *ngFor="let village of villages; let i=index">
+              <table class="table table-condensed row-border">
+                <tbody>
+                    <tr>
+                        <td>
+                          <p *ngIf="!checkVillageUpdate[i]">{{village.name}}</p>
+                          <div class="form-group" *ngIf="checkVillageUpdate[i]">
+                            <input type="text" class="form-control input-sm" id="add_village_update" [(ngModel)]="village.name" placeholder="ຊື່ບ້ານ">
+                          </div>
+                        </td>
+                        <td style="width: 5px; text-align: right; ">
+                            <i class="fa fa-edit editIcon" *ngIf="!checkVillageUpdate[i]" (click)="checkVillageUpdate[i]=true"></i>
+                            <button type="button" class="btn btn-primary btn-sm" *ngIf="checkVillageUpdate[i]"><i class="fa fa-save"></i></button>
+                        </td>
+                        <td style="width: 5px;">
+                            <i class="fa fa-minus closeIcon" *ngIf="!checkVillageUpdate[i]"></i>
+                            <button type="button" class="btn btn-danger btn-sm" *ngIf="checkVillageUpdate[i]" (click)="cancelUpdate(i)"><i class="fa fa-close"></i></button>
+                        </td>
+                      </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

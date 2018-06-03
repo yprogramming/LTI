@@ -1,0 +1,32 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+             [speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+             [color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      <a [routerLink]="['/dashboard']">Dashboard</a>
+      <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a routerLink=""><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li class="active"> Restaurant</li>
+    </ol>
+  </section>
+  <!-- Content Header (Page header) -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+        <ul class="nav navbar-nav">
+          <li><a [routerLink]="['/dashboard','restaurant']"><i class="fa fa-cutlery"></i> ຮ້ານອາຫານ</a></li>
+          <li><a [routerLink]="['insert']"><i class="fa fa-plus"></i> ເພີ່ມຮ້ານອາຫານ</a></li>
+          <li><a [routerLink]="['type']"><i class="fa fa-edit"></i> ປະເພດຮ້ານອາຫານ</a></li>
+          <li><a [routerLink]="['food','type']"><i class="fa fa-edit"></i> ປະເພດອາຫານ</a></li>
+        </ul>
+    </div>
+    <router-outlet></router-outlet>
+  </section>
+  <!-- Main content -->
+</div>
+  

@@ -1,0 +1,66 @@
+<aside class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <a [routerLink]="['/dashboard','profile',en_user_id(user['user_id'])]">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <h4><strong>{{user.user_name}}</strong></h4>
+        </div>
+      </div>
+    </a>
+    <!-- search form -->
+    <!-- <form class="sidebar-form" #fs="ngForm" (submit)="Submit(fs)">
+      <div class="input-group">
+        <input type="text" required name="q" class="form-control" ngModel placeholder="Search...">
+        <span class="input-group-btn">
+                <button type="submit" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+      </div>
+    </form> -->
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li class="header">Menu</li>
+      <li class="treeview">
+        <a href="#">
+            <i class="fa fa-edit"></i> <span>ຈັດການຂໍ້ມູນ</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','address']"><i class="fa fa-circle-o"></i> ບ້ານ, ເມືອງ, ແຂວງ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','attraction']"><i class="fa fa-circle-o"></i> ສະຖານທີ່ທ່ອງທ່ຽວ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','restaurant']"><i class="fa fa-circle-o"></i> ຮ້ານອາຫານ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','shelter']"><i class="fa fa-circle-o"></i> ທີ່ພັກອາໄສ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','transportation']"><i class="fa fa-circle-o"></i> ສະຖານີຂົນສົ່ງໂດຍສານ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','company']"><i class="fa fa-circle-o"></i> ບໍລິສັດນຳທ່ຽວ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','another']"><i class="fa fa-circle-o"></i> ສະຖານທີ່ອື່ນໆ</a></li>
+          <li routerLinkActive="active" *ngIf="checkUserPms()"><a [routerLink]="['/dashboard','user']"><i class="fa fa-circle-o"></i> ຂໍ້ມູນຜູ້ໃຊ້</a></li>
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
+            <i class="fa fa-table"></i> <span>ລາຍງານ</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','attraction','all']"><i class="fa fa-circle-o"></i> ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','attraction','view']"><i class="fa fa-circle-o"></i> ຍອດເຂົ້າເບີ່ງສະຖານທີ່ທ່ອງທ່ຽວ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','restaurant','view']"><i class="fa fa-circle-o"></i> ຍອດເຂົ້າເບີ່ງຮ້ານອາຫານ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','shelter','view']"><i class="fa fa-circle-o"></i> ຍອດເຂົ້າເບີ່ງສະຖານທີ່ພັກອາໄສ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','transportation','view']"><i class="fa fa-circle-o"></i> ຍອດເຂົ້າເບີ່ງສະຖານີຂົນສົ່ງໂດຍສານ</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/dashboard','report','company','view']"><i class="fa fa-circle-o"></i> ຍອດເຂົ້າເບີ່ງບໍລິສັດນຳທ່ຽວ</a></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,14 @@
+.closeIcon {
+    color: red;
+    cursor: pointer;
+}
+.closeIcon:hover {
+    color: tomato;
+}
+.editIcon{
+    font-size: 16px;
+    cursor: pointer;
+}
+.editIcon:hover{
+    color: blue;
+}

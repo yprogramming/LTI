@@ -1,0 +1,27 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      <a [routerLink]="['/dashboard']">Dashboard</a>
+      <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a [routerLink]="['/dashboard']"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li class="active">Another</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+      <div class="row">
+          <ul class="nav navbar-nav">
+            <li><a [routerLink]="['/dashboard','another']"><i class="fa fa-transgender"></i> ສະຖານທີ່ອື່ນໆ</a></li>
+            <li><a [routerLink]="['insert']"><i class="fa fa-plus"></i> ເພີ່ມສະຖານທີ່ອື່ນ</a></li>
+            <li><a [routerLink]="['internet']"><i class="fa fa-phone-square"></i> ສູນອິນເຕີເນັດ</a></li>
+            <li><a [routerLink]="['internet','insert']"><i class="fa fa-plus"></i> ເພີ່ມສູນອິນເຕີເນັດ</a></li>
+          </ul>
+      </div>
+      <router-outlet></router-outlet>
+    </section>
+    <!-- Main content -->
+</div>

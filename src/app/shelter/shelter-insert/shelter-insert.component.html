@@ -1,0 +1,390 @@
+
+<div class="row">
+  <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
+    <h2 class="text-center"><strong>ເພີ່ມສະຖານທີ່ພັກອາໄສໃຫມ່</strong></h2>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+          <p class="box-title">ກະລຸນາເພີ່ມຂໍ້ມູນຂອງສະຖານທີ່ພັກອາໃສໃຫ້ຄົບຖ້ວນ ແລະ ຖືກຕ້ອງ</p>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate role="form" [formGroup]="shelterForm" (ngSubmit)="saveShelter()">
+          <div class="box-body">
+            <!-- Attraction row -->
+            <div class="row">
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <label>ຊື່ສະຖານທີ່ພັກອາໄສ</label>
+                    <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກອາໄສ">
+                  </div>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="form-group" style="margin-top: 5px;">
+                  <span>ປະເພດສະຖານທີ່ພັກອາໄສ</span>
+                  <select class="form-control select2" id="shelt_type" formControlName="shelt_type" style="width: 100%;">
+                    <option value="A" selected="selected">ປະເພດ A</option>
+                    <option value="B">ປະເພດ B</option>
+                    <option value="C">ປະເພດ C</option>
+                    <option value="D">ປະເພດ D</option>
+                    <option value="E">ປະເພດ E</option>
+                    <option value="F">ປະເພດ F</option>
+                    <option value="G">ປະເພດ G</option>
+                  </select>
+                  </div>
+              </div>
+            </div>
+            <!-- Attraction row -->
+            <!-- Address row -->
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <h5><strong>ທີ່ຢູ່</strong></h5>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ແຂວງ</span>
+                    <select class="form-control select2" id="shelt_province" formControlName="shelt_province" style="width: 100%;">
+                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
+                      <option value="B">ວຽງຈັນ</option>
+                      <option value="C">ຊຽງຂວາງ</option>
+                      <option value="D">ໄຊຍະບູລີ</option>
+                      <option value="E">ຄຳມ່ວນ</option>
+                      <option value="F">ຜົ້ງສາລີ</option>
+                      <option value="G">ຈຳປາສັກ</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ເມືອງ</span>
+                    <select class="form-control select2" id="shelt_district" formControlName="shelt_district" style="width: 100%;">
+                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
+                      <option value="B">ໄຊທານີ</option>
+                      <option value="C">ສີໂຄດຕະບອງ</option>
+                      <option value="D">ໄກສອນ</option>
+                      <option value="E">A</option>
+                      <option value="F">B</option>
+                      <option value="G">C</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <span>ບ້ານ</span>
+                  <input 
+                        type="text" 
+                        class="form-control" 
+                        id="shelt_village" 
+                        ngui-auto-complete
+                        [source]="villages"
+                        z-index="4"
+                        formControlName="shelt_village" 
+                        placeholder="ບ້ານ">
+                </div>
+              </div>
+            </div>
+            <!-- Address row -->
+            
+            <!-- Map row -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ຈຸດທີ່ຕັ້ງໃນແຜນທີ່</strong></h5>
+                <div class="map">
+                  <agm-map 
+                    [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="true"
+                    [zoomControl]="true">
+                    
+                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+                        [radius]="5000"
+                        [fillColor]="'red'"
+                        [circleDraggable]="true"
+                        [editable]="true">
+                    </agm-circle>
+
+                  </agm-map>
+                </div>
+                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                  <span>ລັດຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly formControlName="shelt_lat" id="shelt_lat" placeholder="ລັດຕິຈຸດ">
+                </div>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                    <span>ລອງຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly formControlName="shelt_long" id="shelt_long" placeholder="ລອງຕິຈຸດ">
+                </div>
+              </div>
+            </div>
+            <!-- Map row -->
+            <!-- Textarea row -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <label>ລາຍລະອຽດ</label>
+                  <textarea class="textarea" placeholder="ລາຍລະອຽດ" formControlName="shelt_detail"
+                  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+              </div>
+            </div>
+            <!-- Textarea row -->
+            <!-- Contact -->
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <h5><strong>ຂໍ້ມູນຕິດຕໍ່</strong></h5>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <span>ເບີໂທ</span>
+                    <input type="text" class="form-control"  id="shelt_tel" formControlName="shelt_tel" placeholder="ເບີໂທຕິດຕໍ່">
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <span>ອີເມວ</span>
+                    <input type="email" class="form-control"  id="shelt_email" formControlName="shelt_email" placeholder="ອີເມວຕິດຕໍ່">
+                  </div>
+                </div>
+              </div>
+              <!-- Contact -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ສື່ອອນໄລຕ່າງໆ</strong></h5>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <table class="table table-condensed" formArrayName="socials" *ngIf="socialLength()">
+                  <tr>
+                    <th style="width: 10px">ລຳດັບ</th>
+                    <th>ຊື່</th>
+                    <th>URL</th>
+                    <th style="width: 40px">ລົບ</th>
+                  </tr>
+                  <tr *ngFor="let social of shelterForm.get('socials').controls; let i=index"
+                      [formGroup]="social">
+                    <td>{{i + 1}}</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" id="shelt_social_name" formControlName="shelt_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                        </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                          <input type="text" class="form-control input-sm" id="shelt_social_url" formControlName="shelt_social_url" placeholder="URL">
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-lg-12 col-xs-12 text-right">
+                  <button type="button" class="btn btn-success btn-sm" (click)="addNewSocial()"><i class="fa fa-plus"></i> ເພີ່ມສື່</button>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <div class="form-group">
+                  <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <input type="file"  id="shelt_images" (change)="fileChangeListener($event, null)">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of shelterForm.value['images']; let j=index">
+                <div class="small-box">
+                  <div class="box-header">
+                    <p><strong>ຮູບທີ່ {{j + 1}}</strong></p>
+                    <div class="box-tools"><i class="fa fa-close closeIcon" (click)="shelterForm.value['images'].splice(j, 1);"></i></div>
+                  </div>
+                  <div class="inner">
+                      <img [src]="image" alt="image {{j + 1}}">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <div class="form-group">
+                  <span>ວີດີໂອ URL</span>
+                  <input type="text" class="form-control" id="shelt_video" formControlName="shelt_video" placeholder="ລິ້ງວີດີໂອຈາກ Youtube ຫຼື ອື່ນໆ">
+                </div>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                            frameborder="0" allowfullscreen></iframe>
+                  </div>
+              </div>
+            </div>
+            <!-- Room type price -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <hr/>
+                <!-- <h3><strong>ເມນູອາຫານທັງໝົດ</strong></h3> -->
+                <div class="box">
+                    <div class="box-header">
+                      <h3 class="text-center"><strong>ຫ້ອງແບບຕ່າງໆ</strong></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        
+                      <div class="row" formArrayName="rooms">
+                          <div class="col-lg-12 col-xs-12" *ngFor="let room of getRoomControls(); let j=index"
+                              [formGroup]="room">
+                              <div class="box box-primary">
+                                <div class="box-header with-border">
+                                  <p class="box-title"><strong>ຫ້ອງແບບທີ່ {{j + 1}}</strong></p>
+                                  <div class="box-tools">
+                                      <button type="button" class="btn btn-danger btn-sm" (click)="removeRoomStyle(j)"><i class="fa fa-minus"></i></button>
+                                  </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                  <div class="row">
+                                    <div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <span>ແບບຫ້ອງ</span>
+                                          <input type="text" class="form-control input-sm" id="room_style" formControlName="room_style" placeholder="ແບບຫ້ອງ">
+                                        </div>
+                                        <div class="form-group">
+                                          <span>ລາຄາ</span>
+                                          <input type="text" class="form-control input-sm" id="room_price" formControlName="room_price" placeholder="ລາຄາ">
+                                        </div>
+                                        <div class="form-group">
+                                          <span for="room_images">ເລືອກຮູບ</span>
+                                          <input type="file"  id="room_image" (change)="fileChangeListener($event, j)">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-6 col-xs-12" *ngIf="room.get('room_image').value">
+                                        <div class="small-box">
+                                            <div class="box-header">
+                                              <div class="box-tools"><i class="fa fa-close closeIcon" (click)="room.get('room_image').setValue(null)"></i></div>
+                                            </div>
+                                            <div class="inner">
+                                                <img [src]="room.get('room_image').value" alt="image {{i + 1}}">
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-6 col-xs-12" *ngIf="!room.get('room_image').value">
+                                        <img src="http://placehold.it/150x100" alt="...">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="text-right">
+                      <button type="button" class="btn btn-success btn-sm" style="margin-bottom: 5px; margin-right: 5px;" (click)="addNewRoomStyle()"><i class="fa fa-plus"></i> ເພີ່ມ</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <!-- Room type price -->
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-right">
+            <button type="reset" class="btn btn-danger"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+<div class="image-cropper-view" *ngIf="cropImageChecked">
+  <div class="text-center">
+    <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+  </div>
+  <div class="text-center">
+    <label style="width: 800px;">
+      <div class="text-right">
+        <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+        <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-check"></i> ຕົກລົງ</button>
+      </div>
+    </label>
+  </div>
+</div>
+
+
+<!-- Upload image dialog *ngIf="uploadImageChecked" -->
+<div class="image-upload" *ngIf="uploadImageChecked">
+  <div class="row">
+    <div class="col-lg-push-2 col-lg-8 col-md-push-2 col-md-8 col-sm-push-1 col-sm-10 col-xs-push-1 col-xs-10">
+      <div class="box box-widget">
+        <div class="box-header">
+            <h4><span>ອັບໂຫຼດຮູບ...</span> <strong>{{imageIndexUpload}}</strong>/<strong>{{imageLengthUpload}}</strong> <strong>ຮູບ</strong></h4>
+        </div>
+        <div class="box-body upload-scrollbar">
+          <div class="row">
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let image of shelterForm.value['images']; let i=index">
+              <div class="box box-widget">
+                <div class="box-body">
+                  <div class="clearfix">
+                    <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+                    <small class="pull-right">{{uploadPercentShelter[i] | number:'1.0-0'}}%</small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercentShelter[i]+'%'}"></div>
+                  </div>
+                  <img [src]="image" alt="image {{i}}">
+                </div>
+              </div>
+            </div>
+
+            <span *ngFor="let room of shelterForm.value['rooms']; let j=index">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngIf="room.room_image">
+                <div class="box box-widget">
+                  <div class="box-body">
+                    <div class="clearfix">
+                      <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+                      <small class="pull-right">{{uploadPercentRoom[j] | number:'1.0-0'}}%</small>
+                    </div>
+                    <div class="progress xs">
+                      <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercentRoom[j]+'%'}"></div>
+                    </div>
+                    <img [src]="room.room_image" alt="image {{j}}">
+                  </div>
+                </div>
+              </div>
+            </span>
+
+          </div>
+        </div>
+        <div class="box-footer">
+          <h4 class="text-center help-text"><strong>{{imageUploadMessage}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Upload image dialog -->
+
+<!-- Saving icon -->
+  <div class="save-box" *ngIf="savingChecked">
+    <div class="box-revers-background"></div>
+    <div class="box box-widget bg-blue save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-save"></i>
+          <strong>ກຳລັງບັນທືກ ...</strong>
+          <loaders-css [loader]="'ball-pulse'" [loaderClass]="'my-loader'"></loaders-css>
+      </div>
+    </div>
+  </div>
+<!-- Saving icon -->
+
+<!-- Saved icon -->
+<div class="save-box" *ngIf="savedChecked">
+    <div class="box-revers-background"></div>
+  <div class="box box-widget bg-green save-detail">
+    <div class="box-body text-center">
+        <i class="fa fa-check"></i>
+        <strong>ບັນທືກແລ້ວ</strong>
+    </div>
+  </div>
+</div>
+<!-- Saved icon -->

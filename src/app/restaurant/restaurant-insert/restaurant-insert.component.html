@@ -1,0 +1,394 @@
+
+<div class="row">
+  <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
+    <h2 class="text-center"><strong>ເພີ່ມຮ້ານອາຫານໃຫມ່</strong></h2>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+          <p class="box-title">ກະລຸນາເພີ່ມຂໍ້ມູນຮ້ານອາຫານໃຫ້ຄົບຖ້ວນ ແລະ ຖືກຕ້ອງ</p>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form role="form" [formGroup]="restaurantForm" (ngSubmit)="saveRestaurant()">
+          <div class="box-body">
+            <div class="row">
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <label>ຊື່ຮ້ານອາຫານ</label>
+                    <input type="text" class="form-control" id="res_name" formControlName="res_name" placeholder="ຊື່ຮ້ານອາຫານ">
+                  </div>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="form-group" style="margin-top: 5px;">
+                  <span>ປະເພດຮ້ານອາຫານ</span>
+                  <select class="form-control select2" id="res_type" formControlName="res_type" style="width: 100%;">
+                    <option value="A" selected="selected">ປະເພດ A</option>
+                    <option value="B">ປະເພດ B</option>
+                    <option value="C">ປະເພດ C</option>
+                    <option value="D">ປະເພດ D</option>
+                    <option value="E">ປະເພດ E</option>
+                    <option value="F">ປະເພດ F</option>
+                    <option value="G">ປະເພດ G</option>
+                  </select>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                  <h5><strong>ທີ່ຢູ່</strong></h5>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ແຂວງ</span>
+                    <select class="form-control select2" id="res_province" formControlName="res_province" style="width: 100%;">
+                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
+                      <option value="B">ວຽງຈັນ</option>
+                      <option value="C">ຊຽງຂວາງ</option>
+                      <option value="D">ໄຊຍະບູລີ</option>
+                      <option value="E">ຄຳມ່ວນ</option>
+                      <option value="F">ຜົ້ງສາລີ</option>
+                      <option value="G">ຈຳປາສັກ</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ເມືອງ</span>
+                    <select class="form-control select2" id="res_district" formControlName="res_district" style="width: 100%;">
+                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
+                      <option value="B">ໄຊທານີ</option>
+                      <option value="C">ສີໂຄດຕະບອງ</option>
+                      <option value="D">ໄກສອນ</option>
+                      <option value="E">A</option>
+                      <option value="F">B</option>
+                      <option value="G">C</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <span>ບ້ານ</span>
+                  <input 
+                        type="text" 
+                        class="form-control" 
+                        id="res_village" 
+                        ngui-auto-complete
+                        [source]="villages"
+                        z-index="4"
+                        formControlName="res_village" 
+                        placeholder="ບ້ານ">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ຈຸດທີ່ຕັ້ງໃນແຜນທີ່</strong></h5>
+                <div class="map">
+                  <agm-map 
+                    [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="true"
+                    [zoomControl]="true">
+                    
+                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+                        [radius]="5000"
+                        [fillColor]="'red'"
+                        [circleDraggable]="true"
+                        [editable]="true">
+                    </agm-circle>
+
+                  </agm-map>
+                </div>
+                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                  <span>ລັດຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly formControlName="res_lat" id="res_lat" placeholder="ລັດຕິຈຸດ">
+                </div>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                    <span>ລອງຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly id="res_long" formControlName="res_long" placeholder="ລອງຕິຈຸດ">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <label>ລາຍລະອຽດ</label>
+                  <textarea class="textarea" formControlName="res_detail" placeholder="ລາຍລະອຽດ"
+                  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+              </div>
+            </div>
+            <!-- Contact -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <h5><strong>ຂໍ້ມູນຕິດຕໍ່</strong></h5>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <span>ເບີໂທ</span>
+                  <input type="text" class="form-control"  id="res_tel" formControlName="res_tel" placeholder="ເບີໂທຕິດຕໍ່">
+                </div>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <span>ອີເມວ</span>
+                  <input type="email" class="form-control"  id="res_email" formControlName="res_email" placeholder="ອີເມວຕິດຕໍ່">
+                </div>
+              </div>
+            </div>
+            <!-- Contact -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ສື່ອອນໄລຕ່າງໆ</strong></h5>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <table class="table table-condensed" formArrayName="socials" *ngIf="socialLength()">
+                  <tr>
+                    <th style="width: 10px">ລຳດັບ</th>
+                    <th>ຊື່</th>
+                    <th>URL</th>
+                    <th style="width: 40px">ລົບ</th>
+                  </tr>
+                  <tr *ngFor="let social of restaurantForm.get('socials').controls; let i=index"
+                      [formGroup]="social">
+                    <td>{{i + 1}}</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" id="res_social_name" formControlName="res_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                        </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                          <input type="text" class="form-control input-sm" id="res_social_url" formControlName="res_social_url" placeholder="URL">
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-lg-12 col-xs-12 text-right">
+                  <button type="button" class="btn btn-success btn-sm" (click)="addNewSocial()"><i class="fa fa-plus"></i> ເພີ່ມສື່</button>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <div class="form-group">
+                  <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <input type="file"  id="res_images" (change)="fileChangeListener($event, null)">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of restaurantForm.value['images']; let i=index">
+                  <div class="small-box">
+                    <div class="box-header">
+                      <p><strong>ຮູບທີ່ {{i + 1}}</strong></p>
+                      <div class="box-tools"><i class="fa fa-close closeIcon" (click)="restaurantForm.value['images'].splice(index, 1);"></i></div>
+                    </div>
+                    <div class="inner">
+                        <img [src]="image" alt="image {{i + 1}}">
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-lg-12 col-xs-12">
+              <div class="form-group">
+                <span>ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="res_video" formControlName="res_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+              </div>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+              <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                          frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <hr/>
+                <!-- <h3><strong>ເມນູອາຫານທັງໝົດ</strong></h3> -->
+                <div class="box">
+                    <div class="box-header">
+                      <h3 class="text-center"><strong>ເມນູອາຫານທັງໝົດ</strong></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        
+                      <div class="row" formArrayName="foods">
+                          <div class="col-lg-12 col-xs-12" *ngFor="let food of getFoodControls(); let i=index"
+                              [formGroup]="food">
+                              <div class="box box-primary">
+                                <div class="box-header with-border">
+                                  <h5 class="box-title"><strong>ເມນູທີ {{i + 1}}</strong></h5>
+                                  <div class="box-tools">
+                                      <button type="button" class="btn btn-danger btn-sm" (click)="removeFoodMenu(i)"><i class="fa fa-minus"></i></button>
+                                  </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                  <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-xs-12">
+                                        <div class="form-group">
+                                            <span>ຊື່ເມນູອາຫານ</span>
+                                            <input type="text" class="form-control input-sm" id="food_name" formControlName="food_name" placeholder="ຊື່ຮ້ານອາຫານ">
+                                          </div>
+                                          <div class="form-group">
+                                            <span>ປະເພດອາຫານ</span>
+                                            <select class="form-control select2 input-sm" id="food_type" formControlName="food_type" style="width: 100%;">
+                                              <option value="A" selected="selected">ປະເພດ A</option>
+                                              <option value="B">ປະເພດ B</option>
+                                              <option value="C">ປະເພດ C</option>
+                                              <option value="D">ປະເພດ D</option>
+                                              <option value="E">ປະເພດ E</option>
+                                              <option value="F">ປະເພດ F</option>
+                                              <option value="G">ປະເພດ G</option>
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <span>ລາຄາ</span>
+                                            <input type="number" class="form-control input-sm" id="food_price" formControlName="food_price" placeholder="ລາຄາ">
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="res_images">ເລືອກຮູບ</label>
+                                            <input type="file"  id="food_images" (change)="fileChangeListener($event, i)">
+                                          </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-xs-12" *ngIf="food.get('image').value">
+                                        <div class="small-box">
+                                            <div class="box-header">
+                                              <div class="box-title"><strong>ຮູບ</strong></div>
+                                              <div class="box-tools"><i class="fa fa-close closeIcon" (click)="food.get('image').setValue(null)"></i></div>
+                                            </div>
+                                            <div class="inner">
+                                                <img [src]="food.get('image').value" alt="image {{i + 1}}">
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-xs-12" *ngIf="!food.get('image').value">
+                                        <img src="http://placehold.it/150x100" alt="...">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="text-right">
+                      <button type="button" class="btn btn-success btn-sm" style="margin-bottom: 5px; margin-right: 5px;" (click)="addNewFoodMenu()"><i class="fa fa-plus"></i> ເພີ່ມເມນູ</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-right">
+            <button type="reset" class="btn btn-danger"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+<!-- Crop image view -->
+<div class="image-cropper-view" *ngIf="cropImageChecked">
+  <div class="text-center">
+    <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+  </div>
+  <div class="text-center">
+    <label style="width: 800px;">
+      <div class="text-right">
+        <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+        <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-check"></i> ຕົກລົງ</button>
+      </div>
+    </label>
+  </div>
+</div>
+<!-- Crop image view -->
+
+
+  <!-- Upload image dialog *ngIf="uploadImageChecked" -->
+  <div class="image-upload" *ngIf="uploadImageChecked">
+    <div class="row">
+      <div class="col-lg-push-2 col-lg-8 col-md-push-2 col-md-8 col-sm-push-1 col-sm-10 col-xs-push-1 col-xs-10">
+        <div class="box box-widget">
+          <div class="box-header">
+              <h4><span>ອັບໂຫຼດຮູບ...</span> <strong>{{imageIndexUpload}}</strong>/<strong>{{imageLengthUpload}}</strong> <strong>ຮູບ</strong></h4>
+          </div>
+          <div class="box-body upload-scrollbar">
+            <div class="row">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let image of restaurantForm.value['images']; let i=index">
+                <div class="box box-widget">
+                  <div class="box-body">
+                    <div class="clearfix">
+                      <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+                      <small class="pull-right">{{uploadPercentRestaurant[i] | number:'1.0-0'}}%</small>
+                    </div>
+                    <div class="progress xs">
+                      <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercentRestaurant[i]+'%'}"></div>
+                    </div>
+                    <img [src]="image" alt="image {{i}}">
+                  </div>
+                </div>
+              </div>
+
+              <span *ngFor="let food of restaurantForm.value['foods']; let j=index">
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6"  *ngIf="food.image">
+                  <div class="box box-widget">
+                    <div class="box-body">
+                      <div class="clearfix">
+                        <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+                        <small class="pull-right">{{uploadPercentFood[j] | number:'1.0-0'}}%</small>
+                      </div>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercentFood[j]+'%'}"></div>
+                      </div>
+                      <img [src]="food.image" alt="image {{j}}">
+                    </div>
+                  </div>
+                </div>
+              </span>
+
+            </div>
+          </div>
+          <div class="box-footer">
+            <h4 class="text-center help-text"><strong>{{imageUploadMessage}}</strong></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Upload image dialog -->
+
+  <!-- Saving icon -->
+    <div class="save-box" *ngIf="savingChecked">
+      <div class="box-revers-background"></div>
+      <div class="box box-widget bg-blue save-detail">
+        <div class="box-body text-center">
+            <i class="fa fa-save"></i>
+            <strong>ກຳລັງບັນທືກ</strong>
+            <loaders-css [loader]="'ball-pulse'" [loaderClass]="'my-loader'"></loaders-css>
+        </div>
+      </div>
+    </div>
+  <!-- Saving icon -->
+
+  <!-- Saved icon -->
+  <div class="save-box" *ngIf="savedChecked">
+      <div class="box-revers-background"></div>
+    <div class="box box-widget bg-green save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-check"></i>
+          <strong>ບັນທືກແລ້ວ</strong>
+      </div>
+    </div>
+  </div>
+  <!-- Saved icon -->

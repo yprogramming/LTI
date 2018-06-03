@@ -1,0 +1,101 @@
+
+<div class="row">
+    <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
+      <h2 class="text-center"><strong>ປະເພດສະຖານີຂົນສົ່ງໂດຍສານ</strong></h2>
+      <div class="box box-primary">
+          <div class="box-header with-border">
+            <p class="box-title"><strong>ເພີ່ມປະເພດສະຖາຂົນສົ່ງໂດຍສານໃໝ່</strong></p>
+          </div>
+          <!-- /.box-header -->
+          <!-- form start -->
+          <form novalidate role="form" [formGroup]="transportationTypeForm" (ngSubmit)="saveTransportationType()">
+            <div class="box-body">
+              <table class="table table-condensed">
+                <tr>
+                  <th>ປະເພດສະຖານີຂົນສົ່ງໂດຍສານ</th>
+                  <th style="width: 40px"></th>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="tran_type_name" formControlName="tran_type_name" placeholder="ປະເພດສະຖານີຂົນສົ່ງໂດຍສານ">
+                    </div>
+                  </td>
+                  <td>
+                      <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </form>
+        </div>
+  
+        <div class="box">
+          <div class="box-header">
+            <p class="box-title"><strong>ປະເພດສະຖານີຂົນສົ່ງໂດຍສານທັງໝົດ</strong></p>
+          </div>
+          <div class="box-body">
+              <table class="table table-condensed">
+                  <tr>
+                    <th style="width: 60px">ລຳດັບ</th>
+                    <th>ປະເພດສະຖານີຂົນສົ່ງໂດຍສານ</th>
+                    <th style="width: 40px"></th>
+                    <th style="width: 40px"></th>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <p *ngIf="!checkVisible">ທາງບົກ</p>
+                      <div class="form-group" *ngIf="checkVisible">
+                        <input type="text" class="form-control" id="tra_type_update" placeholder="ປະເພດສະຖານທີພັກອາໄສ">
+                      </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>
+                        <p *ngIf="!checkVisible">ທາງນ້ຳ</p>
+                    <div class="form-group" *ngIf="checkVisible">
+                        <input type="text" class="form-control" id="tra_type_update" placeholder="ປະເພດສະຖານທີພັກອາໄສ">
+                      </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>
+                        <p *ngIf="!checkVisible">ທາງອາກາດ</p>
+                    <div class="form-group" *ngIf="checkVisible">
+                        <input type="text" class="form-control" id="tra_type_update" placeholder="ປະເພດຮ້ານອາຫານ">
+                      </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                    </td>
+                  </tr>
+                </table>
+          </div>
+        </div>
+    </div>
+  </div>
+  

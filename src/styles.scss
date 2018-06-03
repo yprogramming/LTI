@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@ngx-gallery/core/styles/gallery';
+@import '~@ngx-gallery/core/styles/gallery';
+@import '~@ngx-gallery/core/styles/lightbox';
+@import "node_modules/loaders.css/src/loaders";
+
+@font-face {
+    font-family: 'PhetsarathOT'; 
+    src: url('assets/font/phetsarath_ot.eot'); 
+    src: url('assets/font/phetsarath_ot.eot?#iefix') format('embedded-opentype'), 
+    url('assets/font/phetsarath_ot.woff2') format('woff2'), 
+    url('assets/font/phetsarath_ot.woff') format('woff'), 
+    url('assets/font/phetsarath_ot.ttf') format('truetype'),
+    url('assets/font/phetsarath_ot.svg#Phetsarath_OT') format('svg'); 
+    font-weight: normal;
+    font-style: normal; 
+}
+
+*{ 
+    font-family: "PhetsarathOT";
+}

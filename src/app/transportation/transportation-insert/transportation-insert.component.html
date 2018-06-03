@@ -1,0 +1,378 @@
+
+<div class="row">
+  <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
+    <h2 class="text-center"><strong>ເພີ່ມສະຖານີຂົນສົ່ງໂດຍສານໃຫມ່</strong></h2>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+          <p class="box-title">ກະລຸນາເພີ່ມຂໍ້ມູນສະຖານີຂົນສົ່ງໂດຍສານໃຫ້ຖືກຕ້ອງ ແລະ ຄົບຖ້ວນ</p>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate role="form" [formGroup]="transportationForm" (ngSubmit)="saveTransportation()">
+          <div class="box-body">
+            <div class="row">
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <label>ຊື່ສະຖານີ</label>
+                    <input type="text" class="form-control" id="tran_name" formControlName="tran_name" placeholder="ຊື່ສະຖານີ">
+                  </div>
+              </div>
+              <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="form-group" style="margin-top: 5px;">
+                  <span>ປະເພດສະຖານີ</span>
+                  <select class="form-control select2" id="tran_type" formControlName="tran_type" style="width: 100%;">
+                    <option value="A" selected="selected">ທາງບົກ</option>
+                    <option value="B">ທາງອາກາດ</option>
+                    <option value="C">ທາງນ້ຳ</option>
+                  </select>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ທີ່ຢູ່</strong></h5>
+              </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ແຂວງ</span>
+                    <select class="form-control select2" id="tran_province" formControlName="tran_province" style="width: 100%;">
+                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
+                      <option value="B">ວຽງຈັນ</option>
+                      <option value="C">ຊຽງຂວາງ</option>
+                      <option value="D">ໄຊຍະບູລີ</option>
+                      <option value="E">ຄຳມ່ວນ</option>
+                      <option value="F">ຜົ້ງສາລີ</option>
+                      <option value="G">ຈຳປາສັກ</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                  <div class="form-group">
+                    <span>ເມືອງ</span>
+                    <select class="form-control select2" id="tran_district" formControlName="tran_district" style="width: 100%;">
+                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
+                      <option value="B">ໄຊທານີ</option>
+                      <option value="C">ສີໂຄດຕະບອງ</option>
+                      <option value="D">ໄກສອນ</option>
+                      <option value="E">A</option>
+                      <option value="F">B</option>
+                      <option value="G">C</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <span>ບ້ານ</span>
+                  <input 
+                        type="text" 
+                        class="form-control" 
+                        id="tran_village" 
+                        ngui-auto-complete
+                        [source]="villages"
+                        z-index="4"
+                        formControlName="tran_village" 
+                        placeholder="ບ້ານ">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ຈຸດທີ່ຕັ້ງໃນແຜນທີ່</strong></h5>
+                <div class="map">
+                  <agm-map 
+                    [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="true"
+                    [zoomControl]="true">
+                    
+                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+                        [radius]="5000"
+                        [fillColor]="'red'"
+                        [circleDraggable]="true"
+                        [editable]="true">
+                    </agm-circle>
+
+                  </agm-map>
+                </div>
+                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                  <span>ລັດຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly formControlName="tran_lat" id="tran_lat" placeholder="ລັດຕິຈຸດ">
+                </div>
+              </div>
+              <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                    <span>ລອງຕິຈຸດ</span>
+                  <input type="text" class="form-control" readonly id="tran_long" formControlName="tran_long" placeholder="ລອງຕິຈຸດ">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <label>ລາຍລະອຽດ</label>
+                  <textarea class="textarea" formControlName="tran_detail" placeholder="ລາຍລະອຽດກ່ຽວກັບສະຖານີ"
+                  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+              </div>
+            </div>
+            <!-- Contact -->
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <h5><strong>ຂໍ້ມູນຕິດຕໍ່</strong></h5>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <span>ເບີໂທ</span>
+                    <input type="text" class="form-control"  id="tran_tel" formControlName="tran_tel" placeholder="ເບີໂທຕິດຕໍ່">
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <span>ອີເມວ</span>
+                    <input type="email" class="form-control"  id="tran_email" formControlName="tran_email" placeholder="ອີເມວຕິດຕໍ່">
+                  </div>
+                </div>
+              </div>
+              <!-- Contact -->
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <h5><strong>ສື່ອອນໄລຕ່າງໆ</strong></h5>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <table class="table table-condensed" formArrayName="socials" *ngIf="socialLength()">
+                  <tr>
+                    <th style="width: 10px">ລຳດັບ</th>
+                    <th>ຊື່</th>
+                    <th>URL</th>
+                    <th style="width: 40px">ລົບ</th>
+                  </tr>
+                  <tr *ngFor="let social of transportationForm.get('socials').controls; let i=index"
+                      [formGroup]="social">
+                    <td>{{i + 1}}</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" id="tran_social_name" formControlName="tran_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                        </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                          <input type="text" class="form-control input-sm" id="tran_social_url" formControlName="tran_social_url" placeholder="URL">
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-lg-12 col-xs-12 text-right">
+                  <button type="button" class="btn btn-success btn-sm" (click)="addNewSocial()"><i class="fa fa-plus"></i> ເພີ່ມສື່</button>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                <div class="form-group">
+                  <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <input type="file"  id="res_images" (change)="fileChangeListener($event)">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of transportationForm.value['images']; let i=index">
+                  <div class="small-box">
+                    <div class="box-header">
+                      <p><strong>ຮູບທີ່ {{i + 1}}</strong></p>
+                      <div class="box-tools"><i class="fa fa-close closeIcon" (click)="this.restaurantForm.value['images'].splice(index, 1);"></i></div>
+                    </div>
+                    <div class="inner">
+                        <img [src]="image" alt="image {{i + 1}}">
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-lg-12 col-xs-12">
+              <div class="form-group">
+                <span>ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="tran_video" formControlName="tran_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+              </div>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+              <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                          frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <hr/>
+                <!-- <h3><strong>ເມນູອາຫານທັງໝົດ</strong></h3> -->
+                <div class="box">
+                    <div class="box-header">
+                      <h3 class="text-center"><strong>ບໍລີການຕ່າງໆ</strong></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        
+                      <div class="row" formArrayName="services">
+                          <div class="col-lg-12 col-xs-12" *ngFor="let service of getServiceControls(); let i=index"
+                              [formGroup]="service">
+                              <div class="box box-primary">
+                                <div class="box-header with-border">
+                                  <h5 class="box-title"><strong>ບໍລິການທີ່ {{i + 1}}</strong></h5>
+                                  <div class="box-tools">
+                                      <i class="fa fa-close closeIcon" (click)="removeService(i)"></i>
+                                  </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                  <div class="form-group">
+                                    <span>ຍານພາຫະນະ</span>
+                                    <input type="text" class="form-control" id="service_name" formControlName="service_name" placeholder="ຍານພາຫະນະ">
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-lg-push-1 col-lg-11 col-md-push-1 col-md-11 col-sm-push1 col-sm-11 col-xs-push-1 col-xs-11">
+                                      <h4><strong>ໄລຍະທາງ</strong></h4>
+                                    </div>
+                                    <div class="col-lg-push-1 col-lg-11 col-md-push-1 col-md-11 col-sm-push1 col-sm-11 col-xs-push-1 col-xs-11">
+                                        <div class="box box-success">
+                                          <div class="box-body">
+                                            <table class="table table-condensed" formArrayName="distances" *ngIf="service.get('distances').length">
+                                              <tr>
+                                                <th style="width: 10px">ລຳດັບ</th>
+                                                <th>ຕົ້ນທາງ</th>
+                                                <th>ປາຍທາງ</th>
+                                                <th>ລາຄາ</th>
+                                                <th style="width: 10px">ລົບ</th>
+                                              </tr>
+                                              <tr *ngFor="let distance of service.get('distances').controls; let j=index"
+                                                  [formGroup]="distance">
+                                                <td>{{j + 1}}</td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control input-sm" id="from" formControlName="from" placeholder="ຕົ້ນທາງ">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                  <div class="form-group">
+                                                      <input type="text" class="form-control input-sm" id="to" formControlName="to" placeholder="ປາຍທາງ">
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <div class="form-group">
+                                                      <input type="number" class="form-control input-sm" id="price" formControlName="price" placeholder="ລາຄາ">
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <button type="button" class="btn btn-danger btn-sm" (click)="service.get('distances').removeAt(j)"><i class="fa fa-minus"></i></button>
+                                                </td>
+                                              </tr>
+                                            </table>
+                                              <div class="text-right">
+                                                <a href="javascript:event" class="color-green" (click)="service.get('distances').push(initDistance())"><i class="fa fa-plus"></i> ເພີ່ມ</a>
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="text-right">
+                      <button type="button" class="btn btn-success btn-sm" style="margin-bottom: 5px; margin-right: 5px;" (click)="addNewService()"><i class="fa fa-plus"></i> ເພີ່ມບໍລິການ</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-right">
+            <button type="reset" class="btn btn-danger"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+<!-- Crop image view -->
+<div class="image-cropper-view" *ngIf="cropImageChecked">
+  <div class="text-center">
+    <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+  </div>
+  <div class="text-center">
+    <label style="width: 800px;">
+      <div class="text-right">
+        <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+        <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-check"></i> ຕົກລົງ</button>
+      </div>
+    </label>
+  </div>
+</div>
+<!-- Crop image view -->
+
+
+  <!-- Upload image dialog *ngIf="uploadImageChecked" -->
+  <div class="image-upload" *ngIf="uploadImageChecked">
+    <div class="row">
+      <div class="col-lg-push-2 col-lg-8 col-md-push-2 col-md-8 col-sm-push-1 col-sm-10 col-xs-push-1 col-xs-10">
+        <div class="box box-widget">
+          <div class="box-header">
+              <h4><span>ອັບໂຫຼດຮູບ...</span> <strong>{{imageIndexUpload}}</strong>/<strong>{{imageLengthUpload}}</strong> <strong>ຮູບ</strong></h4>
+          </div>
+          <div class="box-body upload-scrollbar">
+            <div class="row">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let image of anotherForm.value['images']; let i=index">
+                <div class="box box-widget">
+                  <div class="box-body">
+                    <div class="clearfix">
+                      <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+                      <small class="pull-right">{{uploadPercent[i] | number:'1.0-0'}}%</small>
+                    </div>
+                    <div class="progress xs">
+                      <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercent[i]+'%'}"></div>
+                    </div>
+                    <img [src]="image" alt="image {{i}}">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <h4 class="text-center help-text"><strong>{{imageUploadMessage}}</strong></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Upload image dialog -->
+
+  <!-- Saving icon -->
+    <div class="save-box" *ngIf="savingChecked">
+      <div class="box-revers-background"></div>
+      <div class="box box-widget bg-blue save-detail">
+        <div class="box-body text-center">
+            <i class="fa fa-save"></i>
+            <strong>ກຳລັງບັນທືກ ...</strong>
+        </div>
+      </div>
+    </div>
+  <!-- Saving icon -->
+
+  <!-- Saved icon -->
+  <div class="save-box" *ngIf="savedChecked">
+      <div class="box-revers-background"></div>
+    <div class="box box-widget bg-green save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-check"></i>
+          <strong>ບັນທືກແລ້ວ</strong>
+      </div>
+    </div>
+  </div>
+  <!-- Saved icon -->

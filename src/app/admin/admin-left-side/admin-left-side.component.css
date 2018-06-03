@@ -1,0 +1,8 @@
+.img-circle{
+    cursor: pointer;
+}
+.img-circle:hover{
+    opacity: .9;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}

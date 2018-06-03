@@ -1,0 +1,91 @@
+img{
+    width: 100%;
+}
+.image-cropper-view{
+  opacity: 1;
+  position: fixed;
+  padding-top: 5em;
+  top: 0px;
+  left: 0px;
+  background: black;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.btn-round{
+  position: absolute;
+  right: 22px;
+  bottom: 130px;
+  border-radius: 50%;
+}
+.map{
+  margin-bottom: 5px;
+}
+agm-map {
+  height: 300px;
+}
+.help-text{
+  color: rgb(163, 161, 161);
+}
+.small-box{
+  border: 1px solid rgb(209, 207, 207);
+}
+.closeIcon {
+  color: red;
+  cursor: pointer;
+}
+.closeIcon:hover {
+  color: tomato;
+}
+.ng-valid.ng-dirty.ng-touched{
+  border-color: blue;
+}
+.ng-dirty.ng-invalid.ng-touched {
+  border-color: red
+}
+.ng-pristine.ng-invalid.ng-touched{
+  border-color: red;
+}
+
+
+.image-upload{
+  opacity: 1;
+  position: fixed;
+  padding-top: 5em;
+  top: 0px;
+  left: 0px;
+  background: black;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.upload-scrollbar{
+  overflow-y: scroll;
+  height: 400px;
+}
+
+.save-box{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.save-detail {
+  width: 10%;
+  position: absolute;
+  top: 48%;
+  left: 45%;
+}
+.box-revers-background{
+  opacity: .6;
+  position: absolute;
+  background: rgb(105, 104, 104);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}

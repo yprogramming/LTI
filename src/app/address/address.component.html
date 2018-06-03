@@ -1,0 +1,25 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Dashboard
+      <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a routerLink=""><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li class="active"> Address</li>
+    </ol>
+  </section>
+  <!-- Content Header (Page header) -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+        <ul class="nav navbar-nav">
+          <li><a [routerLink]="['/dashboard','address']"><i class="fa fa-map-marker"></i> ທີ່ຢູ່</a></li>
+          <li><a [routerLink]="['insert']"><i class="fa fa-plus"></i> ເພີ່ມທີ່ຢູ່</a></li>
+        </ul>
+    </div>
+    <router-outlet></router-outlet>
+  </section>
+  <!-- Main content -->
+</div>

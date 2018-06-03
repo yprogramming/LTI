@@ -1,0 +1,19 @@
+.img-circle{
+    cursor: pointer;
+}
+.img-circle:hover{
+    opacity: .9;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.closeIcon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: yellow;
+    cursor: pointer;
+}
+.closeIcon:hover {
+    color: pink;
+}

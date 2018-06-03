@@ -1,0 +1,41 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+             [speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+             [color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
+<div class="login-box">
+  <div class="login-logo">
+    <b>LTI</b>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <h4 class="login-box-msg"><strong>ເຂົ້າສູ່ລະບົບ</strong></h4>
+    <p class="text-center error-message" *ngIf="errorMessage">{{errorMessage}}</p>
+    <form novalidate [formGroup]="loginForm" (ngSubmit)="doLogin()">
+      <div class="form-group has-feedback">
+        <input type="email" class="form-control" formControlName="user_email" placeholder="ອີເມວ">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" formControlName="user_pass" placeholder="ລະຫັດຜ່ານ">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-xs-6">
+          <a [routerLink]="['/register']" *ngIf="existUsers">ສ້າງຜູ້ດູແລລະບົບ</a>
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+        <div class="col-xs-6 text-right">
+          <button type="submit" class="btn btn-primary btn-flat" *ngIf="!checkSumit">ເຂົ້າສູ່ລະບົບ</button>
+          <button type="button" class="btn btn-primary btn-block btn-flat" *ngIf="checkSumit">
+              <loaders-css [loader]="'ball-pulse'" [loaderClass]="'my-loader'"></loaders-css>
+          </button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>

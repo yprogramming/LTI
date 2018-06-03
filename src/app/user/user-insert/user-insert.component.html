@@ -1,0 +1,133 @@
+<div class="row">
+  <div class="col-lg-push-2 col-lg-8 col-xs-12">
+      <div class="box box-widget">
+          <div class="box-header with-border">
+              <p class="box-title">ເພີ່ມຂໍ້ມູນຜູ້ໃຊ້ໃໝ່</p>
+          </div>
+        
+          <div class="register-box-body">
+        
+            <form novalidate [formGroup]="userForm" (ngSubmit)="saveUser()">
+              <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12">
+                  <div class="form-group has-feedback">
+                    <input type="text" class="form-control" formControlName="user_name" placeholder="ຊື່ ແລະ ນາມສະກຸນ">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                    <input type="email" class="form-control" formControlName="user_email" placeholder="ອີເມວ">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                    <input type="password" class="form-control" formControlName="user_pass" placeholder="ລະຫັດຜ່ານ">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                    <input type="password" class="form-control" formControlName="user_confirm" placeholder="ຢືນຢັນລະຫັດຜ່ານ">
+                    <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                  </div>
+                  <!-- checkbox -->
+                  <div class="row">
+                    <div class="col-xs-6">
+                        <label>
+                            <input type="radio" value="ad" formControlName="user_permission">
+                          ຫົວໜ້າ IT
+                        </label>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <label>
+                            <input type="radio" value="us" formControlName="user_permission" checked>
+                          ພະນັກງານ IT
+                        </label>
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 10px;">
+                    <input type="file" class="form-control" (change)="fileChangeListener($event)">
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                    <div class="small-box">
+                        <div class="box-header" *ngIf="userForm.value['user_profile']">
+                          <div class="box-tools"><i class="fa fa-close closeIcon" (click)="userForm.get('user_profile').setValue(null)"></i></div>
+                        </div>
+                        <div class="inner">
+                            <img [src]="userForm.value['user_profile']?userForm.value['user_profile']:'assets/img/ic_user.jpg'" alt="profile">
+                        </div>
+                      </div>
+                </div>
+                <div class="col-xs-12 text-right">
+                    <button type="reset" class="btn btn-danger btn-flat"><i class="fa fa-user-times"></i> ຍົກເລີກ</button>
+                  <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-user-plus"></i> ເພີ່ມຜູ້ໃຊ້</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.form-box -->
+        </div>
+        <!-- /.register-box -->
+  </div>
+</div>
+
+  <!-- Crom image dialog -->
+  <div class="image-cropper-view" *ngIf="cropImageChecked">
+      <div class="text-center">
+        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+      </div>
+      <div class="text-center">
+        <label style="width: 800px;">
+          <div class="text-right">
+            <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-check"></i> ຕົກລົງ</button>
+          </div>
+        </label>
+      </div>
+    </div>
+    <!-- Crom image dialog -->
+
+    <!-- Upload image dialog *ngIf="uploadImageChecked" -->
+  <div class="image-upload" *ngIf="uploadImageChecked">
+    <div class="row">
+      <div class="col-lg-push-4 col-lg-4 col-md-push-3 col-md-6 col-sm-push-3 col-sm-6 col-xs-12">
+        <div class="box box-widget">
+          <div class="box-body">
+            <div class="clearfix">
+              <span class="pull-left">ກຳລັງອັບໂຫຼດຮູບ</span>
+              <small class="pull-right">{{uploadPercent | number:'1.0-0'}}%</small>
+            </div>
+            <div class="progress">
+              <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercent+'%'}"></div>
+            </div>
+            <img [src]="userForm.value['user_profile']" alt="Profile">
+          </div>
+          <div class="box-footer">
+            <h4 class="text-center help-text"><strong>{{imageUploadMessage}}</strong></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Upload image dialog -->
+
+  <!-- Saving icon -->
+    <div class="save-box" *ngIf="savingChecked">
+      <div class="box-revers-background"></div>
+      <div class="box box-widget bg-blue save-detail">
+        <div class="box-body text-center">
+            <i class="fa fa-save"></i>
+            <strong>ກຳລັງບັນທືກ ...</strong>
+        </div>
+      </div>
+    </div>
+  <!-- Saving icon -->
+
+  <!-- Saved icon -->
+  <div class="save-box" *ngIf="savedChecked">
+      <div class="box-revers-background"></div>
+    <div class="box box-widget bg-green save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-check"></i>
+          <strong>ບັນທືກແລ້ວ</strong>
+      </div>
+    </div>
+  </div>
+  <!-- Saved icon -->

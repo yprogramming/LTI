@@ -1,0 +1,37 @@
+.closeIcon {
+    color: red;
+    cursor: pointer;
+}
+.closeIcon:hover {
+    color: tomato;
+}
+
+.editIcon {
+    cursor: pointer;
+}
+.editIcon:hover {
+    color: blue;
+}
+
+.row-border {
+    border-bottom: 2px solid rgb(233, 232, 232);
+}
+
+.ng-valid.ng-dirty.ng-touched{
+    border-color: blue;
+  }
+  .ng-dirty.ng-invalid.ng-touched {
+    border-color: red
+  }
+  
+  .ng-pristine.ng-invalid.ng-touched{
+    border-color: red;
+  }
+
+.color-green{
+    color: green;
+}
+.color-green:hover{
+    cursor: pointer;
+    color: blue;
+}

@@ -1,0 +1,319 @@
+<div class="row">
+    <div class="col-lg-push-2 col-lg-8 col-md-push-1 col-md-10 col-xs-12">
+      <!-- Box Comment -->
+      <div class="box box-widget">
+        <div class="box-header with-border">
+          <div class="row" *ngIf="checkEditProfile">
+              <div class="col-lg-12 col-xs-12">
+                <h4 class="text-center"><strong>ແກ້ໄຂຮູບ</strong></h4>
+                  <div class="small-box">
+                    <div class="box-header">
+                      <div class="form-group">
+                        <label for="res_images">ເພີ່ມຮູບ</label>
+                        <input type="file"  id="int_images" (change)="fileChangeListener($event)">
+                      </div>
+                      <div class="box-tools"><a tooltip="ຍົກເລີກການແກ້ໄຂ" href="javascript:event(0)" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="small-box">
+                              <div class="box-header">
+                                <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon"></i></div>
+                              </div>
+                              <div class="inner">
+                                  <img src="assets/img/photo5.png" alt="image {{1}}">
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row" *ngIf="!checkEditProfile">
+              <div class="col-lg-12 col-xs-12">
+                  <img src="assets/img/photo5.png" alt="Photo 2">
+                  <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
+              </div>
+          </div>
+          <!-- /.user-block -->
+          <div class="row">
+              <div class="col-lg-12 col-xs-12" *ngIf="!checkEditName">
+                  <h3><strong tooltip="ຊື່ສູນອິນເຕີເນັດ">ສູນລາວໂທລະຄົມ</strong> <span style="font-size: 16px;">(<span class="help-text"> ສູນອິນເຕີເນັດ </span>) </span> <i tooltip="ແກ້ໄຂຊື່ສູນອິນເຕີເນັດ" class="fa fa-edit editIcon" (click)="checkEditName=true"></i></h3>
+              </div>
+              <div class="col-lg-12 col-xs-12" *ngIf="checkEditName">
+                <h4 class="text-center"><strong>ແກ້ໄຂຊື່ສູນອິນເຕີເນັດ</strong></h4>
+                <form novalidate [formGroup]="updateTittleForm" (ngSubmit)="updateTitle()">
+                  <table class="table table-condensed">
+                    <tr>
+                      <td>
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="int_name" formControlName="int_name" placeholder="ຊື່ສູນອິນເຕີເນັດ">
+                        </div>
+                      </td>
+                      <td style="width: 10px">
+                          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
+                      </td>
+                      <td style="width: 10px">
+                          <button type="button" class="btn btn-danger" (click)="checkEditName=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                      </td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <h4><strong>ທີ່ຢູ່:</strong></h4>
+                  <p *ngIf="!checkEditAddress"><span style="font-size: 16px;">ບ້ານທາດຫຼວງ ເມືອງໄຊເສດຖາ ນະຄອນຫຼວງວຽງຈັນ</span> <i tooltip="ແກ້ໄຂທີ່ຢູ່" class="fa fa-edit editIcon" (click)="checkEditAddress=true"></i></p>
+              </div>
+              <div class="col-lg-12 col-xs-12" *ngIf="checkEditAddress">
+                  <form novalidate [formGroup]="updateAddressForm" (ngSubmit)="updateAddress()">
+                    <table class="table table-condensed">
+                      <tr>
+                        <td>
+                          <select class="form-control select2" id="int_province" formControlName="int_province" style="width: 100%;">
+                            <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
+                            <option value="B">ວຽງຈັນ</option>
+                            <option value="C">ຊຽງຂວາງ</option>
+                            <option value="D">ໄຊຍະບູລີ</option>
+                            <option value="E">ຄຳມ່ວນ</option>
+                            <option value="F">ຜົ້ງສາລີ</option>
+                            <option value="G">ຈຳປາສັກ</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control select2" id="int_district" formControlName="int_district" style="width: 100%;">
+                            <option value="A" selected="selected">ໄຊເສດຖາ</option>
+                            <option value="B">ໄຊທານີ</option>
+                            <option value="C">ສີໂຄດຕະບອງ</option>
+                            <option value="D">ໄກສອນ</option>
+                            <option value="E">A</option>
+                            <option value="F">B</option>
+                            <option value="G">C</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input 
+                                type="text" 
+                                class="form-control" 
+                                id="int_village" 
+                                ngui-auto-complete
+                                [source]="villages"
+                                z-index="4"
+                                formControlName="int_village"
+                                placeholder="ບ້ານ">
+                        </td>
+                        <td style="width: 10px">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                        </td>
+                        <td style="width: 10px">
+                            <button type="button" class="btn btn-danger" (click)="checkEditAddress=false"><i class="fa fa-close"></i></button>
+                        </td>
+                      </tr>
+                    </table>
+                  </form>
+              </div>
+  
+              <div class="col-lg-12 col-xs-12">
+                <div class="map">
+                  <agm-map 
+                    [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="true"
+                    [zoomControl]="true">
+                    
+                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+                        [radius]="5000"
+                        [fillColor]="'red'"
+                        [circleDraggable]="true"
+                        [editable]="true">
+                    </agm-circle>
+  
+                  </agm-map>
+                </div>
+                <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation" (click)="checkEditLocation=true"></i>
+                <div class="text-right saveLocationButton" *ngIf="checkEditLocation">
+                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="checkEditLocation=false"><i class="fa fa-close"></i></button>
+                </div>
+                <button type="button" class="btn btn-success btn-round" *ngIf="checkEditLocation" ><i class="fa fa-map-marker"></i></button>
+              </div>
+  
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xs-12">
+                  <h4><strong>ລາຍລະອຽດ:</strong></h4>
+                  <p *ngIf="!checkEditDetail"><span style="font-size: 16px;"> xxx xxx xxxx xxx xxxx xxx xxxx xxxx xxxx xxxx xxxx xxxx xxx xxxx xxxx xxx xxxx xxx xxx xx xxxxx xxxx xxx xxx xxx xxx xxx xxx xxx xx</span> <i tooltip="ແກ້ໄຂລາຍລະອຽດ" class="fa fa-edit editIcon" (click)="checkEditDetail=true"></i></p>
+              </div>
+              <div class="col-lg-12 col-xs-12" *ngIf="checkEditDetail">
+                  <form novalidate [formGroup]="updateDetailForm" (ngSubmit)="updateDetail()">
+                    <textarea class="textarea" placeholder="ລາຍລະອຽດ" formControlName="int_detail"
+                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> ບັນທຶກ</button>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="checkEditDetail=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                    </div>
+                  </form>
+              </div>
+
+              <div class="col-lg-12 col-xs-12">
+                  <h4><strong>ຂໍ້ມູນຕິດຕໍ່:</strong> <i tooltip="ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່" class="fa fa-edit editIcon" *ngIf="!checkEditContact" (click)="checkEditContact=true"></i></h4>
+                <div class="row" *ngIf="!checkEditContact">
+                  <div class="col-lg-6 col-md-6 col-xs-12">
+                    <p>ເບີໂທ:</p>
+                    <p><strong>02099833266</strong></p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-xs-12">
+                    <p>ອີເມວ:</p>
+                    <p><strong>yourthor.yiaveu@gmail.com</strong></p>
+                  </div>
+                </div>
+  
+                <div *ngIf="checkEditContact">
+                  <form [formGroup]="updateContactForm" (ngSubmit)="updateContact()">
+                    <table class="table table-condensed">
+                      <tr>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="int_tel" formControlName="int_tel" placeholder="ເບີໂທ">
+                            </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                              <input type="text" class="form-control" id="int_email" formControlName="int_email" placeholder="ອີເມວ">
+                          </div>
+                        </td>
+                        <td style="width: 10px;">
+                          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                        </td>
+                        <td style="width: 10px;">
+                          <button type="button" class="btn btn-danger" (click)="checkEditContact=false"><i class="fa fa-close"></i></button>
+                        </td>
+                      </tr>
+                    </table>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        <!-- /.box-footer -->
+        <div class="box-footer">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <h4><strong>ສື່ອອນໄລຕ່າງໆ:</strong></h4>
+                </div>
+                <div class="col-lg-12 col-xs-12">
+                  <div class="row" *ngIf="!checkEditSocial">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="small-box">
+                        <div class="box-header">
+                          <p><span style="font-size: 16px;">ເຟດບູກ:</span></p>
+                          <div class="box-tools">
+                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
+                              <i class="fa fa-close closeIcon" ></i>
+                          </div>
+                          <div>
+                                <strong>www.facebook.com/yourthor.yiaveu</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="small-box">
+                        <div class="box-header">
+                          <p><span style="font-size: 16px;">tweeter:</span></p>
+                          <div class="box-tools">
+                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
+                              <i class="fa fa-close closeIcon" ></i>
+                          </div>
+                          <div><strong>www.tweeter.com/yourthor.yiaveu</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-xs-12 text-right" *ngIf="!checkAddSocial">
+                        <a tooltip="ເພີ່ມສື່ອອນໄລ" href="javascript:event(0)" class="color-green" (click)="checkAddSocial=true"><i class="fa fa-plus"></i> ເພີ່ມສື່</a>
+                    </div>
+                    <div class="col-lg-12 col-xs-12" *ngIf="checkAddSocial">
+                      <form novalidate [formGroup]="addNewSocialForm" (ngSubmit)="saveNewSocial()">
+                        <p><strong>ເພີ່ມສື່ອອນໄລ</strong></p>
+                        <table class="table table-condensed">
+                          <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control input-sm" id="int_social_name" formControlName="int_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                                </div>
+                            </td>
+                            <td>
+                              <div class="form-group">
+                                  <input type="text" class="form-control input-sm" id="int_social_url" formControlName="int_social_url" placeholder="URL">
+                              </div>
+                            </td>
+                            <td style="width: 10px;">
+                              <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                            </td>
+                            <td style="width: 10px;">
+                              <button type="button" class="btn btn-danger btn-sm" (click)="checkAddSocial=false"><i class="fa fa-close"></i></button>
+                            </td>
+                          </tr>
+                        </table>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-xs-12" *ngIf="checkEditSocial">
+                    <form novalidate [formGroup]="updateSocailForm" (ngSubmit)="updateSocial()">
+                      <h4><strong>ແກ້ໄຂ</strong></h4>
+                      <table class="table table-condensed">
+                        <tr>
+                          <td>
+                              <div class="form-group">
+                                  <input type="text" class="form-control" id="int_social_name" formControlName="int_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                              </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="int_social_url" formControlName="int_social_url" placeholder="URL">
+                            </div>
+                          </td>
+                          <td style="width: 10px;">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                          </td>
+                          <td style="width: 10px;">
+                            <button type="button" class="btn btn-danger" (click)="checkEditSocial=false"><i class="fa fa-close"></i></button>
+                          </td>
+                        </tr>
+                      </table>
+                    </form>
+                </div>
+                <div class="col-lg-12 col-xs-12 text-center">
+                    <a href="javascript:event(0)" class="closeIcon" style="font-size: 16px;"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                </div>
+              </div>
+        </div>
+        <!-- /.box-footer -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  
+  <!-- Crom image dialog -->
+  <div class="image-cropper-view" *ngIf="cropImageChecked">
+      <div class="text-center">
+        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+      </div>
+      <div class="text-center">
+        <label style="width: 800px;">
+          <div class="text-right">
+            <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-save"></i> ບັນທຶກ</button>
+          </div>
+        </label>
+      </div>
+    </div>
+    <!-- Crom image dialog -->

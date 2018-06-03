@@ -1,0 +1,14 @@
+.ng-valid.ng-dirty.ng-touched{
+    border-color: blue;
+  }
+  .ng-dirty.ng-invalid.ng-touched {
+    border-color: red
+  }
+
+  .error-message-one{
+    list-style: none; 
+    color: rgb(223, 113, 113);
+  }
+  .error-message-many{
+    color: rgb(223, 113, 113);
+  }

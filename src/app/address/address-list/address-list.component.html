@@ -1,0 +1,132 @@
+
+<div class="row">
+    <!-- Col -->
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <!-- Box Comment -->
+      <h3><strong>ປະເທດລາວ</strong></h3>
+      <div class="box box-widget">
+        <div class="box-header with-border">
+          <table class="table table-condensed" *ngIf="checkProvinceUpdate">
+            <tr>
+              <th></th>
+              <th style="width: 20px"></th>
+              <th style="width: 20px"></th>
+            </tr>
+            <tr>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control input-sm" value="ນະຄອນຫຼວງວຽງຈັນ" id="att_type_update" placeholder="ຊື່ແຂວງ">
+                </div>
+              </td>
+              <td>
+                  <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+              </td>
+              <td>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="checkProvinceUpdate=false"><i class="fa fa-close"></i></button>
+              </td>
+            </tr>
+          </table>
+          <div class="box-title" *ngIf="!checkProvinceUpdate"><Strong>ນະຄອນຫຼວງວຽງຈັນ</Strong></div>
+          <div class="box-tools" *ngIf="!checkProvinceUpdate">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button type="button" class="btn btn-box-tool" (click)="checkProvinceUpdate=true"><i class="fa fa-edit"></i></button>
+              <button type="button" class="btn btn-box-tool closeIcon"><i class="fa fa-close"></i></button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table class="table table-condensed">
+              <tr>
+                <th style="width: 40px"></th>
+                <th></th>
+                <th style="width: 20px"></th>
+                <th style="width: 20px"></th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <a [routerLink]="['/dashboard','address','district','kjkdjkdkdfd']" *ngIf="!checkVisible">ເມືອງໄຊທານີ</a>
+                  <div class="form-group" *ngIf="checkVisible">
+                    <input type="text" class="form-control input-sm" id="att_type_update" placeholder="ຊື່ເມືອງ">
+                  </div>
+                </td>
+                <td>
+                    <i class="fa fa-edit editIcon" *ngIf="!checkVisible" (click)="checkVisible=true"></i>
+                    <button type="button" class="btn btn-primary btn-sm" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                </td>
+                <td>
+                    <i class="fa fa-minus closeIcon" *ngIf="!checkVisible"></i>
+                    <button type="button" class="btn btn-danger btn-sm" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                </td>
+              </tr>
+              <tr>
+                  <td>2</td>
+                  <td>
+                      <a [routerLink]="['/dashboard','address','district','kjkdjkdkdfd']" *ngIf="!checkVisible">ເມືອງໄຊເສດຖາ</a>
+                    <div class="form-group" *ngIf="checkVisible">
+                      <input type="text" class="form-control input-sm" id="att_type_update" placeholder="ຊື່ເມືອງ">
+                    </div>
+                  </td>
+                  <td>
+                      <i class="fa fa-edit editIcon" *ngIf="!checkVisible" (click)="checkVisible=true"></i>
+                      <button type="button" class="btn btn-primary btn-sm" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                  </td>
+                  <td>
+                      <i class="fa fa-minus closeIcon" *ngIf="!checkVisible"></i>
+                      <button type="button" class="btn btn-danger btn-sm" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>
+                      <a [routerLink]="['/dashboard','address','district','kjkdjkdkdfd']" *ngIf="!checkVisible">ເມືອງສີສັດຕະນາກ</a>
+                    <div class="form-group" *ngIf="checkVisible">
+                      <input type="text" class="form-control input-sm" id="att_type_update" placeholder="ຊື່ເມືອງ">
+                    </div>
+                  </td>
+                  <td>
+                      <i class="fa fa-edit editIcon" *ngIf="!checkVisible" (click)="checkVisible=true"></i>
+                      <button type="button" class="btn btn-primary btn-sm" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                  </td>
+                  <td>
+                      <i class="fa fa-minus closeIcon" *ngIf="!checkVisible"></i>
+                      <button type="button" class="btn btn-danger btn-sm" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                  </td>
+                </tr>
+            </table>
+        </div>
+        <!-- /.box-body -->
+        <!-- Box footer -->
+        <div class="box-footer">
+            <table class="table table-condensed" *ngIf="checkAddNewDistrict">
+              <tr>
+                <th></th>
+                <th style="width: 20px"></th>
+                <th style="width: 20px"></th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control input-sm" id="att_type_update" placeholder="ຊື່ເມືອງ">
+                  </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="checkAddNewDistrict=false"><i class="fa fa-close"></i></button>
+                </td>
+              </tr>
+            </table> 
+          <div class="text-right" *ngIf="!checkAddNewDistrict">
+            <a href="javascript:event" class="color-green" (click)="checkAddNewDistrict=true"><i class="fa fa-plus"></i> ເພີ່ມເມືອງ</a>
+          </div>
+        </div>
+        <!-- Box footer -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    
+  </div>

@@ -1,0 +1,99 @@
+<header class="main-header">
+  <!-- Logo -->
+  <a [routerLink]="['/dashboard']" class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b>L</b>TI</span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><b>Lao Tour Info</b></span>
+  </a>
+  <!-- Header Navbar: style can be found in header.less -->
+  <nav class="navbar navbar-static-top">
+    <!-- Sidebar toggle button-->
+    <a href="javascript:event(0)" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <!-- Notifications: style can be found in dropdown.less -->
+        <li class="dropdown notifications-menu">
+          <a href="javascript:event" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">10</span>
+            </a>
+          <ul class="dropdown-menu">
+            <li class="header"><strong>ມີແຈ້ງເຕືອນທັງໝົດ 10 ຄັ້ງ</strong></li>
+            <li>
+              <!-- inner menu: contains the actual data -->
+              <ul class="menu">
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-users text-aqua"></i> ກວດສອບສະຖານທີ່ທ່ອງທ່ຽວຖ້ຳຈັງ
+                    </a>
+                </li>
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-warning text-yellow"></i> ກວດສອບການປັບປຸງຂໍ້ມູນຮ້ານອາຫານດວງວິໄລ
+                    </a>
+                </li>
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-users text-red"></i> ກວດສອບການຂໍ້ມູນໂຮງແຮມລາວວຽງ
+                    </a>
+                </li>
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-shopping-cart text-green"></i> ກວດສອບຄວາມຖືກຕ້ອງຂອງສະນີລົດເມສາຍໃຕ້
+                    </a>
+                </li>
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-user text-red"></i> ກວດສອບຄວາມຖືກຕ້ອງກ່ຽວກັບບໍລິສັດນຳທ່ຽວທົ່ວລາວ
+                    </a>
+                </li>
+                <li>
+                  <a href="javascript:event">
+                      <i class="fa fa-user text-red"></i> ກວດສອບຄວາມຖືກຕ້ອງກ່ຽວກັບປ້ຳນ້ຳມັນວຽງຈັນໃຫມ່
+                    </a>
+                </li>
+              </ul>
+            </li>
+            <li class="footer"><a href="javascript:event"><strong>ແຈ້ງເຕືອນທັງໝົດ</strong></a></li>
+          </ul>
+        </li>
+        
+        <!-- User Account: style can be found in dropdown.less -->
+        <li class="dropdown user user-menu">
+          <a href="javascript:event" class="dropdown-toggle" data-toggle="dropdown">
+              <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="user-image" alt="User Image">
+              <span class="hidden-xs">{{user.user_name}}</span>
+            </a>
+          <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header">
+              <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="img-circle" alt="User Image" (click)="navigateToProfile(en_user_id(user['user_id']))">
+
+              <p>
+                  {{user.user_name}} ~Admin
+                <small>{{user.lg_date}}</small>
+              </p>
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+              <div class="pull-left">
+                <a [routerLink]="['/dashboard','profile', en_user_id(user['user_id'])]" class="btn btn-default btn-flat">ຂໍ້ມູນສ່ວນຕົວ</a>
+              </div>
+              <div class="pull-right">
+                <a href="javascript:event" class="btn btn-default btn-flat" (click)="doLogout()">ອອກລະບົບ</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!-- Control Sidebar Toggle Button -->
+        <li>
+          <a href="javascript:event" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
