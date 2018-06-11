@@ -27,7 +27,6 @@ const res_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     RestaurantRoutingModule,
     AgmCoreModule.forRoot({
@@ -47,8 +46,7 @@ const res_component = [
         prompt: 'Dialog'
       }
     }),
-    NgProgressModule,
-    LoadersCssModule
+    NgProgressModule
   ],
   declarations: [
     ...res_component

@@ -1,3 +1,7 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
     <div class="col-lg-push-2 col-lg-8 col-md-push-1 col-md-10 col-xs-12">
       <!-- Box Comment -->
@@ -12,16 +16,16 @@
                         <label for="res_images">ເພີ່ມຮູບ</label>
                         <input type="file"  id="int_images" (change)="fileChangeListener($event)">
                       </div>
-                      <div class="box-tools"><a tooltip="ຍົກເລີກການແກ້ໄຂ" href="javascript:event(0)" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
+                      <div class="box-tools"><a tooltip="ຍົກເລີກການແກ້ໄຂ" href="javascript:event" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of internet_center['images']; let i=index">
                             <div class="small-box">
                               <div class="box-header">
-                                <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon"></i></div>
+                                <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
                               </div>
                               <div class="inner">
-                                  <img src="assets/img/photo5.png" alt="image {{1}}">
+                                  <img [src]="image" alt="image {{1}}">
                               </div>
                             </div>
                           </div>
@@ -31,14 +35,20 @@
           </div>
           <div class="row" *ngIf="!checkEditProfile">
               <div class="col-lg-12 col-xs-12">
-                  <img src="assets/img/photo5.png" alt="Photo 2">
+                  <img [src]="internet_center['images'][0]" alt="profile" *ngIf="internet_center['images']">
                   <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
               </div>
           </div>
           <!-- /.user-block -->
           <div class="row">
               <div class="col-lg-12 col-xs-12" *ngIf="!checkEditName">
-                  <h3><strong tooltip="ຊື່ສູນອິນເຕີເນັດ">ສູນລາວໂທລະຄົມ</strong> <span style="font-size: 16px;">(<span class="help-text"> ສູນອິນເຕີເນັດ </span>) </span> <i tooltip="ແກ້ໄຂຊື່ສູນອິນເຕີເນັດ" class="fa fa-edit editIcon" (click)="checkEditName=true"></i></h3>
+                  <h3>
+                    <strong tooltip="ຊື່ສູນອິນເຕີເນັດ">{{internet_center['name']}}</strong>
+                    <span style="font-size: 16px;">
+                      (<span class="help-text"> ສູນອິນເຕີເນັດ </span>)
+                    </span>
+                    <i tooltip="ແກ້ໄຂຊື່ສູນອິນເຕີເນັດ" class="fa fa-edit editIcon" (click)="viewEditName()"></i>
+                  </h3>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditName">
                 <h4 class="text-center"><strong>ແກ້ໄຂຊື່ສູນອິນເຕີເນັດ</strong></h4>
@@ -67,32 +77,23 @@
             <div class="row">
               <div class="col-lg-12 col-xs-12">
                   <h4><strong>ທີ່ຢູ່:</strong></h4>
-                  <p *ngIf="!checkEditAddress"><span style="font-size: 16px;">ບ້ານທາດຫຼວງ ເມືອງໄຊເສດຖາ ນະຄອນຫຼວງວຽງຈັນ</span> <i tooltip="ແກ້ໄຂທີ່ຢູ່" class="fa fa-edit editIcon" (click)="checkEditAddress=true"></i></p>
+                  <p *ngIf="!checkEditAddress">
+                    <span style="font-size: 16px;" *ngIf="another_place['address']">ບ້ານ{{internet_center['address']['village']}} ເມືອງ{{internet_center['address']['district']['district']}} ແຂວງ{{internet_center['address']['district']['province']['province']}}</span>
+                    <i tooltip="ແກ້ໄຂທີ່ຢູ່" class="fa fa-edit editIcon" (click)="viewEditAddress()"></i>
+                  </p>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditAddress">
                   <form novalidate [formGroup]="updateAddressForm" (ngSubmit)="updateAddress()">
                     <table class="table table-condensed">
                       <tr>
                         <td>
-                          <select class="form-control select2" id="int_province" formControlName="int_province" style="width: 100%;">
-                            <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                            <option value="B">ວຽງຈັນ</option>
-                            <option value="C">ຊຽງຂວາງ</option>
-                            <option value="D">ໄຊຍະບູລີ</option>
-                            <option value="E">ຄຳມ່ວນ</option>
-                            <option value="F">ຜົ້ງສາລີ</option>
-                            <option value="G">ຈຳປາສັກ</option>
+                          <select class="form-control select2" id="int_province" formControlName="int_province" style="width: 100%;" (change)="changeDistrict()">
+                              <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                           </select>
                         </td>
                         <td>
-                          <select class="form-control select2" id="int_district" formControlName="int_district" style="width: 100%;">
-                            <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                            <option value="B">ໄຊທານີ</option>
-                            <option value="C">ສີໂຄດຕະບອງ</option>
-                            <option value="D">ໄກສອນ</option>
-                            <option value="E">A</option>
-                            <option value="F">B</option>
-                            <option value="G">C</option>
+                          <select class="form-control select2" id="int_district" formControlName="int_district" style="width: 100%;" (change)="changeVillage()">
+                              <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                           </select>
                         </td>
                         <td>
@@ -137,17 +138,20 @@
                 </div>
                 <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation" (click)="checkEditLocation=true"></i>
                 <div class="text-right saveLocationButton" *ngIf="checkEditLocation">
-                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="checkEditLocation=false"><i class="fa fa-close"></i></button>
+                    <button tooltip="ບັນທືກຈຸດທີ່ຕັ້ງໃໝ່" type="button" class="btn btn-primary btn-sm" (click)="updateLocation()"><i class="fa fa-save"></i></button>
+                    <button tooltip="ຍົກເລີກ" type="button" class="btn btn-danger btn-sm" (click)="cancelLocation()"><i class="fa fa-close"></i></button>
                 </div>
-                <button type="button" class="btn btn-success btn-round" *ngIf="checkEditLocation" ><i class="fa fa-map-marker"></i></button>
+                <button tooltip="ເລືອກຈຸດທີ່ຕັ້ງປະຈຸບັນ" type="button" class="btn btn-success btn-round" *ngIf="checkEditLocation" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
   
             </div>
             <div class="row">
               <div class="col-lg-12 col-xs-12">
                   <h4><strong>ລາຍລະອຽດ:</strong></h4>
-                  <p *ngIf="!checkEditDetail"><span style="font-size: 16px;"> xxx xxx xxxx xxx xxxx xxx xxxx xxxx xxxx xxxx xxxx xxxx xxx xxxx xxxx xxx xxxx xxx xxx xx xxxxx xxxx xxx xxx xxx xxx xxx xxx xxx xx</span> <i tooltip="ແກ້ໄຂລາຍລະອຽດ" class="fa fa-edit editIcon" (click)="checkEditDetail=true"></i></p>
+                  <p *ngIf="!checkEditDetail">
+                    <span style="font-size: 16px;"> {{internet_center['detail']}}</span>
+                    <i tooltip="ແກ້ໄຂລາຍລະອຽດ" class="fa fa-edit editIcon" (click)="viewEditDetail()"></i>
+                  </p>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditDetail">
                   <form novalidate [formGroup]="updateDetailForm" (ngSubmit)="updateDetail()">
@@ -161,15 +165,22 @@
               </div>
 
               <div class="col-lg-12 col-xs-12">
-                  <h4><strong>ຂໍ້ມູນຕິດຕໍ່:</strong> <i tooltip="ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່" class="fa fa-edit editIcon" *ngIf="!checkEditContact" (click)="checkEditContact=true"></i></h4>
+                  <h4><strong>ຂໍ້ມູນຕິດຕໍ່:</strong> 
+                    <i 
+                        tooltip="ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່"
+                        class="fa fa-edit editIcon"
+                        *ngIf="!checkEditContact"
+                        (click)="viewEditContact()">
+                    </i>
+                  </h4>
                 <div class="row" *ngIf="!checkEditContact">
                   <div class="col-lg-6 col-md-6 col-xs-12">
                     <p>ເບີໂທ:</p>
-                    <p><strong>02099833266</strong></p>
+                    <p><strong>{{internet_center['tel']?internet_center['tel']:'(ບໍ່ມີເບີໂທ)'}}/strong></p>
                   </div>
                   <div class="col-lg-6 col-md-6 col-xs-12">
                     <p>ອີເມວ:</p>
-                    <p><strong>yourthor.yiaveu@gmail.com</strong></p>
+                    <p><strong>{{internet_center['email']?internet_center['email']:'(ບໍ່ມີອີເມວ)'}}</strong></p>
                   </div>
                 </div>
   
@@ -209,34 +220,28 @@
                 </div>
                 <div class="col-lg-12 col-xs-12">
                   <div class="row" *ngIf="!checkEditSocial">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="small-box">
-                        <div class="box-header">
-                          <p><span style="font-size: 16px;">ເຟດບູກ:</span></p>
-                          <div class="box-tools">
-                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
-                              <i class="fa fa-close closeIcon" ></i>
-                          </div>
-                          <div>
-                                <strong>www.facebook.com/yourthor.yiaveu</strong>
+                    
+                    <div class="col-lg-12 col-xs-12">
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" *ngFor="let social of internet_center['socials']; let i=index">
+                          <div class="small-box">
+                            <div class="box-header">
+                              <p><a href="{{social['url']}}" target="_blank"><span style="font-size: 16px;">{{social['name']}}</span></a></p>
+                              <div class="box-tools">
+                                  <i class="fa fa-edit editIcon" (click)="viewEditSocial(i, social)"></i>
+                                  <i class="fa fa-close closeIcon" (click)="deleteSocial(i, social)"></i>
+                              </div>
+                              <div>
+                                    <strong>{{social['url']}}</strong>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="small-box">
-                        <div class="box-header">
-                          <p><span style="font-size: 16px;">tweeter:</span></p>
-                          <div class="box-tools">
-                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
-                              <i class="fa fa-close closeIcon" ></i>
-                          </div>
-                          <div><strong>www.tweeter.com/yourthor.yiaveu</strong></div>
-                        </div>
-                      </div>
-                    </div>
+                    
                     <div class="col-lg-12 col-xs-12 text-right" *ngIf="!checkAddSocial">
-                        <a tooltip="ເພີ່ມສື່ອອນໄລ" href="javascript:event(0)" class="color-green" (click)="checkAddSocial=true"><i class="fa fa-plus"></i> ເພີ່ມສື່</a>
+                        <a tooltip="ເພີ່ມສື່ອອນໄລ" href="javascript:event" class="color-green" (click)="checkAddSocial=true"><i class="fa fa-plus"></i> ເພີ່ມສື່</a>
                     </div>
                     <div class="col-lg-12 col-xs-12" *ngIf="checkAddSocial">
                       <form novalidate [formGroup]="addNewSocialForm" (ngSubmit)="saveNewSocial()">
@@ -245,12 +250,12 @@
                           <tr>
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control input-sm" id="int_social_name" formControlName="int_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                                    <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                                 </div>
                             </td>
                             <td>
                               <div class="form-group">
-                                  <input type="text" class="form-control input-sm" id="int_social_url" formControlName="int_social_url" placeholder="URL">
+                                  <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                               </div>
                             </td>
                             <td style="width: 10px;">
@@ -272,12 +277,12 @@
                         <tr>
                           <td>
                               <div class="form-group">
-                                  <input type="text" class="form-control" id="int_social_name" formControlName="int_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                                  <input type="text" class="form-control" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                               </div>
                           </td>
                           <td>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="int_social_url" formControlName="int_social_url" placeholder="URL">
+                                <input type="text" class="form-control" formControlName="url" placeholder="URL">
                             </div>
                           </td>
                           <td style="width: 10px;">
@@ -291,7 +296,7 @@
                     </form>
                 </div>
                 <div class="col-lg-12 col-xs-12 text-center">
-                    <a href="javascript:event(0)" class="closeIcon" style="font-size: 16px;"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                    <a href="javascript:event" class="closeIcon" style="font-size: 16px;" (click)="deleteInternet()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
                 </div>
               </div>
         </div>
@@ -317,3 +322,44 @@
       </div>
     </div>
     <!-- Crom image dialog -->
+
+<!-- Upload image dialog *ngIf="uploadImageChecked" -->
+<div class="upload-box" *ngIf="uploadImageChecked">
+  <div class="box-revers-background"></div>
+  <div class="box box-widget uppload-detail">
+    <div class="box-body">
+      <div class="clearfix">
+        <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+        <small class="pull-right">{{uploadPercent | number:'1.0-0'}}%</small>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercent + '%'}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Upload image dialog -->
+
+<!-- Saving icon -->
+  <div class="save-box" *ngIf="savingChecked">
+    <div class="box-revers-background"></div>
+    <div class="box box-widget bg-blue save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-save"></i>
+          <strong>ກຳລັງບັນທືກ...</strong>
+      </div>
+    </div>
+  </div>
+<!-- Saving icon -->
+
+<!-- Saved icon -->
+<div class="save-box" *ngIf="savedChecked">
+    <div class="box-revers-background"></div>
+  <div class="box box-widget bg-green save-detail">
+    <div class="box-body text-center">
+        <i class="fa fa-check"></i>
+        <strong>ບັນທືກແລ້ວ</strong>
+    </div>
+  </div>
+</div>
+<!-- Saved icon -->

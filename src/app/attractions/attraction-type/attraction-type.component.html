@@ -47,12 +47,12 @@
                 <td>
                   <p *ngIf="!checkUpdate[i]">{{type.type}}</p>
                   <div class="form-group" *ngIf="checkUpdate[i]">
-                    <input type="text" class="form-control" id="att_type_update" [(ngModel)]="type.type" placeholder="ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ">
+                    <input type="text" class="form-control" #attType id="att_type_update" value="{{type.type}}"laceholder="ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ">
                   </div>
                 </td>
                 <td>
                     <button type="button" class="btn btn-success" *ngIf="!checkUpdate[i]" (click)="checkUpdate[i]=true"><i class="fa fa-edit"></i></button>
-                    <button type="button" class="btn btn-primary" *ngIf="checkUpdate[i]" (click)="checkUpdate[i]=false"><i class="fa fa-save"></i></button>
+                    <button type="button" class="btn btn-primary" *ngIf="checkUpdate[i]" (click)="updateType(i, attType.value)"><i class="fa fa-save"></i></button>
                 </td>
                 <td>
                     <button type="button" class="btn btn-danger" *ngIf="!checkUpdate[i]" (click)="data.splice(i,1)"><i class="fa fa-minus"></i></button>

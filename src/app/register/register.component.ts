@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   checkSumit: Boolean = false;
   errorMessage: String = null;
   registerForm: FormGroup;
-  subscription: Subscription;
+
   constructor(
     private formBuilder: FormBuilder,
     private registerService: UserService,
@@ -50,9 +50,9 @@ export class RegisterComponent implements OnInit {
         user_pass: this.registerForm.value['u_pass'],
       };
       this.checkSumit = true;
-      this.subscription = this.registerService.registerAdmin(data).subscribe((success) => {
+      this.registerService.registerAdmin(data).subscribe((success) => {
         // Success logic goes here
-        const alertSubscription: Subscription = this.coolDialogs.alert('ສ້າງຜູ້ຄວບຄຸມລະບົບສຳເລັດແລ້ວ', {
+        this.coolDialogs.alert('ສ້າງຜູ້ຄວບຄຸມລະບົບສຳເລັດແລ້ວ', {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
@@ -61,10 +61,8 @@ export class RegisterComponent implements OnInit {
           localStorage.setItem('lti_exist', 'true');
           this.router.navigate(['/login']);
           this.registerForm.reset();
-          alertSubscription.unsubscribe();
           this.checkSumit = false;
         });
-        this.subscription.unsubscribe();
       }, (error) => {
         try {
           const err = error.json();
@@ -73,7 +71,6 @@ export class RegisterComponent implements OnInit {
         } catch (err) {
           this.router.navigate(['/login']);
         }
-        this.subscription.unsubscribe();
       });
     } else {
       StaticFunc.triggerForm(this.registerForm);

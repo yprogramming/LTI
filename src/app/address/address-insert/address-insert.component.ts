@@ -1,5 +1,9 @@
+import { Router } from '@angular/router';
+import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
+import { AddressService } from './../../services/address.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { StaticFunc } from '../../function-usages/static.func';
 
 @Component({
   selector: 'app-address-insert',
@@ -8,17 +12,26 @@ import { FormArray, FormControl, FormGroup, FormBuilder, Validators } from '@ang
 })
 export class AddressInsertComponent implements OnInit {
 
+
+  savingChecked: Boolean = false;
+  savedChecked: Boolean = false;
+
+  errorMessage: String = null;
   addressForm: FormGroup;
   constructor(
-    formBuilder: FormBuilder
+    formBuilder: FormBuilder,
+    private addressService: AddressService,
+    private coolDialogs: NgxCoolDialogsService,
+    private router: Router
   ) {
     this.addressForm = formBuilder.group({
       add_province: ['', [Validators.required]],
-      att_districts: formBuilder.array([this.initDistrict()])
+      add_districts: formBuilder.array([this.initDistrict()])
     });
    }
 
   ngOnInit() {
+    console.log(this.villageLength(0));
   }
 
   initDistrict() {
@@ -28,16 +41,16 @@ export class AddressInsertComponent implements OnInit {
     });
   }
   getDistrictControls() {
-    return (<FormArray>this.addressForm.get('att_districts')).controls;
+    return (<FormArray>this.addressForm.get('add_districts')).controls;
   }
   districtLength() {
-    return (<FormArray>this.addressForm.get('att_districts')).length;
+    return (<FormArray>this.addressForm.get('add_districts')).length;
   }
   removeDistrict(index) {
-    (<FormArray>this.addressForm.get('att_districts')).removeAt(index);
+    (<FormArray>this.addressForm.get('add_districts')).removeAt(index);
   }
   addNewDistrict() {
-    (<FormArray>this.addressForm.get('att_districts')).push(this.initDistrict());
+    (<FormArray>this.addressForm.get('add_districts')).push(this.initDistrict());
   }
 
   initVillage() {
@@ -46,11 +59,67 @@ export class AddressInsertComponent implements OnInit {
     });
   }
 
+  villageLength(index) {
+    return (<FormArray>
+      (<FormGroup>(
+        <FormArray>this.addressForm.get('add_districts')
+      ).controls[index])
+      .get('add_villages')
+    ).length;
+  }
+  removeVillage( dis_index, vil_index) {
+    (<FormArray>
+      (<FormGroup>(
+        <FormArray>this.addressForm.get('add_districts')
+      ).controls[dis_index])
+      .get('add_villages')
+    ).removeAt(vil_index);
+  }
+
   saveAddress() {
     if (this.addressForm.valid) {
-      console.log(this.addressForm.value);
+      this.savingChecked = true;
+      this.addressService.insertAddress(this.addressForm.value).subscribe((success) => {
+        this.savingChecked = false;
+        this.savedChecked = true;
+        setTimeout(() => {
+          this.savedChecked = false;
+          if (this.districtLength() > 0) {
+            for (let i = 1; i < this.districtLength(); i++) {
+              this.removeDistrict(i);
+            }
+            if (this.villageLength(0) > 1) {
+              for (let j = 1; j < this.villageLength(0); j++) {
+                this.removeVillage( 0, j);
+              }
+            }
+          }
+          this.addressForm.reset();
+        }, 3000);
+      }, (error) => {
+        if (error.status === 410) {
+          this.coolDialogs.alert(error.json()['message'], {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Warning'
+          }).subscribe((res) => {
+            localStorage.clear();
+            this.router.navigate(['/login']);
+          });
+        } else if (error.status <= 423 && error.status >= 400) {
+          this.errorMessage = error.json()['message'];
+        } else {
+          this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }
+      });
     } else {
-      alert('ຂໍ້ມູນຂອງທຸກໆຟິວຫ້າມວ່າງ');
+      StaticFunc.triggerForm(this.addressForm);
     }
   }
 }

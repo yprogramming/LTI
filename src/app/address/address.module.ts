@@ -1,3 +1,4 @@
+import { NgProgressModule } from 'ngx-progressbar';
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 import { TooltipModule } from 'ngx-tooltip';
 import { AddressRoutingModule } from './address-routing.module';
@@ -17,21 +18,10 @@ const add_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     AddressRoutingModule,
-    TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    })
+    NgProgressModule,
+    TooltipModule
   ],
   declarations: [
     ...add_component

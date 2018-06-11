@@ -21,7 +21,6 @@ const com_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     TourCompanyRoutingModule,
     AgmCoreModule.forRoot({

@@ -1,3 +1,5 @@
+import { DashboardService } from './../services/dashboard.service';
+import { TooltipModule } from 'ngx-tooltip';
 import { NgProgressModule } from 'ngx-progressbar';
 import { UserProfileComponent } from './../user-profile/user-profile.component';
 import { NgModule } from '@angular/core';
@@ -32,10 +34,12 @@ const admin_component = [
     CommonModule,
     FormsModule,
     AdminRoutingModule,
-    NgProgressModule
+    NgProgressModule,
+    TooltipModule
   ],
   declarations: [
     ...admin_component
-  ]
+  ],
+  providers: [DashboardService]
 })
 export class AdminModule { }

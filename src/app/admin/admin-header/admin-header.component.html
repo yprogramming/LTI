@@ -1,3 +1,7 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <header class="main-header">
   <!-- Logo -->
   <a [routerLink]="['/dashboard']" class="logo">
@@ -74,7 +78,7 @@
               <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="img-circle" alt="User Image" (click)="navigateToProfile(en_user_id(user['user_id']))">
 
               <p>
-                  {{user.user_name}} ~Admin
+                  {{user.user_name}} ~<span><small>{{userPMS()}}</small></span>
                 <small>{{user.lg_date}}</small>
               </p>
             </li>

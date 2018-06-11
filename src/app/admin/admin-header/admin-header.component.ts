@@ -1,3 +1,4 @@
+import { NgProgress } from 'ngx-progressbar';
 import { StaticFunc } from './../../function-usages/static.func';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { UserService } from './../../services/user.service';
@@ -15,6 +16,7 @@ export class AdminHeaderComponent implements OnInit {
   subscription: Subscription;
   user: Object;
   constructor(
+    public progress: NgProgress,
     private router: Router,
     private logoutService: UserService,
     private coolDialogs: NgxCoolDialogsService
@@ -29,32 +31,39 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   doLogout() {
+    this.progress.start();
     this.subscription = this.logoutService.logoutUser().subscribe((success) => {
       localStorage.removeItem('lt_token');
       this.router.navigate(['/login']);
       this.subscription.unsubscribe();
+      this.progress.done();
     }, (error) => {
       if (error.status === 410) {
         const alertSubscription: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
-          title: 'Error'
+          title: 'Warning'
         }).subscribe((res) => {
-          localStorage.removeItem('lt_token');
+          localStorage.clear();
           this.router.navigate(['/login']);
           alertSubscription.unsubscribe();
         });
       } else {
-        localStorage.removeItem('lt_token');
+        localStorage.clear();
         this.router.navigate(['/login']);
       }
       this.subscription.unsubscribe();
+      this.progress.done();
     });
   }
 
   en_user_id(id: string) {
     return StaticFunc.en_normal(id);
+  }
+
+  userPMS() {
+    return StaticFunc.userPMS(this.user['user_pms']);
   }
 
 }

@@ -1,3 +1,6 @@
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { DashboardService } from './../../services/dashboard.service';
 import { NgProgress } from 'ngx-progressbar';
 import { Component, OnInit } from '@angular/core';
 import { } from 'jquery';
@@ -8,6 +11,7 @@ import { } from 'jqueryui';
 import { } from 'daterangepicker';
 import { } from 'jquery.slimscroll';
 import * as moment from 'moment';
+import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 // Variable in assets/js/scripts.js file
 declare var AdminLTE: any;
 
@@ -23,10 +27,85 @@ export class AdminDashboard1Component implements OnInit {
   knob: JQuery;
   calendar: JQuery;
 
+
+  // variable
+  allPlacesCount: {
+    attractions: {
+      length: number,
+      data: Array<Object>
+    },
+    restaurants: {
+      length: number,
+      data: Array<Object>
+    },
+    shelters: {
+      length: number,
+      data: Array<Object>
+    },
+    transportations: {
+      length: number,
+      data: Array<Object>
+    }
+  };
+
   constructor(
-    public progress: NgProgress
-  ) { 
+    public progress: NgProgress,
+    private dashboardService: DashboardService,
+    private coolDialogs: NgxCoolDialogsService,
+    private router: Router
+  ) {
+    this.allPlacesCount = {
+      attractions: {
+        length: 0,
+        data: []
+      },
+      restaurants: {
+        length: 0,
+        data: []
+      },
+      shelters: {
+        length: 0,
+        data: []
+      },
+      transportations: {
+        length: 0,
+        data: []
+      }
+    };
     progress.start();
+    dashboardService.allPlaceLength().subscribe((data) => {
+      const places = data.json();
+      this.allPlacesCount = places['data'];
+      this.progress.done();
+    }, (error) => {
+      this.progress.done();
+      if (error.status === 410) {
+        const alertSubscription: Subscription = this.coolDialogs.alert(error.json()['message'], {
+          theme: 'material', // available themes: 'default' | 'material' | 'dark'
+          okButtonText: 'OK',
+          color: 'black',
+          title: 'Warning'
+        }).subscribe((res) => {
+          localStorage.clear();
+          this.router.navigate(['/login']);
+          alertSubscription.unsubscribe();
+        });
+      } else if (error.status <= 423 && error.status >= 400) {
+        this.coolDialogs.alert(error.json()['message'], {
+          theme: 'material', // available themes: 'default' | 'material' | 'dark'
+          okButtonText: 'OK',
+          color: 'black',
+          title: 'Error'
+        });
+      } else {
+        this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+          theme: 'material', // available themes: 'default' | 'material' | 'dark'
+          okButtonText: 'OK',
+          color: 'black',
+          title: 'Error'
+        });
+      }
+    });
   }
   ngOnInit() {
      // Update the AdminLTE layouts
@@ -42,41 +121,39 @@ export class AdminDashboard1Component implements OnInit {
     jQuery('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
 
     // jQuery UI sortable for the todo list
-    jQuery('.todo-list').sortable({
-      placeholder: 'sort-highlight',
-      handle: '.handle',
-      forcePlaceholderSize: true,
-      zIndex: 999999
-    });
+    // jQuery('.todo-list').sortable({
+    //   placeholder: 'sort-highlight',
+    //   handle: '.handle',
+    //   forcePlaceholderSize: true,
+    //   zIndex: 999999
+    // });
 
     // bootstrap WYSIHTML5 - text editor
     // jQuery('.textarea').wysihtml5();
 
-    jQuery('.daterange').daterangepicker({
-      ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      },
-      startDate: moment().subtract(29, 'days'),
-      endDate: moment()
-    }, function (start, end) {
-      // window.alert('You chose:  ' + this.start.format('MMMM D, YYYY') + ' - ' + this.end.format('MMMM D, YYYY'));
-    });
+    // jQuery('.daterange').daterangepicker({
+    //   ranges: {
+    //     'Today': [moment(), moment()],
+    //     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    //     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    //     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    //     'This Month': [moment().startOf('month'), moment().endOf('month')],
+    //     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //   },
+    //   startDate: moment().subtract(29, 'days'),
+    //   endDate: moment()
+    // }, function (start, end) {
+    //   // window.alert('You chose:  ' + this.start.format('MMMM D, YYYY') + ' - ' + this.end.format('MMMM D, YYYY'));
+    // });
 
 
-    this.knob = jQuery('.knob').knob();
-    this.calendar = jQuery('#calendar').datepicker();
+    // this.knob = jQuery('.knob').knob();
+    // this.calendar = jQuery('#calendar').datepicker();
 
-    // SLIMSCROLL FOR CHAT WIDGET
-    jQuery('#chat-box').slimScroll({
-      height: '250px'
-    });
-
-    setTimeout( () => this.progress.done(), 4000);
+    // // SLIMSCROLL FOR CHAT WIDGET
+    // jQuery('#chat-box').slimScroll({
+    //   height: '250px'
+    // });
 
     this.areaChart = Morris.Area({
       element: 'revenue-chart',

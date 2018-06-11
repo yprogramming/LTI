@@ -1,5 +1,10 @@
 
-<div class="row">
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
+
+<div class="row" *ngIf="checkAnotherLength()">
     <div class="col-lg-push-9 col-lg-3 col-md-push-8 col-md-4 col-sm-push-7 col-sm-5 col-xs-push-6 col-xs-6">
         <div class="input-group" style="margin-bottom: 10px;">
             <input type="text" class="form-control input-sm" placeholder="Search...">
@@ -12,23 +17,24 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let another_place of another_places">
       <!-- small box -->
       <div class="small-box bg-aqua">
         <div class="box-header">
-            <h4 class="box-title" style="color: white;"><strong>ສະຖານທູດລາວເມກາ</strong></h4>
+            <h4 class="box-title" style="color: white;"><strong>{{another_place['name']}}</strong></h4>
             <div class="box-tools" style="color: white;">
                 <i class="fa fa-check"></i>
             </div>
         </div>
         <div class="inner">
-            <img src="assets/img/photo1.png" alt="" style="width: 100%;">
-            <p>ບ້ານທາດດຳ ເມືອງໄຊເສດຖາ ນະຄອນຫຼວງວຽງຈັນ</p>
+            <img [src]="another_place['images'][0]" alt="" style="width: 100%;">
+            <p>ບ້ານ{{another_place['address']['village']}} ເມືອງ{{another_place['address']['district']['district']}} ແຂວງ{{another_place['address']['district']['province']['province']}}</p>
         </div>
         <div class="icon">
             <i class="ion ion-stats-bars"></i>
         </div>
-        <a [routerLink]="['/dashboard','another','detail','kdjfkjslkeijkdjkfjkd']" class="small-box-footer"><strong>ຂໍ້ມູນເພີ່ມເຕີມ</strong> <i class="fa fa-arrow-circle-right"></i></a>
+        <a [routerLink]="['/dashboard','another','detail',another_place['_id']]" class="small-box-footer"><strong>ຂໍ້ມູນເພີ່ມເຕີມ</strong> <i class="fa fa-arrow-circle-right"></i></a>
       </div>
   </div>
   

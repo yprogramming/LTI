@@ -2,45 +2,68 @@
   <div class="col-lg-push-2 col-lg-8 col-xs-12">
       <div class="box box-widget">
           <div class="box-header with-border">
-              <p class="box-title">ເພີ່ມຂໍ້ມູນຜູ້ໃຊ້ໃໝ່</p>
+              <p class="box-title"><strong>ເພີ່ມຂໍ້ມູນຜູ້ໃຊ້ໃໝ່</strong></p>
           </div>
         
           <div class="register-box-body">
         
             <form novalidate [formGroup]="userForm" (ngSubmit)="saveUser()">
               <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12" *ngIf="errorMessage">
+                    <p class="text-center error-message-one">{{errorMessage}}</p>
+                </div>
                 <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12">
                   <div class="form-group has-feedback">
                     <input type="text" class="form-control" formControlName="user_name" placeholder="ຊື່ ແລະ ນາມສະກຸນ">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                   </div>
+                  <ul class="error-message-one" *ngIf="userForm.controls['user_name'].errors && userForm.controls['user_name'].dirty">
+                    <li [hidden]="!userForm.controls['user_name'].hasError('required')">ຊື່ຫ້າມວ່າງ</li>
+                  </ul>
                   <div class="form-group has-feedback">
                     <input type="email" class="form-control" formControlName="user_email" placeholder="ອີເມວ">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                   </div>
+                  <ul class="error-message-many" *ngIf="userForm.controls['user_email'].errors && userForm.controls['user_email'].dirty">
+                    <li [hidden]="!userForm.controls['user_email'].hasError('required')">ອີເມວຫ້າມວ່າງ</li>
+                    <li [hidden]="!userForm.controls['user_email'].hasError('simpleEmailRule')">ອີເມວບໍ່ຖືກຕ້ອງ</li>
+                  </ul>
                   <div class="form-group has-feedback">
                     <input type="password" class="form-control" formControlName="user_pass" placeholder="ລະຫັດຜ່ານ">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                   </div>
+                  <ul class="error-message-many" *ngIf="userForm.controls['user_pass'].errors && userForm.controls['user_pass'].dirty">
+                    <li [hidden]="!userForm.controls['user_pass'].hasError('required')">ລະຫັດຜ່ານຫ້າມວ່າງ</li>
+                    <li [hidden]="!userForm.controls['user_pass'].hasError('minlength')">ຕ້ອງມີຄວາມຍາວຢ່າງໝ້ອຍ 8 ຕົວ</li>
+                    <li [hidden]="!userForm.controls['user_pass'].hasError('alphabeticalCharacterRule')">ຕ້ອງມີຕົວອັກສອນຢ່າງໜ້ອຍ 1 ຕົວ</li>
+                    <li [hidden]="!userForm.controls['user_pass'].hasError('digitCharacterRule')">ຕ້ອງມີຕົວເລກຢ່າງໜ້ອຍ 1 ຕົວ</li>
+                  </ul>
                   <div class="form-group has-feedback">
                     <input type="password" class="form-control" formControlName="user_confirm" placeholder="ຢືນຢັນລະຫັດຜ່ານ">
                     <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                   </div>
+                  <ul class="error-message-many" *ngIf="userForm.controls['user_confirm'].errors && userForm.controls['user_confirm'].dirty">
+                    <li [hidden]="!userForm.controls['user_confirm'].hasError('required')">ລະຫັດຢືນຢັນຫ້າມຫວ່າງ</li>
+                    <li [hidden]="userForm.controls['user_confirm'].hasError('required') && !userForm.controls['user_confirm'].hasError('mismatchedPasswords')">ລະຫັດຜ່ານບໍ່ກົງກັນ</li>
+                  </ul>
                   <!-- checkbox -->
                   <div class="row">
                     <div class="col-xs-6">
                         <label>
-                            <input type="radio" value="ad" formControlName="user_permission">
-                          ຫົວໜ້າ IT
+                            <input type="radio" value="admin" formControlName="user_permission">
+                          ຜູ້ບໍລິຫານໜ່ອຍງານ IT
                         </label>
                     </div>
                     <div class="col-xs-6 text-right">
                         <label>
-                            <input type="radio" value="us" formControlName="user_permission" checked>
+                            <input type="radio" value="user" formControlName="user_permission" checked>
                           ພະນັກງານ IT
                         </label>
                     </div>
                   </div>
+                  <ul class="error-message-one" *ngIf="userForm.controls['user_permission'].errors && userForm.controls['user_permission'].dirty">
+                    <li [hidden]="!userForm.controls['user_permission'].hasError('required')">ຕ້ອງເລືອກສະຖານະຜູ້ໃຊ້ລະບົບ</li>
+                  </ul>
                   <div class="form-group" style="margin-top: 10px;">
                     <input type="file" class="form-control" (change)="fileChangeListener($event)">
                   </div>

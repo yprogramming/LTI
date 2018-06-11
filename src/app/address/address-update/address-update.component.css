@@ -14,7 +14,7 @@
 }
 
 .row-border {
-    border-bottom: 2px solid rgb(233, 232, 232);
+    border: 2px solid rgb(233, 232, 232);
 }
 
 .ng-valid.ng-dirty.ng-touched{
@@ -34,4 +34,10 @@
 .color-green:hover{
     cursor: pointer;
     color: blue;
+}
+
+.box-border{
+    border-left: 1px solid rgb(233, 232, 232);
+    border-right: 1px solid rgb(233, 232, 232);
+    /* border-bottom: 2px solid gray; */
 }

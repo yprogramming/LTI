@@ -24,7 +24,6 @@ const shel_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ShelterRoutingModule,
     AgmCoreModule.forRoot({
@@ -43,8 +42,7 @@ const shel_component = [
         confirm: 'Confirmation',
         prompt: 'Dialog'
       }
-    }),
-    LoadersCssModule
+    })
   ],
   declarations: [
     ...shel_component

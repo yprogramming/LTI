@@ -1,3 +1,5 @@
+import { AnotherService } from './../services/another.service';
+import { NgProgressModule } from 'ngx-progressbar';
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 import { TooltipModule } from 'ngx-tooltip';
 import { ImageCropperModule } from 'ngx-img-cropper';
@@ -27,7 +29,6 @@ const another_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     AnotherRoutingModule,
     AgmCoreModule.forRoot({
@@ -36,21 +37,11 @@ const another_component = [
     NguiAutoCompleteModule,
     ImageCropperModule,
     TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    }),
-    LoadersCssModule
+    NgProgressModule
   ],
   declarations: [
     ...another_component
-  ]
+  ],
+  providers: [AnotherService]
 })
 export class AnotherModule { }

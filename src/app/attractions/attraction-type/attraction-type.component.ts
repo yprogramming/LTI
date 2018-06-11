@@ -44,4 +44,10 @@ export class AttractionTypeComponent implements OnInit {
       });
       this.attractionTypeForm.reset();
   }
+
+  updateType(i, new_type) {
+    // this.checkUpdate[i] = false;
+    console.log(i, new_type);
+  }
+
 }

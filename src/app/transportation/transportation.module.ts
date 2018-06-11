@@ -23,7 +23,6 @@ const tran_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     TransportationRoutingModule,
     AgmCoreModule.forRoot({

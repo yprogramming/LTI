@@ -23,7 +23,6 @@ const att_component = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     AttractionsRoutingModule,
     AgmCoreModule.forRoot({
