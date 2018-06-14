@@ -2,35 +2,36 @@ import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
+
 @Injectable()
-export class CompanyService {
+export class InternetService {
 
   constructor(
     private http: Http
   ) { }
 
-  getTourCompanies() {
+  getInternets() {
     const header: Headers = new Headers();
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.get(environment.SERVER_ADDRESS + '/api/company', option);
+    return this.http.get(environment.SERVER_ADDRESS + '/api/internet', option);
   }
 
-  getTourCompany(company_id) {
+  getInternet(internet_id) {
     const header: Headers = new Headers();
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
-    header.append('ltitoken',  token);
+    header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.get(environment.SERVER_ADDRESS + '/api/company/' + company_id, option);
+    return this.http.get(environment.SERVER_ADDRESS + '/api/internet/' + internet_id, option);
   }
 
-  insertTourCompany(company_info: Object, imageUrls: Array<string>) {
+  insertInternet(internet_info: Object, imageUrls: Array<string>) {
     const data = {};
-    Object.keys(company_info).forEach((key) => {
-      data[key] = company_info[key];
+    Object.keys(internet_info).forEach((key) => {
+      data[key] = internet_info[key];
     });
     data['images'] = imageUrls;
 
@@ -40,61 +41,61 @@ export class CompanyService {
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.put(environment.SERVER_ADDRESS + '/api/company/insert', data, option);
+    return this.http.put(environment.SERVER_ADDRESS + '/api/internet/insert', data, option);
 
   }
 
-  insertSocial(company_new_social: Object) {
+  insertSocial(internet_new_social: Object) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.put(environment.SERVER_ADDRESS + '/api/company/add/social', company_new_social, option);
+    return this.http.put(environment.SERVER_ADDRESS + '/api/internet/add/social', internet_new_social, option);
   }
 
-  insertImage(company_new_image: Object) {
+  insertImage(internet_new_image: Object) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.put(environment.SERVER_ADDRESS + '/api/company/add/image', company_new_image, option);
+    return this.http.put(environment.SERVER_ADDRESS + '/api/internet/add/image', internet_new_image, option);
   }
 
-  updateTourCompany(company_update_info: Object) {
+  updateInternet(internet_update_info: Object) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.patch(environment.SERVER_ADDRESS + '/api/company/update', company_update_info, option);
+    return this.http.patch(environment.SERVER_ADDRESS + '/api/internet/update', internet_update_info, option);
   }
 
-  updateAddress(company_new_address: Object) {
+  updateAddress(internet_new_address: Object) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.patch(environment.SERVER_ADDRESS + '/api/company/update/address', company_new_address, option);
+    return this.http.patch(environment.SERVER_ADDRESS + '/api/internet/update/address', internet_new_address, option);
   }
 
-  updateSocial(company_new_social: Object) {
+  updateSocial(internet_new_social: Object) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.patch(environment.SERVER_ADDRESS + '/api/company/update/social', company_new_social, option);
+    return this.http.patch(environment.SERVER_ADDRESS + '/api/internet/update/social', internet_new_social, option);
   }
 
-  deleteTourCompany(company_id: string) {
+  deleteInternet(internet_id: string) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');
     const user = JSON.parse(localStorage.getItem('lt_token'));
@@ -102,8 +103,8 @@ export class CompanyService {
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
     return this.http.delete(environment.SERVER_ADDRESS
-                            + '/api/company/delete/'
-                            + company_id, option);
+                            + '/api/internet/delete/'
+                            + internet_id, option);
   }
 
   deleteImage(del_image: Object) {
@@ -113,7 +114,7 @@ export class CompanyService {
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.post(environment.SERVER_ADDRESS + '/api/company/delete/image', del_image, option);
+    return this.http.post(environment.SERVER_ADDRESS + '/api/internet/delete/image', del_image, option);
   }
 
   deleteSocial(del_social: Object) {
@@ -124,10 +125,9 @@ export class CompanyService {
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
     return this.http.delete(environment.SERVER_ADDRESS
-                            + '/api/company/delete/'
-                            + del_social['com_id']
+                            + '/api/internet/delete/'
+                            + del_social['int_id']
                             + '/social/'
                             + del_social['social_id'], option);
   }
-
 }

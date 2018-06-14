@@ -116,7 +116,7 @@ export class RestaurantInsertComponent implements OnInit {
       food_name: new FormControl(null, [Validators.required]),
       food_type: new FormControl(null, [Validators.required]),
       food_price: new FormControl(null, [Validators.required, Validators.min(0)]),
-      image: new FormControl(null)
+      image: new FormControl(null, [Validators.required])
     });
   }
 

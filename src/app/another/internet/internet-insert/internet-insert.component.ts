@@ -1,3 +1,4 @@
+import { CustomValidators } from 'ng2-validation';
 import { EmailValidators } from 'ngx-validators';
 import { NgProgress } from 'ngx-progressbar';
 import { InternetService } from './../../../services/internet.service';
@@ -98,7 +99,7 @@ export class InternetInsertComponent implements OnInit {
       this.internetForm.get('int_district').setValue(this.districts[0]['_id']);
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -150,7 +151,7 @@ export class InternetInsertComponent implements OnInit {
   initSocial() {
     return new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      url: new FormControl(null, [Validators.required])
+      url: new FormControl(null, [Validators.required, CustomValidators.url])
     });
   }
 
@@ -302,7 +303,7 @@ export class InternetInsertComponent implements OnInit {
                   }
                 }
                 if (this.socialLength() > 0) {
-                  for (let i = 0; i < this.socialLength(); i++) {
+                  for (let i = 1; i < this.socialLength(); i++) {
                     this.removeSocial(i);
                   }
                 }
@@ -313,7 +314,7 @@ export class InternetInsertComponent implements OnInit {
               this.savedChecked = false;
               this.savingChecked = false;
               this.uploadImageChecked = false;
-              if (error.status === 410) {
+              if (error.status === 405) {
                 this.coolDialogs.alert(error.json()['message'], {
                   theme: 'material', // available themes: 'default' | 'material' | 'dark'
                   okButtonText: 'OK',

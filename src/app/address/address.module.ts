@@ -18,6 +18,7 @@ const add_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     AddressRoutingModule,
     NgProgressModule,

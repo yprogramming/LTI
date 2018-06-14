@@ -79,7 +79,7 @@ export class AdminDashboard1Component implements OnInit {
       this.progress.done();
     }, (error) => {
       this.progress.done();
-      if (error.status === 410) {
+      if (error.status === 405) {
         const alertSubscription: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',

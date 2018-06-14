@@ -41,7 +41,7 @@ export class AddressListComponent implements OnInit {
       }
       progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -101,7 +101,7 @@ export class AddressListComponent implements OnInit {
             //   alertSubscription.unsubscribe();
             // });
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -148,7 +148,7 @@ export class AddressListComponent implements OnInit {
           console.log('delete success fully');
           this.provinces.splice(i, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -236,7 +236,7 @@ export class AddressListComponent implements OnInit {
             //   alertSubscription.unsubscribe();
             // });
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -298,7 +298,7 @@ export class AddressListComponent implements OnInit {
             //   alertSubscription.unsubscribe();
             // });
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -343,7 +343,7 @@ export class AddressListComponent implements OnInit {
           console.log('delete success fully');
           this.provinces[i]['districts'].splice(j, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',

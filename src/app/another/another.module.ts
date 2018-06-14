@@ -1,3 +1,4 @@
+import { InternetService } from './../services/internet.service';
 import { AnotherService } from './../services/another.service';
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
@@ -42,6 +43,6 @@ const another_component = [
   declarations: [
     ...another_component
   ],
-  providers: [AnotherService]
+  providers: [AnotherService, InternetService]
 })
 export class AnotherModule { }

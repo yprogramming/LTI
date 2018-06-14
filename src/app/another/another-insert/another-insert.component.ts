@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@ang
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage, AngularFireStorageReference } from 'angularfire2/storage';
+import { CustomValidators } from 'ng2-validation';
 
 @Component({
   selector: 'app-another-insert',
@@ -46,9 +47,9 @@ export class AnotherInsertComponent implements OnInit {
   anotherForm: FormGroup;
   constructor(
     formBuilder: FormBuilder,
-    public progress: NgProgress,
     private firebaseStorage: AngularFireStorage,
     private firebaseStorageRef: AngularFireStorage,
+    public progress: NgProgress,
     private coolDialogs: NgxCoolDialogsService,
     private router: Router,
     private addressService: AddressService,
@@ -93,7 +94,7 @@ export class AnotherInsertComponent implements OnInit {
       this.anotherForm.get('ano_district').setValue(this.districts[0]['_id']);
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -126,10 +127,7 @@ export class AnotherInsertComponent implements OnInit {
   initSocial() {
     return new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      url: new FormControl(null, [
-        Validators.required,
-        // Validators.pattern('/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/')
-      ])
+      url: new FormControl(null, [Validators.required, CustomValidators.url])
     });
   }
 
@@ -304,7 +302,7 @@ export class AnotherInsertComponent implements OnInit {
                   }
                 }
                 if (this.socialLength() > 0) {
-                  for (let i = 0; i < this.socialLength(); i++) {
+                  for (let i = 1; i < this.socialLength(); i++) {
                     this.removeSocial(i);
                   }
                 }
@@ -315,7 +313,7 @@ export class AnotherInsertComponent implements OnInit {
               this.savedChecked = false;
               this.savingChecked = false;
               this.uploadImageChecked = false;
-              if (error.status === 410) {
+              if (error.status === 405) {
                 this.coolDialogs.alert(error.json()['message'], {
                   theme: 'material', // available themes: 'default' | 'material' | 'dark'
                   okButtonText: 'OK',

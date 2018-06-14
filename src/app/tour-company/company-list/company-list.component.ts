@@ -23,7 +23,7 @@ export class CompanyListComponent implements OnInit {
       this.tour_companies = anothers.json()['data'];
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',

@@ -173,7 +173,7 @@
                         </div>
                         <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
                           <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
-                          <li [hidden]="!social.controls['url'].hasError('pattern')">(http or https://www.example.com/...)</li>
+                          <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
                         </ul>
                       </td>
                       <td>
@@ -194,7 +194,7 @@
                     <input type="file"  id="int_images" (change)="fileChangeListener($event)">
                   </div>
                   <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
-                    <li [hidden]="anotherForm.value['images'].length">ຕ້ອງເລືອກຮູບສູນອິນເຕີເນັດຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                    <li [hidden]="internetForm.value['images'].length">ຕ້ອງເລືອກຮູບສູນອິນເຕີເນັດຢ່າງໜ້ອຍ 1 ຮູບ</li>
                   </ul>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of internetForm.value['images']; let j=index">

@@ -167,7 +167,7 @@
                         </div>
                         <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
                           <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
-                          <li [hidden]="!social.controls['url'].hasError('pattern')">(http or https://www.example.com/...)</li>
+                          <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
                         </ul>
                       </td>
                       <td>

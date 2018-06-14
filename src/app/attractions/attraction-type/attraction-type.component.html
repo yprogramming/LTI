@@ -1,4 +1,7 @@
-
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
   <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
     <h2 class="text-center"><strong>ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ</strong></h2>
@@ -42,20 +45,20 @@
                 <th style="width: 40px"></th>
                 <th style="width: 40px"></th>
               </tr>
-              <tr *ngFor="let type of data; let i=index">
+              <tr *ngFor="let type of attractions_types; let i=index">
                 <td>{{i + 1}}</td>
                 <td>
-                  <p *ngIf="!checkUpdate[i]">{{type.type}}</p>
+                  <p *ngIf="!checkUpdate[i]">{{type.name}}</p>
                   <div class="form-group" *ngIf="checkUpdate[i]">
-                    <input type="text" class="form-control" #attType id="att_type_update" value="{{type.type}}"laceholder="ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ">
+                    <input type="text" class="form-control" [(ngModel)]="new_name" placeholder="ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ">
                   </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-success" *ngIf="!checkUpdate[i]" (click)="checkUpdate[i]=true"><i class="fa fa-edit"></i></button>
-                    <button type="button" class="btn btn-primary" *ngIf="checkUpdate[i]" (click)="updateType(i, attType.value)"><i class="fa fa-save"></i></button>
+                    <button type="button" class="btn btn-success" *ngIf="!checkUpdate[i]" (click)="viewEditType(i)"><i class="fa fa-edit"></i></button>
+                    <button type="button" class="btn btn-primary" *ngIf="checkUpdate[i]" (click)="updateType(i)"><i class="fa fa-save"></i></button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger" *ngIf="!checkUpdate[i]" (click)="data.splice(i,1)"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-danger" *ngIf="!checkUpdate[i]" (click)="deleteType(i, type._id)"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-danger" *ngIf="checkUpdate[i]" (click)="checkUpdate[i]=false"><i class="fa fa-close"></i></button>
                 </td>
               </tr>

@@ -1,4 +1,7 @@
-
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
   <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
     <h2 class="text-center"><strong>ເພີ່ມສະຖານທີ່ທ່ອງທ່ຽວໃຫມ່</strong></h2>
@@ -17,32 +20,33 @@
                     <label>ຊື່ສະຖານທີ່ທ່ອງທ່ຽວ</label>
                     <input type="text" class="form-control" id="att_name" formControlName="att_name" placeholder="ຊື່ສະຖານທີ່ທ່ອງທ່ຽວ">
                   </div>
+                  <ul class="error-message-one" *ngIf="attractionsForm.controls['att_name'].errors && attractionsForm.controls['att_name'].dirty">
+                    <li [hidden]="!attractionsForm.controls['att_name'].hasError('required')">ຊື່ສະຖານທີ່ທ່ອງທ່ຽວຫ້າມວ່າງ</li>
+                  </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ</span>
                   <select class="form-control select2" id="att_type" formControlName="att_type" style="width: 100%;">
-                    <option value="A" selected="selected">ປະເພດ A</option>
-                    <option value="B">ປະເພດ B</option>
-                    <option value="C">ປະເພດ C</option>
-                    <option value="D">ປະເພດ D</option>
-                    <option value="E">ປະເພດ E</option>
-                    <option value="F">ປະເພດ F</option>
-                    <option value="G">ປະເພດ G</option>
+                    <option *ngFor="let type of attractions_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
                 </div>
               </div>
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <input type="radio" value="true" formControlName="att_top">
-                  ເປັນສະຖານທີ່ທ່ອງທ່ຽວຊື່ດັງ
+              <div class="col-lg-12 col-xs-12">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <input type="radio" value="true" formControlName="att_top">
+                      ເປັນສະຖານທີ່ທ່ອງທ່ຽວຊື່ດັງ
+                      </div>
                   </div>
-              </div>
-              <div class="col-xs-6 text-right">
-                <div class="form-group">
-                  <input type="radio" value="false" formControlName="att_top" checked>
-                  ເປັນສະຖານທີ່ທ່ອງທ່ຽວທຳມະດາ
-              </div>
+                  <div class="col-xs-6 text-right">
+                    <div class="form-group">
+                      <input type="radio" value="false" formControlName="att_top" checked>
+                      ເປັນສະຖານທີ່ທ່ອງທ່ຽວທຳມະດາ
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- Attraction row -->
@@ -56,18 +60,28 @@
                   <span>ສຳລັບຜູ້ໃຫຍ່</span>
                   <input type="number" class="form-control"  id="att_price_adult" formControlName="adult" placeholder="ລາຄາສຳລັບຜູ້ໃຫຍ່">
                 </div>
+                <ul class="error-message-many" *ngIf="attractionsForm.controls['att_price'].controls['adult'].errors && attractionsForm.controls['att_price'].controls['adult'].dirty">
+                  <li [hidden]="!attractionsForm.controls['att_price'].controls['adult'].hasError('required')">ຄວນມີລາຄາເຂົ້າຊົມສຳລັບຜູ້ໃຫຍ່</li>
+                  <li [hidden]="!attractionsForm.controls['att_price'].controls['adult'].hasError('min')">ລາຄາເຂົ້າຊົມຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+                </ul>
               </div>
               <div class="col-lg-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <span>ສຳລັບຄົນຕ່າງຊາດ</span>
                   <input type="number" class="form-control"  id="att_price_foreign" formControlName="foreign" placeholder="ລາຄາສຳລັບຄົນຕ່າງຊາດ">
                 </div>
+                <ul class="error-message-one" *ngIf="attractionsForm.controls['att_price'].controls['foreign'].errors && attractionsForm.controls['att_price'].controls['foreign'].dirty">
+                  <li [hidden]="!attractionsForm.controls['att_price'].controls['foreign'].hasError('min')">ລາຄາເຂົ້າຊົມຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+                </ul>
               </div>
               <div class="col-lg-4 col-sm-4 col-xs-12">
               <div class="form-group">
                 <span>ສຳລັບເດັກນ້ອຍ</span>
                 <input type="number" class="form-control"  id="att_price_children" formControlName="children" placeholder="ລາຄາສຳລັບເດັກນ້ອຍ">
               </div>
+              <ul class="error-message-one" *ngIf="attractionsForm.controls['att_price'].controls['children'].errors && attractionsForm.controls['att_price'].controls['children'].dirty">
+                <li [hidden]="!attractionsForm.controls['att_price'].controls['children'].hasError('min')">ລາຄາເຂົ້າຊົມຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+              </ul>
             </div>
           </div>
           <!-- Price row -->
@@ -79,45 +93,36 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ແຂວງ</span>
-                    <select class="form-control select2" id="att_province" formControlName="att_province" style="width: 100%;">
-                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                      <option value="B">ວຽງຈັນ</option>
-                      <option value="C">ຊຽງຂວາງ</option>
-                      <option value="D">ໄຊຍະບູລີ</option>
-                      <option value="E">ຄຳມ່ວນ</option>
-                      <option value="F">ຜົ້ງສາລີ</option>
-                      <option value="G">ຈຳປາສັກ</option>
+                    <select class="form-control select2" id="att_province" formControlName="att_province" style="width: 100%;" (change)="changeDistrict()">
+                      <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ເມືອງ</span>
-                    <select class="form-control select2" id="att_district" formControlName="att_district" style="width: 100%;">
-                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                      <option value="B">ໄຊທານີ</option>
-                      <option value="C">ສີໂຄດຕະບອງ</option>
-                      <option value="D">ໄກສອນ</option>
-                      <option value="E">A</option>
-                      <option value="F">B</option>
-                      <option value="G">C</option>
+                    <select class="form-control select2" id="att_district" formControlName="att_district" style="width: 100%;" (change)="changeVillage()">
+                      <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <span>ບ້ານ</span>
-                  <input 
-                        type="text" 
-                        class="form-control" 
-                        id="att_village" 
-                        ngui-auto-complete
-                        [source]="villages"
-                        z-index="4"
-                        formControlName="att_village" 
-                        placeholder="ບ້ານ">
+                  <div class="form-group">
+                    <span>ບ້ານ</span>
+                    <input 
+                          type="text" 
+                          class="form-control" 
+                          id="att_village" 
+                          ngui-auto-complete
+                          [source]="villages"
+                          z-index="4"
+                          formControlName="att_village" 
+                          placeholder="ບ້ານ">
+                  </div>
+                  <ul class="error-message-one" *ngIf="attractionsForm.controls['att_village'].errors && attractionsForm.controls['att_village'].dirty">
+                    <li [hidden]="!attractionsForm.controls['att_village'].hasError('required')">ຊື່ບ້ານຫ້າມວ່າງ</li>
+                  </ul>
                 </div>
-              </div>
             </div>
             <!-- Address row -->
             
@@ -142,7 +147,7 @@
 
                   </agm-map>
                 </div>
-                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+                <button tooltip="ເລືອກຈຸດທີ່ຕັ້ງປະຈຸບັນ" type="button" class="btn btn-success btn-round" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
@@ -156,6 +161,11 @@
                   <input type="text" class="form-control" readonly formControlName="att_long" id="att_long" placeholder="ລອງຕິຈຸດ">
                 </div>
               </div>
+              <div class="col-lg-12 col-xs-12">
+                <ul class="error-message-one" *ngIf="attractionsForm.controls['att_long'].errors && attractionsForm.controls['att_long'].dirty">
+                  <li [hidden]="!attractionsForm.controls['att_long'].hasError('required')">ຄລິກເລືອກລັດຕິຈຸດ ແລະ ລອງຕິຈຸດຈາກແຜນທີ່</li>
+                </ul>
+              </div>
             </div>
             <!-- Map row -->
             <!-- Textarea row -->
@@ -164,6 +174,9 @@
                 <label>ລາຍລະອຽດ</label>
                   <textarea class="textarea" placeholder="ລາຍລະອຽດ" formControlName="att_detail"
                   style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                  <ul class="error-message-one" *ngIf="attractionsForm.controls['att_detail'].errors && attractionsForm.controls['att_detail'].dirty">
+                    <li [hidden]="!attractionsForm.controls['att_detail'].hasError('required')">ຄລິກເລືອກລັດຕິຈຸດ ແລະ ລອງຕິຈຸດຈາກແຜນທີ່</li>
+                  </ul>
               </div>
               <div class="col-lg-12 col-xs-12">
                 <label>ກົດລະບຽບ</label>
@@ -187,12 +200,19 @@
                   <span>ເບີໂທ</span>
                   <input type="text" class="form-control"  id="att_tel" formControlName="att_tel" placeholder="ເບີໂທຕິດຕໍ່">
                 </div>
+                <ul class="error-message-one" *ngIf="attractionsForm.controls['att_tel'].errors && attractionsForm.controls['att_tel'].dirty">
+                  <li [hidden]="!attractionsForm.controls['att_tel'].hasError('required')">ເບີໂທຕິດຕໍ່ຫ້າມວ່າງ</li>
+                </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <span>ອີເມວ</span>
                   <input type="email" class="form-control"  id="att_email" formControlName="att_email" placeholder="ອີເມວຕິດຕໍ່">
                 </div>
+                <ul class="error-message-many" *ngIf="attractionsForm.controls['att_email'].errors && attractionsForm.controls['att_email'].dirty">
+                  <li [hidden]="!attractionsForm.controls['att_email'].hasError('required')">ອີເມວຫ້າມວ່າງ</li>
+                  <li [hidden]="!attractionsForm.controls['att_email'].hasError('simpleEmailRule')">ອີເມວບໍ່ຖືກຕ້ອງ</li>
+                </ul>
               </div>
             </div>
             <!-- Contact -->
@@ -213,13 +233,20 @@
                     <td>{{i + 1}}</td>
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" id="att_social_name" formControlName="att_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                            <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                         </div>
+                        <ul class="error-message-one" *ngIf="social.controls['name'].errors && social.controls['name'].dirty">
+                          <li [hidden]="!social.controls['name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                        </ul>
                     </td>
                     <td>
                       <div class="form-group">
-                          <input type="text" class="form-control input-sm" id="att_social_url" formControlName="att_social_url" placeholder="URL">
+                          <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                       </div>
+                      <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
+                        <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                        <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
+                      </ul>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
@@ -238,6 +265,9 @@
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
                   <input type="file"  id="att_images" (change)="fileChangeListener($event)">
                 </div>
+                <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
+                  <li [hidden]="attractionsForm.value['images'].length">ຕ້ອງເລືອກຮູບບໍລິສັດນຳທ່ຽວຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                </ul>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of attractionsForm.value['images']; let j=index">
                 <div class="small-box">
@@ -254,13 +284,16 @@
             <div class="row">
             <div class="col-lg-12 col-xs-12">
               <div class="form-group">
-                <span>ວີດີໂອ URL</span>
-                <input type="text" class="form-control" id="att_video" formControlName="att_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+                <span>Youtube ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="att_video" formControlName="att_video" placeholder="Youtube ວີດີໂອ URL">
               </div>
             </div>
-            <div class="col-lg-12 col-xs-12">
+            <ul class="error-message-one" *ngIf="attractionsForm.controls['att_video'].errors && attractionsForm.controls['att_video'].dirty">
+              <li [hidden]="!attractionsForm.controls['att_video'].hasError('url')">(https://www.youtube.com/...)</li>
+            </ul>
+            <div class="col-lg-12 col-xs-12" *ngIf="attractionsForm.value['att_video'] && attractionsForm.controls['att_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(attractionsForm.value['att_video'])"
                           frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>

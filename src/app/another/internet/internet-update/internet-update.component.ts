@@ -8,6 +8,7 @@ import { NgProgress } from 'ngx-progressbar';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CustomValidators } from 'ng2-validation';
 
 @Component({
   selector: 'app-internet-update',
@@ -90,13 +91,13 @@ export class InternetUpdateComponent implements OnInit {
     });
     this.addNewSocialForm = formBuilder.group({
       name: [null, [Validators.required]],
-      url: [null, [Validators.required]]
+      url: [null, [Validators.required, CustomValidators.url]]
     });
     this.updateSocailForm = formBuilder.group({
       idx: [null, [Validators.required]],
       _id: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      url: [null, [Validators.required]]
+      url: [null, [Validators.required, CustomValidators.url]]
     });
 
     // Setting image cropper
@@ -114,11 +115,12 @@ export class InternetUpdateComponent implements OnInit {
       if (params.id) {
       const int_id = params.id;
       internetService.getInternet(int_id).subscribe((internet_center) => {
+        console.log(internet_center.json()['data']);
          this.internet_center = internet_center.json()['data'];
          this.lat = this.internet_center['location']['lat'];
          this.lng = this.internet_center['location']['long'];
        }, (error) => {
-         if (error.status === 410) {
+         if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
              theme: 'material', // available themes: 'default' | 'material' | 'dark'
              okButtonText: 'OK',
@@ -159,7 +161,7 @@ export class InternetUpdateComponent implements OnInit {
       this.provinces = provinces.json()['data'];
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -208,6 +210,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   croppedImage() {
+    console.log(this.data);
     this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ອັບໂຫຼດ',
@@ -217,7 +220,7 @@ export class InternetUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         this.uploadPercent = 0;
-        const new_image = this.data;
+        const new_image = this.data['image'];
         this.uploadImageChecked = true;
         const internetRef = this.firebaseStorage.ref('Internets');
         const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
@@ -246,7 +249,7 @@ export class InternetUpdateComponent implements OnInit {
                     this.internet_center['images'].push(image_url);
                   }, 3000);
                 }, (error) => {
-                  if (error.status === 410) {
+                  if (error.status === 405) {
                     this.coolDialogs.alert(error.json()['message'], {
                       theme: 'material', // available themes: 'default' | 'material' | 'dark'
                       okButtonText: 'OK',
@@ -411,7 +414,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['name'] = this.updateTittleForm.value['int_name'];
             this.checkEditName = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -512,7 +515,7 @@ export class InternetUpdateComponent implements OnInit {
             this.checkEditAddress = false;
 
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -547,7 +550,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   updateLocation() {
-    if (this.updateTittleForm.valid) {
+    if (this.lat !== this.internet_center['location']['lat']) {
       const data = {
         int_id: this.internet_center['_id'],
         title: 'ປ່ຽນຈຸດທີ່ຕັ້ງຂອງ \'' + this.internet_center['name'] + '\'',
@@ -572,7 +575,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['location']['long'] = this.lng;
             this.checkEditLocation = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -600,6 +603,13 @@ export class InternetUpdateComponent implements OnInit {
           });
         }
       });
+    } else {
+      this.coolDialogs.alert('ຈຸດທີ່ຕັ້ງຍັງບໍ່ປ່ຽນແປງ...', {
+        theme: 'material', // available themes: 'default' | 'material' | 'dark'
+        okButtonText: 'OK',
+        color: 'black',
+        title: 'Warning'
+      });
     }
   }
 
@@ -625,7 +635,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['detail'] = this.updateDetailForm.value['int_detail'];
             this.checkEditDetail = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -682,7 +692,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['email'] = this.updateContactForm.value['int_email'];
             this.checkEditContact = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -740,7 +750,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['socials'][social_index]['url'] = data['social']['url'];
             this.checkEditSocial = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -783,7 +793,7 @@ export class InternetUpdateComponent implements OnInit {
       }).subscribe((res) => {
         if (res) {
           const data = {
-            ano_id: this.internet_center['_id'],
+            int_id: this.internet_center['_id'],
             social: this.addNewSocialForm.value
           };
           this.internetService.insertSocial(data).subscribe((success) => {
@@ -791,7 +801,7 @@ export class InternetUpdateComponent implements OnInit {
             this.internet_center['socials'].push(success.json()['data']);
             this.addNewSocialForm.reset();
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -843,7 +853,7 @@ export class InternetUpdateComponent implements OnInit {
             this.router.navigate(['/dashboard', 'internet']);
           });
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -889,7 +899,7 @@ export class InternetUpdateComponent implements OnInit {
         this.internetService.deleteImage(data).subscribe((success) => {
           this.internet_center['images'].splice(i, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -935,7 +945,7 @@ export class InternetUpdateComponent implements OnInit {
         this.internetService.deleteSocial(data).subscribe((success) => {
           this.internet_center['socials'].splice(i, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',

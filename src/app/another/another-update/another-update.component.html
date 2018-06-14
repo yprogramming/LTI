@@ -22,15 +22,15 @@
                   </div>
                   <div class="row">
                       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of another_place['images']; let i=index">
-                          <div class="small-box">
-                            <div class="box-header">
-                              <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
-                            </div>
-                            <div class="inner">
-                                <img [src]="image" alt="image {{i}}">
-                            </div>
+                        <div class="small-box">
+                          <div class="box-header">
+                            <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
+                          </div>
+                          <div class="inner">
+                              <img [src]="image" alt="image {{i}}">
                           </div>
                         </div>
+                      </div>
                   </div>
                 </div>
             </div>
@@ -110,12 +110,12 @@
                               placeholder="ບ້ານ">
                       </td>
                       <td style="width: 10px">
-                          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
                       </td>
                       <td style="width: 10px">
-                          <button type="button" class="btn btn-danger" (click)="checkEditAddress=false">
-                            <i class="fa fa-close"></i>
-                          </button>
+                        <button type="button" class="btn btn-danger" (click)="checkEditAddress=false">
+                          <i class="fa fa-close"></i>
+                        </button>
                       </td>
                     </tr>
                   </table>
@@ -224,7 +224,6 @@
             </div>
             <div class="col-lg-12 col-xs-12">
               <div class="row" *ngIf="!checkEditSocial">
-
                 <div class="col-lg-12 col-xs-12">
                   <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" *ngFor="let social of another_place['socials']; let i=index">

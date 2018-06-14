@@ -104,16 +104,16 @@ export class ShelterInsertComponent implements OnInit {
 
   initSocial() {
     return new FormGroup({
-      shelt_social_name: new FormControl(null, [Validators.required]),
-      shelt_social_url: new FormControl(null, [Validators.required])
+      name: new FormControl(null, [Validators.required]),
+      url: new FormControl(null, [Validators.required])
     });
   }
 
   initRoom() {
     return new FormGroup({
-      room_style: new FormControl(null, [Validators.required]),
-      room_price: new FormControl(null, [Validators.required]),
-      room_image: new FormControl(null)
+      style: new FormControl(null, [Validators.required]),
+      price: new FormControl(null, [Validators.required]),
+      room_image: new FormControl(null, [Validators.required])
     });
   }
 

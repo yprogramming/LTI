@@ -25,7 +25,7 @@ export class InternetListComponent implements OnInit {
       this.internet_centers = internets.json()['data'];
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',

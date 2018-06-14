@@ -1,3 +1,4 @@
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AddressService } from './../../services/address.service';
 import { Router } from '@angular/router';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
@@ -48,6 +49,7 @@ export class CompanyInsertComponent implements OnInit {
 
   constructor(
     formBuilder: FormBuilder,
+    private safeSanitizer: DomSanitizer,
     private firebaseStorage: AngularFireStorage,
     private firebaseStorageRef: AngularFireStorage,
     public progress: NgProgress,
@@ -96,7 +98,7 @@ export class CompanyInsertComponent implements OnInit {
       this.companyTourForm.get('com_district').setValue(this.districts[0]['_id']);
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -133,6 +135,18 @@ export class CompanyInsertComponent implements OnInit {
         this.lng = position.coords.longitude;
       });
     }
+  }
+
+  safeVideoUrl(url: string): SafeResourceUrl {
+    const new_url = url.split('&')[0];
+    const urlArray = new_url.split('=');
+    if (urlArray[0] === 'https://www.youtube.com/watch?v') {
+      const youtube_id = urlArray[1];
+      const youtube_domain = urlArray[0].split('watch')[0];
+      const youtube_embed_url = youtube_domain + 'embed/' + youtube_id;
+      return this.safeSanitizer.bypassSecurityTrustResourceUrl(youtube_embed_url);
+    }
+    return this.safeSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   initAddress() {
@@ -223,9 +237,9 @@ export class CompanyInsertComponent implements OnInit {
 
   saveCompanyTour() {
     this.imageLengthUpload = this.companyTourForm.value['images'].length;
-    if (this.companyTourForm.valid && this.imageLengthUpload > 0){
+    if (this.companyTourForm.valid && this.imageLengthUpload > 0) {
 
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສູນອິນເຕີເນັດນີ້ແທ້ບໍ?', {
+      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນບໍລິສັດນຳທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -249,7 +263,6 @@ export class CompanyInsertComponent implements OnInit {
               const companyUpload = companyRef.child(imageName).putString(image, 'data_url'); // ອັບໂຫຼດຂຶ້ນ Firebase Storage
               companyUpload.percentageChanges().subscribe((percent) => {
                 this.uploadPercent[i] = percent;                                                  // ເອົາເປີເຊັນການອັບໂຫຼດຂອງແຕ່ລະຮູບ
-                console.log(percent);
                 if ( percent === 100) {
                   this.imageIndexUpload += 1;                                                 // ເມື່ອໃດອັບໂຫລດສຳເລັດ ຮ້ອງຂໍ URL
                   setTimeout(() => {
@@ -304,7 +317,7 @@ export class CompanyInsertComponent implements OnInit {
               this.savedChecked = false;
               this.savingChecked = false;
               this.uploadImageChecked = false;
-              if (error.status === 410) {
+              if (error.status === 405) {
                 this.coolDialogs.alert(error.json()['message'], {
                   theme: 'material', // available themes: 'default' | 'material' | 'dark'
                   okButtonText: 'OK',
@@ -344,6 +357,9 @@ export class CompanyInsertComponent implements OnInit {
         }
       });
 
+    } else {
+      this.checkImageAfterTrigerForm = true;
+      StaticFunc.triggerForm(this.companyTourForm);
     }
   }
 }

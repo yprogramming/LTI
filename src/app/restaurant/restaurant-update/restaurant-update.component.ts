@@ -92,16 +92,17 @@ export class RestaurantUpdateComponent implements OnInit {
       res_social_url: [null, [Validators.required]]
     });
     this.updateFoodForm = formBuilder.group({
+      id: [null, [Validators.required]],
       food_name: [null, [Validators.required]],
       food_type: [null, [Validators.required]],
       food_price: [null, [Validators.required]],
-      image: [null]
+      image: [null, [Validators.required]]
     });
     this.addNewFoodForm = formBuilder.group({
       add_food_name: [null, [Validators.required]],
       add_food_type: [null, [Validators.required]],
       add_food_price: [null, [Validators.required]],
-      add_image: [null]
+      add_image: [null, [Validators.required]]
     });
 
     // Setting image cropper

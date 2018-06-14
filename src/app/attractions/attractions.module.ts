@@ -1,3 +1,5 @@
+import { NgProgressModule } from 'ngx-progressbar';
+import { AttractionsService } from './../services/attractions.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
@@ -23,6 +25,7 @@ const att_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     AttractionsRoutingModule,
     AgmCoreModule.forRoot({
@@ -30,11 +33,12 @@ const att_component = [
     }),
     NguiAutoCompleteModule,
     ImageCropperModule,
-    TooltipModule
+    TooltipModule,
+    NgProgressModule
   ],
   declarations: [
     ...att_component
   ],
-  providers: [NgxCoolDialogsService]
+  providers: [AttractionsService]
 })
 export class AttractionsModule { }

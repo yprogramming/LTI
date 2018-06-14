@@ -1,3 +1,4 @@
+import { NgProgressModule } from 'ngx-progressbar';
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 import { TooltipModule } from 'ngx-tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { CompanyInsertComponent } from './company-insert/company-insert.componen
 import { CompanyListComponent } from './company-list/company-list.component';
 import { CompanyUpdateComponent } from './company-update/company-update.component';
 import { TourCompanyComponent } from './tour-company.component';
+import { CompanyService } from '../services/company.service';
 
 const com_component = [
   TourCompanyComponent,
@@ -39,10 +41,12 @@ const com_component = [
         confirm: 'Confirmation',
         prompt: 'Dialog'
       }
-    })
+    }),
+    NgProgressModule
   ],
   declarations: [
     ...com_component
-  ]
+  ],
+  providers: [CompanyService]
 })
 export class TourCompanyModule { }

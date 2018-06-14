@@ -52,7 +52,7 @@ export class AddressUpdateComponent implements OnInit {
         this.progress.done();
       }, (error) => {
         this.progress.done();
-        if (error.status === 410) {
+        if (error.status === 405) {
           this.coolDialogs.alert(error.json()['message'], {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
@@ -125,7 +125,7 @@ export class AddressUpdateComponent implements OnInit {
             //   alertSubscription.unsubscribe();
             // });
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -187,7 +187,7 @@ export class AddressUpdateComponent implements OnInit {
           this.district['villages'].splice(i, 1);
           console.log(success);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -248,7 +248,7 @@ export class AddressUpdateComponent implements OnInit {
             //   alertSubscription.unsubscribe();
             // });
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',

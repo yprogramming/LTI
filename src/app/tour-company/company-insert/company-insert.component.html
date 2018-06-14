@@ -88,7 +88,7 @@
 
                   </agm-map>
                 </div>
-                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+                <button tooltip="ເລືອກຈຸດທີ່ຕັ້ງປະຈຸບັນ" type="button" class="btn btn-success btn-round" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
@@ -194,7 +194,7 @@
                   <input type="file"  id="com_images" (change)="fileChangeListener($event)">
                 </div>
                 <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
-                  <li [hidden]="anotherForm.value['images'].length">ຕ້ອງເລືອກຮູບບໍລິສັດນຳທ່ຽວຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                  <li [hidden]="companyTourForm.value['images'].length">ຕ້ອງເລືອກຮູບບໍລິສັດນຳທ່ຽວຢ່າງໜ້ອຍ 1 ຮູບ</li>
                 </ul>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of companyTourForm.value['images']; let j=index">
@@ -212,16 +212,16 @@
             <div class="row">
             <div class="col-lg-12 col-xs-12">
               <div class="form-group">
-                <span>ວີດີໂອ URL</span>
-                <input type="text" class="form-control" id="com_video" formControlName="com_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+                <span>Youtube ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="com_video" formControlName="com_video" placeholder="Youtube ວີດີໂອ URL">
               </div>
               <ul class="error-message-one" *ngIf="companyTourForm.controls['com_video'].errors && companyTourForm.controls['com_video'].dirty">
-                <li [hidden]="!companyTourForm.controls['com_video'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                <li [hidden]="!companyTourForm.controls['com_video'].hasError('url')">(https://www.youtube.com/...)</li>
               </ul>
             </div>
-            <div class="col-lg-12 col-xs-12" *ngIf="companyTourForm.value['com_video']">
+            <div class="col-lg-12 col-xs-12" *ngIf="companyTourForm.value['com_video'] && companyTourForm.controls['com_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" [src]="companyTourForm.value['com_video']"
+                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(companyTourForm.value['com_video'])"
                           frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { NgProgress } from 'ngx-progressbar';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CustomValidators } from 'ng2-validation';
 
 @Component({
   selector: 'app-another-update',
@@ -90,13 +91,13 @@ export class AnotherUpdateComponent implements OnInit {
     });
     this.addNewSocialForm = formBuilder.group({
       name: [null, [Validators.required]],
-      url: [null, [Validators.required]]
+      url: [null, [Validators.required, CustomValidators.url]]
     });
     this.updateSocailForm = formBuilder.group({
       idx: [null, [Validators.required]],
       _id: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      url: [null, [Validators.required]]
+      url: [null, [Validators.required, CustomValidators.url]]
     });
 
     // Setting image cropper
@@ -118,7 +119,7 @@ export class AnotherUpdateComponent implements OnInit {
          this.lat = this.another_place['location']['lat'];
          this.lng = this.another_place['location']['long'];
        }, (error) => {
-         if (error.status === 410) {
+         if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
              theme: 'material', // available themes: 'default' | 'material' | 'dark'
              okButtonText: 'OK',
@@ -159,7 +160,7 @@ export class AnotherUpdateComponent implements OnInit {
       this.provinces = provinces.json()['data'];
       this.progress.done();
     }, (error) => {
-      if (error.status === 410) {
+      if (error.status === 405) {
         this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
@@ -246,7 +247,7 @@ export class AnotherUpdateComponent implements OnInit {
                     this.another_place['images'].push(image_url);
                   }, 3000);
                 }, (error) => {
-                  if (error.status === 410) {
+                  if (error.status === 405) {
                     this.coolDialogs.alert(error.json()['message'], {
                       theme: 'material', // available themes: 'default' | 'material' | 'dark'
                       okButtonText: 'OK',
@@ -412,7 +413,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.another_place['name'] = this.updateTittleForm.value['ano_name'];
             this.checkEditName = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -513,7 +514,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.checkEditAddress = false;
 
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -548,7 +549,7 @@ export class AnotherUpdateComponent implements OnInit {
   }
 
   updateLocation() {
-    if (this.updateTittleForm.valid) {
+    if ((this.lat !== this.another_place['location']['lat'])) {
       const data = {
         ano_id: this.another_place['_id'],
         title: 'ປ່ຽນຈຸດທີ່ຕັ້ງຂອງ \'' + this.another_place['name'] + '\'',
@@ -573,7 +574,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.another_place['location']['long'] = this.lng;
             this.checkEditLocation = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -601,6 +602,13 @@ export class AnotherUpdateComponent implements OnInit {
           });
         }
       });
+    } else {
+      this.coolDialogs.alert('ຈຸດທີ່ຕັ້ງຍັງບໍ່ປ່ຽນແປງ...', {
+        theme: 'material', // available themes: 'default' | 'material' | 'dark'
+        okButtonText: 'OK',
+        color: 'black',
+        title: 'Warning'
+      });
     }
   }
 
@@ -626,7 +634,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.another_place['detail'] = this.updateDetailForm.value['ano_detail'];
             this.checkEditDetail = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -682,7 +690,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.another_place['email'] = this.updateContactForm.value['ano_email'];
             this.checkEditContact = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -740,7 +748,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.another_place['socials'][social_index]['url'] = data['social']['url'];
             this.checkEditSocial = false;
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -787,10 +795,11 @@ export class AnotherUpdateComponent implements OnInit {
             social: this.addNewSocialForm.value
           };
           this.anotherService.insertSocial(data).subscribe((success) => {
-            this.another_place['socials'].push(this.addNewSocialForm.value);
+            console.log(success.json()['data']);
+            this.another_place['socials'].push(success.json()['data']);
             this.addNewSocialForm.reset();
           }, (error) => {
-            if (error.status === 410) {
+            if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
@@ -842,7 +851,7 @@ export class AnotherUpdateComponent implements OnInit {
             this.router.navigate(['/dashboard', 'another']);
           });
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -888,7 +897,7 @@ export class AnotherUpdateComponent implements OnInit {
         this.anotherService.deleteImage(data).subscribe((success) => {
           this.another_place['images'].splice(i, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
@@ -934,7 +943,7 @@ export class AnotherUpdateComponent implements OnInit {
         this.anotherService.deleteSocial(data).subscribe((success) => {
           this.another_place['socials'].splice(i, 1);
         }, (error) => {
-          if (error.status === 410) {
+          if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',

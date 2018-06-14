@@ -82,12 +82,12 @@ export class TransportationUpdateComponent implements OnInit {
       tran_video: [null, [Validators.required]]
     });
     this.addNewSocialForm = formBuilder.group({
-      tran_social_name: [null, [Validators.required]],
-      tran_social_url: [null, [Validators.required]]
+      name: [null, [Validators.required]],
+      url: [null, [Validators.required]]
     });
     this.updateSocailForm = formBuilder.group({
-      tran_social_name: [null, [Validators.required]],
-      tran_social_url: [null, [Validators.required]]
+      name: [null, [Validators.required]],
+      url: [null, [Validators.required]]
     });
     this.addNewServiceForm = formBuilder.group({
       service_name: [null, [Validators.required]],

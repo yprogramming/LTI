@@ -144,7 +144,7 @@ export class UserInsertComponent implements OnInit {
                         this.userForm.reset();
                       }, 3000);
                     }, (error) => {
-                      if (error.status === 410) {
+                      if (error.status === 405) {
                         localStorage.clear();
                         this.coolDialogs.alert(error.json()['message'], {
                           theme: 'material', // available themes: 'default' | 'material' | 'dark'
@@ -204,7 +204,7 @@ export class UserInsertComponent implements OnInit {
                 this.userForm.reset();
               }, 4000);
             }, (error) => {
-              if (error.status === 410) {
+              if (error.status === 405) {
                 localStorage.removeItem('lt_token');
                this.coolDialogs.alert(error.json()['message'], {
                   theme: 'material', // available themes: 'default' | 'material' | 'dark'
