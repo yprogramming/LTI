@@ -1,3 +1,4 @@
+import { NotificationService } from './services/notification.service';
 import { AddressService } from './services/address.service';
 import { LoginedService } from './auth-guard/logined.service';
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
@@ -75,7 +76,8 @@ import { LoginService } from './auth-guard/login.service';
     UserService,
     LoginService,
     LoginedService,
-    AddressService
+    AddressService,
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })

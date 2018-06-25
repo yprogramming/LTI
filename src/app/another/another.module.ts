@@ -1,12 +1,10 @@
 import { InternetService } from './../services/internet.service';
 import { AnotherService } from './../services/another.service';
 import { NgProgressModule } from 'ngx-progressbar';
-import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 import { TooltipModule } from 'ngx-tooltip';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { AgmCoreModule } from '@agm/core';
-import { LoadersCssModule } from 'angular2-loaders-css';
 import { AnotherRoutingModule } from './another-routing.module';
 import { AnotherComponent } from './another.component';
 import { NgModule } from '@angular/core';

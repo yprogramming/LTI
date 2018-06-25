@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 import { AttractionTypeComponent } from './attraction-type/attraction-type.component';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import {TooltipModule} from 'ngx-tooltip';
-import { NgxCoolDialogsModule, NgxCoolDialogsService } from 'ngx-cool-dialogs';
 
 const att_component = [
   AttractionsComponent,

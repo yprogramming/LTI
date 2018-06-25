@@ -1,9 +1,10 @@
+import { ImageCropperModule } from 'ngx-img-cropper';
 import { DashboardService } from './../services/dashboard.service';
 import { TooltipModule } from 'ngx-tooltip';
 import { NgProgressModule } from 'ngx-progressbar';
 import { UserProfileComponent } from './../user-profile/user-profile.component';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { UserModule } from './../user/user.module';
@@ -33,6 +34,8 @@ const admin_component = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
+    ImageCropperModule,
     AdminRoutingModule,
     NgProgressModule,
     TooltipModule

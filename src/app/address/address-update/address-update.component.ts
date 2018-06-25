@@ -113,17 +113,6 @@ export class AddressUpdateComponent implements OnInit {
             this.district['villages'][i].village = this.updateVillageForm.value.add_village;
             this.updateVillageForm.reset();
             this.checkVillageUpdate[i] = false;
-            // const alertSubscription: Subscription = this.coolDialogs.alert('ແກ້ໄຂຂໍ້ມູນບ້ານສຳເລັດແລ້ວ', {
-            //   theme: 'material', // available themes: 'default' | 'material' | 'dark'
-            //   okButtonText: 'OK',
-            //   color: 'black',
-            //   title: 'Update'
-            // }).subscribe(() => {
-            //   this.district['villages'][i].village = this.updateVillageForm.value.add_village;
-            //   this.updateVillageForm.reset();
-            //   this.checkVillageUpdate[i] = false;
-            //   alertSubscription.unsubscribe();
-            // });
           }, (error) => {
             if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
@@ -185,7 +174,6 @@ export class AddressUpdateComponent implements OnInit {
       if (res) {
         this.addressService.deleteVillage(id).subscribe((success) => {
           this.district['villages'].splice(i, 1);
-          console.log(success);
         }, (error) => {
           if (error.status === 405) {
             this.coolDialogs.alert(error.json()['message'], {

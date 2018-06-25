@@ -20,12 +20,12 @@
       <div class="small-box bg-orange">
         <div class="box-header">
             <h4 class="box-title" style="color: white;"><strong>{{tour_company['name']}}</strong></h4>
-            <div class="box-tools" style="color: white;">
+            <div class="box-tools" style="color: white;" *ngIf="tour_company['published']">
                 <i class="fa fa-check"></i>
             </div>
         </div>
         <div class="inner">
-            <img [src]="tour_company['images'][0]" alt="" style="width: 100%;">
+            <img [src]="getImage(tour_company['images'][0])" alt="" style="width: 100%;">
             <p>ບ້ານ{{tour_company['address']['village']}} ເມືອງ{{tour_company['address']['district']['district']}} ແຂວງ{{tour_company['address']['district']['province']['province']}}</p>
         </div>
         <div class="icon">

@@ -50,6 +50,10 @@ const routes: Routes = [{
       loadChildren: './../../user/user.module#UserModule'
     },
     {
+      path: 'notification',
+      loadChildren: './../../notification/notification.module#NotificationModule'
+    },
+    {
       path: 'profile/:id',
       component: UserProfileComponent
     }

@@ -1,5 +1,4 @@
-import { LoadersCssModule } from 'angular2-loaders-css';
-import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
+import { RestaurantService } from './../services/restaurant.service';
 import { TooltipModule } from 'ngx-tooltip';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { AgmCoreModule } from '@agm/core';
@@ -27,6 +26,7 @@ const res_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RestaurantRoutingModule,
     AgmCoreModule.forRoot({
@@ -35,21 +35,11 @@ const res_component = [
     NguiAutoCompleteModule,
     ImageCropperModule,
     TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    }),
     NgProgressModule
   ],
   declarations: [
     ...res_component
-  ]
+  ],
+  providers: [ RestaurantService ]
 })
 export class RestaurantModule { }

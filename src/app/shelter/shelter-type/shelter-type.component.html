@@ -1,4 +1,7 @@
-
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
     <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
       <h2 class="text-center"><strong>ປະເພດສະຖານທີ່ພັກອາໄສ</strong></h2>
@@ -30,7 +33,7 @@
           </form>
         </div>
   
-        <div class="box">
+        <div class="box" *ngIf="shelter_types.length">
           <div class="box-header">
             <p class="box-title"><strong>ປະເພດສະຖານທີ່ພັກອາໄສທັງໝົດ</strong></p>
           </div>
@@ -42,55 +45,21 @@
                     <th style="width: 40px"></th>
                     <th style="width: 40px"></th>
                   </tr>
-                  <tr>
-                    <td>1</td>
+                  <tr *ngFor="let type of shelter_types; let i=index">
+                    <td>{{i + 1}}</td>
                     <td>
-                      <p *ngIf="!checkVisible">ໂຮງແຮມ</p>
-                      <div class="form-group" *ngIf="checkVisible">
-                        <input type="text" class="form-control" id="shelt_type_update" placeholder="ປະເພດສະຖານທີພັກອາໄສ">
+                      <p *ngIf="!checkUpdate[i]">{{type.name}}</p>
+                      <div class="form-group" *ngIf="checkUpdate[i]">
+                        <input type="text" class="form-control" [(ngModel)]="new_name" placeholder="ປະເພດສະຖານທີພັກອາໄສ">
                       </div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
+                        <button type="button" class="btn btn-success" *ngIf="!checkUpdate[i]" (click)="viewEditType(i)"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" *ngIf="checkUpdate[i]" (click)="updateType(i)"><i class="fa fa-save"></i></button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>
-                        <p *ngIf="!checkVisible">ເຮືອນພັກ</p>
-                    <div class="form-group" *ngIf="checkVisible">
-                        <input type="text" class="form-control" id="res_type_update" placeholder="ປະເພດສະຖານທີພັກອາໄສ">
-                      </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>
-                        <p *ngIf="!checkVisible">ເຮືອນພື້ນເມືອງລາວ</p>
-                    <div class="form-group" *ngIf="checkVisible">
-                        <input type="text" class="form-control" id="res_type_update" placeholder="ປະເພດຮ້ານອາຫານ">
-                      </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-success" *ngIf="!checkVisible" (click)="checkVisible=true"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-primary" *ngIf="checkVisible"><i class="fa fa-save"></i></button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" *ngIf="!checkVisible"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-danger" *ngIf="checkVisible" (click)="checkVisible=false"><i class="fa fa-close"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="!checkUpdate[i]" (click)="deleteType(i, type._id)"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="checkUpdate[i]" (click)="checkUpdate[i]=false"><i class="fa fa-close"></i></button>
                     </td>
                   </tr>
                 </table>

@@ -55,7 +55,7 @@ export class UserInsertComponent implements OnInit {
       ],
       user_confirm: [null, [Validators.required]],
       user_permission: [null, [Validators.required]],
-      user_profile: [null]
+      user_profile: [null, [Validators.required]]
     });
     this.userForm.setValidators(PasswordValidators.mismatchedPasswords('user_pass', 'user_confirm'));
 

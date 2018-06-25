@@ -106,3 +106,43 @@ agm-map {
 .error-message-many{
   color: rgb(223, 113, 113);
 }
+
+.save-box{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.save-detail {
+  width: 10%;
+  position: absolute;
+  top: 48%;
+  left: 45%;
+}
+.box-revers-background{
+  opacity: .6;
+  position: absolute;
+  background: rgb(105, 104, 104);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-box {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.uppload-detail {
+  width: 18%;
+  position: absolute;
+  top: 48%;
+  left: 41%;
+}

@@ -16,16 +16,20 @@
                     <label>ຊື່ສະຖານີ</label>
                     <input type="text" class="form-control" id="tran_name" formControlName="tran_name" placeholder="ຊື່ສະຖານີ">
                   </div>
+                  <ul class="error-message-one" *ngIf="transportationForm.controls['tran_name'].errors && transportationForm.controls['tran_name'].dirty">
+                    <li [hidden]="!transportationForm.controls['tran_name'].hasError('required')">ຊື່ສະຖານີຂົນສົ່ງໂດຍສານຫ້າມວ່າງ</li>
+                  </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດສະຖານີ</span>
-                  <select class="form-control select2" id="tran_type" formControlName="tran_type" style="width: 100%;">
-                    <option value="A" selected="selected">ທາງບົກ</option>
-                    <option value="B">ທາງອາກາດ</option>
-                    <option value="C">ທາງນ້ຳ</option>
+                  <select class="form-control select2" id="tran_type" formControlName="tran_type" style="width: 100%;" (change)="getServiceAutocomplete()">
+                    <option *ngFor="let type of transportation_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
-                  </div>
+                </div>
+                <ul class="error-message-one" *ngIf="transportationForm.controls['tran_type'].errors && transportationForm.controls['tran_type'].dirty">
+                  <li [hidden]="!transportationForm.controls['tran_type'].hasError('required')">ເພີ່ມປະເພດສະຖານີຂົນສົ່ງໂດຍສານກ່ອນ</li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -35,45 +39,36 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ແຂວງ</span>
-                    <select class="form-control select2" id="tran_province" formControlName="tran_province" style="width: 100%;">
-                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                      <option value="B">ວຽງຈັນ</option>
-                      <option value="C">ຊຽງຂວາງ</option>
-                      <option value="D">ໄຊຍະບູລີ</option>
-                      <option value="E">ຄຳມ່ວນ</option>
-                      <option value="F">ຜົ້ງສາລີ</option>
-                      <option value="G">ຈຳປາສັກ</option>
+                    <select class="form-control select2" id="tran_province" formControlName="tran_province" style="width: 100%;" (change)="changeDistrict()">
+                      <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ເມືອງ</span>
-                    <select class="form-control select2" id="tran_district" formControlName="tran_district" style="width: 100%;">
-                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                      <option value="B">ໄຊທານີ</option>
-                      <option value="C">ສີໂຄດຕະບອງ</option>
-                      <option value="D">ໄກສອນ</option>
-                      <option value="E">A</option>
-                      <option value="F">B</option>
-                      <option value="G">C</option>
+                    <select class="form-control select2" id="tran_district" formControlName="tran_district" style="width: 100%;" (change)="changeVillage()">
+                      <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <span>ບ້ານ</span>
-                  <input 
-                        type="text" 
-                        class="form-control" 
-                        id="tran_village" 
-                        ngui-auto-complete
-                        [source]="villages"
-                        z-index="4"
-                        formControlName="tran_village" 
-                        placeholder="ບ້ານ">
+                  <div class="form-group">
+                    <span>ບ້ານ</span>
+                    <input 
+                          type="text" 
+                          class="form-control" 
+                          id="tran_village" 
+                          ngui-auto-complete
+                          [source]="villages"
+                          z-index="4"
+                          formControlName="tran_village" 
+                          placeholder="ບ້ານ">
+                  </div>
+                  <ul class="error-message-one" *ngIf="transportationForm.controls['tran_village'].errors && transportationForm.controls['tran_village'].dirty">
+                    <li [hidden]="!transportationForm.controls['tran_village'].hasError('required')">ຊື່ບ້ານຫ້າມວ່າງ</li>
+                  </ul>
                 </div>
-              </div>
             </div>
             <div class="row">
               <div class="col-lg-12 col-xs-12">
@@ -83,19 +78,19 @@
                     [latitude]="lat"
                     [longitude]="lng"
                     [zoom]="zoom"
-                    [disableDefaultUI]="true"
-                    [zoomControl]="true">
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
                     
-                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                        [radius]="5000"
-                        [fillColor]="'red'"
-                        [circleDraggable]="true"
-                        [editable]="true">
-                    </agm-circle>
-
+                    <agm-marker 
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
+  
                   </agm-map>
                 </div>
-                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+                <button type="button" class="btn btn-success btn-round" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
@@ -108,6 +103,11 @@
                     <span>ລອງຕິຈຸດ</span>
                   <input type="text" class="form-control" readonly id="tran_long" formControlName="tran_long" placeholder="ລອງຕິຈຸດ">
                 </div>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <ul class="error-message-one" *ngIf="transportationForm.controls['tran_long'].errors && transportationForm.controls['tran_long'].dirty">
+                  <li [hidden]="!transportationForm.controls['tran_long'].hasError('required')">ຄລິກເລືອກລັດຕິຈຸດ ແລະ ລອງຕິຈຸດຈາກແຜນທີ່</li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -127,12 +127,19 @@
                     <span>ເບີໂທ</span>
                     <input type="text" class="form-control"  id="tran_tel" formControlName="tran_tel" placeholder="ເບີໂທຕິດຕໍ່">
                   </div>
+                  <ul class="error-message-one" *ngIf="transportationForm.controls['tran_tel'].errors && transportationForm.controls['tran_tel'].dirty">
+                    <li [hidden]="!transportationForm.controls['tran_tel'].hasError('required')">ເບີໂທຕິດຕໍ່ຫ້າມວ່າງ</li>
+                  </ul>
                 </div>
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ອີເມວ</span>
                     <input type="email" class="form-control"  id="tran_email" formControlName="tran_email" placeholder="ອີເມວຕິດຕໍ່">
                   </div>
+                  <ul class="error-message-many" *ngIf="transportationForm.controls['tran_email'].errors && transportationForm.controls['tran_email'].dirty">
+                    <li [hidden]="!transportationForm.controls['tran_email'].hasError('required')">ອີເມວຫ້າມວ່າງ</li>
+                    <li [hidden]="!transportationForm.controls['tran_email'].hasError('simpleEmailRule')">ອີເມວບໍ່ຖືກຕ້ອງ</li>
+                  </ul>
                 </div>
               </div>
               <!-- Contact -->
@@ -153,13 +160,20 @@
                     <td>{{i + 1}}</td>
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" id="tran_social_name" formControlName="tran_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                            <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                         </div>
+                        <ul class="error-message-one" *ngIf="social.controls['name'].errors && social.controls['name'].dirty">
+                          <li [hidden]="!social.controls['name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                        </ul>
                     </td>
                     <td>
                       <div class="form-group">
-                          <input type="text" class="form-control input-sm" id="tran_social_url" formControlName="tran_social_url" placeholder="URL">
+                          <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                       </div>
+                      <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
+                        <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                        <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
+                      </ul>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
@@ -176,8 +190,11 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
-                  <input type="file"  id="res_images" (change)="fileChangeListener($event)">
+                  <input type="file" accept="image/*" id="res_images" (change)="fileChangeListener($event)">
                 </div>
+                <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
+                  <li [hidden]="transportationForm.value['images'].length">ຕ້ອງເລືອກຮູບຂອງສະຖານີຂົນສົ່ງໂດຍສານຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                </ul>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of transportationForm.value['images']; let i=index">
                   <div class="small-box">
@@ -194,13 +211,16 @@
             <div class="row">
             <div class="col-lg-12 col-xs-12">
               <div class="form-group">
-                <span>ວີດີໂອ URL</span>
-                <input type="text" class="form-control" id="tran_video" formControlName="tran_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+                <span>Youtube ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="tran_video" formControlName="tran_video" placeholder="Youtube ວີດີໂອ URL">
               </div>
+              <ul class="error-message-one" *ngIf="transportationForm.controls['tran_video'].errors && transportationForm.controls['tran_video'].dirty">
+                <li [hidden]="!transportationForm.controls['tran_video'].hasError('url')">(https://www.youtube.com/...)</li>
+              </ul>
             </div>
-            <div class="col-lg-12 col-xs-12">
+            <div class="col-lg-12 col-xs-12" *ngIf="transportationForm.value['tran_video'] && transportationForm.controls['tran_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(transportationForm.value['tran_video'])"
                           frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
@@ -229,9 +249,20 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                   <div class="form-group">
-                                    <span>ຍານພາຫະນະ</span>
-                                    <input type="text" class="form-control" id="service_name" formControlName="service_name" placeholder="ຍານພາຫະນະ">
+                                    <span>ຍານພາຫະນະບໍລິການ</span>
+                                    <input 
+                                          type="text" 
+                                          class="form-control" 
+                                          id="service_name" 
+                                          ngui-auto-complete
+                                          [source]="v_services"
+                                          z-index="4"
+                                          formControlName="service_name" 
+                                          placeholder="ຍານພາຫະນະບໍລິການ">
                                   </div>
+                                  <ul class="error-message-one" *ngIf="service.controls['service_name'].errors && service.controls['service_name'].dirty">
+                                    <li [hidden]="!service.controls['service_name'].hasError('required')">ຍານພາຫະນະບໍລິການຫ້າມວ່າງ</li>
+                                  </ul>
                                   <div class="row">
                                     <div class="col-lg-push-1 col-lg-11 col-md-push-1 col-md-11 col-sm-push1 col-sm-11 col-xs-push-1 col-xs-11">
                                       <h4><strong>ໄລຍະທາງ</strong></h4>
@@ -252,18 +283,28 @@
                                                 <td>{{j + 1}}</td>
                                                 <td>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control input-sm" id="from" formControlName="from" placeholder="ຕົ້ນທາງ">
+                                                        <input type="text" class="form-control input-sm" formControlName="from" placeholder="ຕົ້ນທາງ">
                                                     </div>
+                                                    <ul class="error-message-one" *ngIf="distance.controls['from'].errors && distance.controls['from'].dirty">
+                                                      <li [hidden]="!distance.controls['from'].hasError('required')">ຕົ້ນທາງຫ້າມວ່າງ</li>
+                                                    </ul>
                                                 </td>
                                                 <td>
                                                   <div class="form-group">
-                                                      <input type="text" class="form-control input-sm" id="to" formControlName="to" placeholder="ປາຍທາງ">
+                                                      <input type="text" class="form-control input-sm" formControlName="to" placeholder="ປາຍທາງ">
                                                   </div>
+                                                  <ul class="error-message-one" *ngIf="distance.controls['to'].errors && distance.controls['to'].dirty">
+                                                    <li [hidden]="!distance.controls['to'].hasError('required')">ປາຍທາງຫ້າມວ່າງ</li>
+                                                  </ul>
                                                 </td>
                                                 <td>
                                                   <div class="form-group">
-                                                      <input type="number" class="form-control input-sm" id="price" formControlName="price" placeholder="ລາຄາ">
+                                                      <input type="number" class="form-control input-sm" formControlName="price" placeholder="ລາຄາ">
                                                   </div>
+                                                  <ul class="error-message-one" *ngIf="distance.controls['price'].errors && distance.controls['price'].dirty">
+                                                    <li [hidden]="!distance.controls['price'].hasError('required')">ລາຄາຫ້າມວ່າງ</li>
+                                                    <li [hidden]="!distance.controls['price'].hasError('min')">ລາຄາຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+                                                  </ul>
                                                 </td>
                                                 <td>
                                                   <button type="button" class="btn btn-danger btn-sm" (click)="service.get('distances').removeAt(j)"><i class="fa fa-minus"></i></button>
@@ -328,7 +369,7 @@
           </div>
           <div class="box-body upload-scrollbar">
             <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let image of anotherForm.value['images']; let i=index">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let image of transportationForm.value['images']; let i=index">
                 <div class="box box-widget">
                   <div class="box-body">
                     <div class="clearfix">

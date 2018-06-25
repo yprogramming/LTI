@@ -1,5 +1,4 @@
 import { NgProgressModule } from 'ngx-progressbar';
-import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 import { TooltipModule } from 'ngx-tooltip';
 import { AddressRoutingModule } from './address-routing.module';
 import { AddressComponent } from './address.component';

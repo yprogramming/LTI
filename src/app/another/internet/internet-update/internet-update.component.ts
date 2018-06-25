@@ -59,6 +59,7 @@ export class InternetUpdateComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -115,10 +116,10 @@ export class InternetUpdateComponent implements OnInit {
       if (params.id) {
       const int_id = params.id;
       internetService.getInternet(int_id).subscribe((internet_center) => {
-        console.log(internet_center.json()['data']);
          this.internet_center = internet_center.json()['data'];
          this.lat = this.internet_center['location']['lat'];
          this.lng = this.internet_center['location']['long'];
+         this.label = this.internet_center['name'];
        }, (error) => {
          if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
@@ -210,7 +211,6 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   croppedImage() {
-    console.log(this.data);
     this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ອັບໂຫຼດ',
@@ -303,13 +303,33 @@ export class InternetUpdateComponent implements OnInit {
     });
   }
 
+  checkPublished() {
+    return StaticFunc.published(this.internet_center['published']);
+  }
+
   setCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    if (this.checkEditLocation) {
+      this.lat = $event.coords.lat;
+      this.lng = $event.coords.lng;
+      this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    }
+  }
+
+  cancelLocation() {
+    this.lat = this.internet_center['location']['lat'];
+    this.lng = this.internet_center['location']['long'];
+    this.label = this.internet_center['name'];
+    this.checkEditLocation = false;
   }
 
   changeDistrict() {
@@ -342,10 +362,11 @@ export class InternetUpdateComponent implements OnInit {
     }
   }
 
-  cancelLocation() {
-    this.lat = this.internet_center['location']['lat'];
-    this.lng = this.internet_center['location']['long'];
-    this.checkEditLocation = false;
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
   }
 
   viewEditName() {
@@ -432,7 +453,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -533,7 +554,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -593,7 +614,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -653,7 +674,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -710,7 +731,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -768,7 +789,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -819,7 +840,7 @@ export class InternetUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງບັນທືກຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -835,7 +856,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   deleteInternet() {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຂໍ້ມູນສູນອິນເຕີເນັດນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຂໍ້ມູນສູນອິນເຕີເນັດນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ບັນທືກ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -871,7 +892,7 @@ export class InternetUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -884,7 +905,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   deleteImage(i, image) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຮູບນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຮູບນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -917,7 +938,7 @@ export class InternetUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -930,7 +951,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   deleteSocial(i, social) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບສື່ອອນໄລນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບສື່ອອນໄລນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -963,7 +984,7 @@ export class InternetUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

@@ -15,35 +15,57 @@
     
     <!-- Main content -->
     <section class="content">
+      <input type="file" accept="image/*"  id="id_choose_profile" (change)="fileChangeListener($event)" style="opacity: 0;">
       <div class="box box-widget">
         <div class="box-header bg-aqua-active">
           <div class="box-tools">
             <button type="button" class="btn btn-box-tool" tooltip="ລືມລະຫັດຜ່ານ">
               <i class="fa  fa-question-circle"></i>
           </button>
-            <button type="button" class="btn btn-box-tool" tooltip="ແກ້ໄຂຊື່ຜູ້ໃຊ້">
+            <button type="button" class="btn btn-box-tool" tooltip="ແກ້ໄຂຊື່ຜູ້ໃຊ້" (click)="viewEditName()">
                 <i class="fa fa-edit"></i>
             </button>
-            <button type="button" class="btn btn-box-tool" tooltip="ປ່ຽນໂປຣຟາຍລ໌">
+            <button type="button" class="btn btn-box-tool" tooltip="ປ່ຽນໂປຣຟາຍລ໌" (click)="viewUpdateProfile()">
                 <i class="fa fa-camera"></i>
             </button>
           </div>
         </div>
         <div class="box-body box-profile bg-aqua-active">
-          <img class="profile-user-img img-responsive img-circle" [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" alt="User profile picture">
+          <img class="profile-user-img img-responsive img-circle" [src]="user['user_profile']?user['user_profile']:'assets/img/ic_user.jpg'" alt="User profile picture">
+          <h3 class="profile-username text-center">
+            <span *ngIf="!checkUpdateName">{{user.user_name}}</span>
+          </h3>
+          <div class="row" *ngIf="checkUpdateName">
+              <div class="col-lg-push-3 col-lg-6 col-md-push-2 col-md-8 col-xs-12">
+                <form novalidate [formGroup]="userNameUpdateForm" (ngSubmit)="updateName()">
+                  <table class="table table-condensed table-margin">
+                    <tr>
+                        <td>
+                          <div class="form-group">
+                            <input type="text" class="form-control input-sm" formControlName="fullname" placeholder="ຊື່ ແລະ ນາມສະຖຸນ">
+                          </div>
+                        </td>
+                        <td style="width: 20px">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                        </td>
+                        <td style="width: 20px">
+                            <button type="button" class="btn btn-danger btn-sm" (click)="checkUpdateName=false"><i class="fa fa-close"></i></button>
+                        </td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
 
-          <h3 class="profile-username text-center"><span>{{user.user_name}}</span></h3>
-
-          <p class="text-muted text-center">{{userPMS()}}</p>
+          <p class="text-muted text-center" *ngIf="!checkUpdateName">{{userPMS()}}</p>
         </div>
         <div class="box-footer">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-lg-5 col-md-5 col-xs-12">
                   <div class="box">
                     <div class="box-header">
                       <h3 class="box-title"><strong>ເຂົ້າສູ່ລະບົບ</strong></h3>
                     </div>
-                    <!-- /.box-header -->
                     <div class="box-body no-padding">
                       <table class="table table-condensed">
                         <tr>
@@ -75,7 +97,6 @@
                       <div class="box-header">
                         <h3 class="box-title"><strong>ອອກຈາກລະບົບ</strong></h3>
                       </div>
-                      <!-- /.box-header -->
                       <div class="box-body no-padding">
                         <table class="table table-condensed">
                           <tr>
@@ -106,7 +127,7 @@
                       </div>
                     </div>
                 </div>
-              </div>
+              </div> -->
         </div>
         <!-- /.box-body -->
       </div>
@@ -114,3 +135,61 @@
     </section>
     <!-- Main content -->
     </div>
+
+  <!-- Crom image dialog -->
+  <div class="image-cropper-view" *ngIf="cropImageChecked">
+      <div class="text-center">
+        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+      </div>
+      <div class="text-center">
+        <label style="width: 800px;">
+          <div class="text-right">
+            <button type="button" class="btn btn-danger" (click)="cancelCrop()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+            <button type="button" class="btn btn-success" (click)="croppedImage()"><i class="fa fa-save"></i> ອັບໂຫຼດ</button>
+          </div>
+        </label>
+      </div>
+    </div>
+    <!-- Crom image dialog -->
+
+
+<!-- Upload image dialog *ngIf="uploadImageChecked" -->
+<div class="upload-box" *ngIf="uploadImageChecked">
+  <div class="box-revers-background"></div>
+  <div class="box box-widget uppload-detail">
+    <div class="box-body">
+      <div class="clearfix">
+        <span class="pull-left">ອັບໂຫຼດແລ້ວ</span>
+        <small class="pull-right">{{uploadPercent | number:'1.0-0'}}%</small>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-green" [ngStyle]="{width: uploadPercent + '%'}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Upload image dialog -->
+
+  <!-- Saving icon -->
+  <div class="save-box" *ngIf="savingChecked">
+      <div class="box-revers-background"></div>
+      <div class="box box-widget bg-blue save-detail">
+        <div class="box-body text-center">
+            <i class="fa fa-save"></i>
+            <strong>ກຳລັງບັນທືກ ...</strong>
+        </div>
+      </div>
+    </div>
+  <!-- Saving icon -->
+
+  <!-- Saved icon -->
+  <div class="save-box" *ngIf="savedChecked">
+      <div class="box-revers-background"></div>
+    <div class="box box-widget bg-green save-detail">
+      <div class="box-body text-center">
+          <i class="fa fa-check"></i>
+          <strong>ບັນທືກແລ້ວ</strong>
+      </div>
+    </div>
+  </div>
+  <!-- Saved icon -->

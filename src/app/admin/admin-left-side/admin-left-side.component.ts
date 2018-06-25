@@ -14,6 +14,20 @@ export class AdminLeftSideComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
+    const clearUserInterval = setInterval(() => {
+      try {
+        this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
+      } catch (e) {
+        clearInterval(clearUserInterval);
+      }
+    }, 3000);
+  }
+
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_user.jpg';
   }
 
   en_user_id(id: string) {

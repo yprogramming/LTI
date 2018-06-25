@@ -58,6 +58,13 @@ export class InternetListComponent implements OnInit {
   ngOnInit() {
   }
 
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
+  }
+
   checkInternetLength() {
     if (this.internet_centers.length > 25) {
       return true;

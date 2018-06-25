@@ -57,6 +57,13 @@ export class AnotherListComponent implements OnInit {
   ngOnInit() {
   }
 
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
+  }
+
   checkAnotherLength() {
     if (this.another_places.length > 25) {
       return true;

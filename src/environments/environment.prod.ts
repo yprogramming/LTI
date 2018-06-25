@@ -8,6 +8,6 @@ export const environment = {
     storageBucket: 'laotour-info.appspot.com',
     messagingSenderId: '753926615292'
   },
-  ANONYMOUS_SECRET: 'laotourapi@nuol.fns.edu.la',
-  SERVER_ADDRESS: 'http://localhost:3000'
+  ANONYMOUS_SECRET: 'laotourinfo@svy.nuol.fns.edu.la',
+  SERVER_ADDRESS: 'https://laotourinfo-api.herokuapp.com'
 };

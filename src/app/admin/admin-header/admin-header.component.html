@@ -13,79 +13,74 @@
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top">
     <!-- Sidebar toggle button-->
-    <a href="javascript:event(0)" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+    <a href="javascript:event" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
 
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
         <!-- Notifications: style can be found in dropdown.less -->
-        <li class="dropdown notifications-menu">
+        <li class="dropdown notifications-menu" *ngIf="checkUserPMS()">
           <a href="javascript:event" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <span class="label label-danger" *ngIf="notifications['length']">{{notifications['length']}}</span>
             </a>
           <ul class="dropdown-menu">
-            <li class="header"><strong>ມີແຈ້ງເຕືອນທັງໝົດ 10 ຄັ້ງ</strong></li>
+            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ' + notifications['length'] + 'ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
             <li>
               <!-- inner menu: contains the actual data -->
               <ul class="menu">
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-users text-aqua"></i> ກວດສອບສະຖານທີ່ທ່ອງທ່ຽວຖ້ຳຈັງ
-                    </a>
-                </li>
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-warning text-yellow"></i> ກວດສອບການປັບປຸງຂໍ້ມູນຮ້ານອາຫານດວງວິໄລ
-                    </a>
-                </li>
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-users text-red"></i> ກວດສອບການຂໍ້ມູນໂຮງແຮມລາວວຽງ
-                    </a>
-                </li>
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-shopping-cart text-green"></i> ກວດສອບຄວາມຖືກຕ້ອງຂອງສະນີລົດເມສາຍໃຕ້
-                    </a>
-                </li>
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-user text-red"></i> ກວດສອບຄວາມຖືກຕ້ອງກ່ຽວກັບບໍລິສັດນຳທ່ຽວທົ່ວລາວ
-                    </a>
-                </li>
-                <li>
-                  <a href="javascript:event">
-                      <i class="fa fa-user text-red"></i> ກວດສອບຄວາມຖືກຕ້ອງກ່ຽວກັບປ້ຳນ້ຳມັນວຽງຈັນໃຫມ່
-                    </a>
+                <li *ngFor="let notification of notifications['data']">
+                  <a [routerLink]="notification['_detail']['path']">
+                    <i class="fa {{notification['_detail']['icon']}} text-red"></i> {{notification['_detail']['title']}}
+                  </a>
                 </li>
               </ul>
             </li>
-            <li class="footer"><a href="javascript:event"><strong>ແຈ້ງເຕືອນທັງໝົດ</strong></a></li>
+            <li class="footer"><a [routerLink]="['/dashboard', 'notification']"><strong>ແຈ້ງເຕືອນທັງໝົດ</strong></a></li>
+          </ul>
+        </li>
+        <li class="dropdown notifications-menu" *ngIf="!checkUserPMS()">
+          <a href="javascript:event" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-danger" *ngIf="notifications['length']">{{notifications['length']}}</span>
+            </a>
+          <ul class="dropdown-menu">
+            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ' + notifications['length'] + 'ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
+            <li>
+              <!-- inner menu: contains the actual data -->
+              <ul class="menu">
+                <li *ngFor="let notification of notifications['data']">
+                  <a [routerLink]="['/dashboard', 'notification', 'detail', notification['_id']]">
+                    <i class="fa fa-users text-aqua"></i> {{notification['_detail']['title']}}
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="footer"><a [routerLink]="['/dashboard', 'notification']"><strong>ແຈ້ງເຕືອນທັງໝົດ</strong></a></li>
           </ul>
         </li>
         
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
           <a href="javascript:event" class="dropdown-toggle" data-toggle="dropdown">
-              <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="user-image" alt="User Image">
-              <span class="hidden-xs">{{user.user_name}}</span>
+              <img [src]="user['user_profile']?getImage(user['user_profile']):'assets/img/ic_user.jpg'" class="user-image" alt="User Image">
+              <span class="hidden-xs">{{user['user_name']}}</span>
             </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <img [src]="user.user_profile?user.user_profile:'assets/img/ic_user.jpg'" class="img-circle" alt="User Image" (click)="navigateToProfile(en_user_id(user['user_id']))">
+              <img [src]="user['user_profile']?getImage(user['user_profile']):'assets/img/ic_user.jpg'" class="img-circle" alt="User Image" (click)="navigateToProfile(en_user_id(user['user_id']))">
 
               <p>
-                  {{user.user_name}} ~<span><small>{{userPMS()}}</small></span>
-                <small>{{user.lg_date}}</small>
+                  {{user['user_name']}} ~<span><small>{{userPMS()}}</small></span>
+                <small>{{user['lg_date']}}</small>
               </p>
             </li>
             <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
-                <a [routerLink]="['/dashboard','profile', en_user_id(user['user_id'])]" class="btn btn-default btn-flat">ຂໍ້ມູນສ່ວນຕົວ</a>
+                <a [routerLink]="['/dashboard','profile', en_user_id(user['user_id'])]" class="btn btn-default btn-flat" *ngIf="user">ຂໍ້ມູນສ່ວນຕົວ</a>
               </div>
               <div class="pull-right">
                 <a href="javascript:event" class="btn btn-default btn-flat" (click)="doLogout()">ອອກລະບົບ</a>

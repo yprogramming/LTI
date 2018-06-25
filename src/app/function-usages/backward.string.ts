@@ -1,5 +1,6 @@
 export class BackwardString {
-    static backward(str) {
+    static backward(st) {
+        const str: string = st;
         let odd = '';
         let even = '';
         if (str.length % 2 === 0) {

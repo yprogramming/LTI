@@ -1,4 +1,5 @@
-import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
+import { NgProgressModule } from 'ngx-progressbar';
+import { TransportationService } from './../services/transportation.service';
 import { TooltipModule } from 'ngx-tooltip';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
@@ -23,6 +24,7 @@ const tran_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     TransportationRoutingModule,
     AgmCoreModule.forRoot({
@@ -31,20 +33,11 @@ const tran_component = [
     NguiAutoCompleteModule,
     ImageCropperModule,
     TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    })
+    NgProgressModule
   ],
   declarations: [
     ...tran_component
-  ]
+  ],
+  providers: [ TransportationService ]
 })
 export class TransportationModule { }

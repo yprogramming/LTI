@@ -1,3 +1,7 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
     <div class="col-lg-push-2 col-lg-8 col-md-push-1 col-md-10 col-xs-12">
       <!-- Box Comment -->
@@ -10,36 +14,43 @@
                     <div class="box-header">
                       <div class="form-group">
                         <label for="res_images">ເພີ່ມຮູບ</label>
-                        <input type="file"  id="res_images" (change)="fileChangeListener($event)">
+                        <input type="file" accept="image/*" id="res_images" (change)="fileChangeListener($event)">
                       </div>
-                      <div class="box-tools"><a href="javascript:event(0)" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
+                      <div class="box-tools"><a href="javascript:event" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <div class="small-box">
-                              <div class="box-header">
-                                <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon"></i></div>
-                              </div>
-                              <div class="inner">
-                                  <img src="assets/img/photo5.png" alt="image {{1}}">
-                              </div>
-                            </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of transportation['images']; let i=index">
+                        <div class="small-box">
+                          <div class="box-header">
+                            <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
                           </div>
+                          <div class="inner">
+                            <img [src]="getImage(image)" alt="image {{i}}">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
               </div>
           </div>
           <div class="row" *ngIf="!checkEditProfile">
-              <div class="col-lg-12 col-xs-12">
-                  <img src="assets/img/photo5.png" alt="Photo 2">
-                  <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
-              </div>
+            <div class="col-lg-12 col-xs-12">
+              <img [src]="getImage(transportation['images'][0])" alt="Photo 2" *ngIf="transportation['images']">
+              <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
+            </div>
           </div>
           <!-- /.user-block -->
           <div class="row">
               <div class="col-lg-12 col-xs-12" *ngIf="!checkEditName">
-                  <h3><strong tooltip="ຊື່ສະຖານີໂດຍສານ">ຄິວລົດສາຍໃຕ້</strong> <span style="font-size: 16px;">(<span class="help-text"> ສະຖານີຂົນສົ່ງໂດຍສານ </span>) </span> <i tooltip="ແກ້ໄຂຊື່ສະຖານີ" class="fa fa-edit editIcon" (click)="checkEditName=true"></i></h3>
-                  <p><span tooltip="ປະເພດສະຖານີໂດຍສານ" style="color: rgb(206, 205, 205);">ທາງບົກ</span></p>
+                  <h3>
+                    <strong tooltip="ຊື່ສະຖານີໂດຍສານ">{{transportation['name']}}</strong> 
+                    <span style="font-size: 16px;">
+                      (<span class="help-text"> ສະຖານີຂົນສົ່ງໂດຍສານ </span>)
+                    </span> <i tooltip="ແກ້ໄຂຊື່ສະຖານີ" class="fa fa-edit editIcon" (click)="viewEditName()"></i>
+                  </h3>
+                  <p>
+                    <span tooltip="ປະເພດສະຖານີໂດຍສານ" style="color: rgb(206, 205, 205);" *ngIf="transportation['transportation_type']">{{transportation['transportation_type']['name']}}</span>
+                  </p>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditName">
                 <h4 class="text-center"><strong>ແກ້ໄຂຊື່ສະຖານີໂດຍສານ</strong></h4>
@@ -54,13 +65,7 @@
                       <td>
                         <div class="form-group">
                           <select class="form-control select2" id="tran_type" formControlName="tran_type" style="width: 100%;">
-                            <option value="A" selected="selected">ປະເພດ A</option>
-                            <option value="B">ປະເພດ B</option>
-                            <option value="C">ປະເພດ C</option>
-                            <option value="D">ປະເພດ D</option>
-                            <option value="E">ປະເພດ E</option>
-                            <option value="F">ປະເພດ F</option>
-                            <option value="G">ປະເພດ G</option>
+                              <option *ngFor="let type of transportation_types" value="{{type['_id']}}">{{type['name']}}</option>
                           </select>
                         </div>
                       </td>
@@ -81,32 +86,27 @@
             <div class="row">
               <div class="col-lg-12 col-xs-12">
                   <h4><strong>ທີ່ຢູ່:</strong></h4>
-                  <p *ngIf="!checkEditAddress"><span style="font-size: 16px;">ບ້ານຜະຂາວ ເມືອງໄຊທານີ ນະຄອນຫລວງວຽງຈັນ</span> <i tooltip="ແກ້ໄຂທີ່ຢູ່" class="fa fa-edit editIcon" (click)="checkEditAddress=true"></i></p>
+                  <p *ngIf="!checkEditAddress">
+                    <span style="font-size: 16px;">
+                        ບ້ານ{{transportation['address']['village']}} 
+                        ເມືອງ{{transportation['address']['district']['district']}} 
+                        ແຂວງ{{transportation['address']['district']['province']['province']}}
+                    </span> 
+                    <i tooltip="ແກ້ໄຂທີ່ຢູ່" class="fa fa-edit editIcon" (click)="viewEditAddress()"></i>
+                  </p>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditAddress">
                   <form novalidate [formGroup]="updateAddressForm" (ngSubmit)="updateAddress()">
                     <table class="table table-condensed">
                       <tr>
                         <td>
-                          <select class="form-control select2" id="tran_province" formControlName="tran_province" style="width: 100%;">
-                            <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                            <option value="B">ວຽງຈັນ</option>
-                            <option value="C">ຊຽງຂວາງ</option>
-                            <option value="D">ໄຊຍະບູລີ</option>
-                            <option value="E">ຄຳມ່ວນ</option>
-                            <option value="F">ຜົ້ງສາລີ</option>
-                            <option value="G">ຈຳປາສັກ</option>
+                          <select class="form-control select2" id="tran_province" formControlName="tran_province" style="width: 100%;" (change)="changeDistrict()">
+                              <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                           </select>
                         </td>
                         <td>
-                          <select class="form-control select2" id="tran_district" formControlName="tran_district" style="width: 100%;">
-                            <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                            <option value="B">ໄຊທານີ</option>
-                            <option value="C">ສີໂຄດຕະບອງ</option>
-                            <option value="D">ໄກສອນ</option>
-                            <option value="E">A</option>
-                            <option value="F">B</option>
-                            <option value="G">C</option>
+                          <select class="form-control select2" id="tran_district" formControlName="tran_district" style="width: 100%;" (change)="changeVillage()">
+                              <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                           </select>
                         </td>
                         <td>
@@ -137,24 +137,24 @@
                     [latitude]="lat"
                     [longitude]="lng"
                     [zoom]="zoom"
-                    [disableDefaultUI]="true"
-                    [zoomControl]="true">
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
                     
-                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                        [radius]="5000"
-                        [fillColor]="'red'"
-                        [circleDraggable]="true"
-                        [editable]="true">
-                    </agm-circle>
+                    <agm-marker 
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
   
                   </agm-map>
                 </div>
                 <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation" (click)="checkEditLocation=true"></i>
                 <div class="text-right saveLocationButton" *ngIf="checkEditLocation">
-                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="checkEditLocation=false"><i class="fa fa-close"></i></button>
+                  <button tooltip="ບັນທືກຈຸດທີ່ຕັ້ງໃໝ່" type="button" class="btn btn-primary btn-sm" (click)="updateLocation()"><i class="fa fa-save"></i></button>
+                  <button tooltip="ຍົກເລີກ" type="button" class="btn btn-danger btn-sm" (click)="cancelLocation()"><i class="fa fa-close"></i></button>
                 </div>
-                <button type="button" class="btn btn-success btn-round" *ngIf="checkEditLocation" ><i class="fa fa-map-marker"></i></button>
+                <button type="button" class="btn btn-success btn-round" *ngIf="checkEditLocation" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
   
             </div>
@@ -162,7 +162,10 @@
               <!-- Detail Update -->
               <div class="col-lg-12 col-xs-12">
                   <h4><strong>ລາຍລະອຽດ:</strong></h4>
-                  <p *ngIf="!checkEditDetail"><span style="font-size: 16px;"> xxx xxx xxxx xxx xxxx xxx xxxx xxxx xxxx xxxx xxxx xxxx xxx xxxx xxxx xxx xxxx xxx xxx xx xxxxx xxxx xxx xxx xxx xxx xxx xxx xxx xx</span> <i tooltip="ແກ້ໄຂລາຍລະອຽດ" class="fa fa-edit editIcon" (click)="checkEditDetail=true"></i></p>
+                  <p *ngIf="!checkEditDetail">
+                    <span style="font-size: 16px;"> {{restaurant['detail']}}</span> 
+                    <i tooltip="ແກ້ໄຂລາຍລະອຽດ" class="fa fa-edit editIcon" (click)="viewEditDetail()"></i>
+                  </p>
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="checkEditDetail">
                   <form novalidate [formGroup]="updateDetailForm" (ngSubmit)="updateDetail()">
@@ -192,7 +195,7 @@
                             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
                         </td>
                         <td style="width: 10px">
-                            <button type="button" class="btn btn-danger" (click)="checkEditVideo=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                            <button type="button" class="btn btn-danger" (click)="cancelVideo()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
                         </td>
                       </tr>
                     </table>
@@ -201,23 +204,31 @@
               </div>
               <div class="col-lg-12 col-xs-12">
                 <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
-                          frameborder="0" allowfullscreen></iframe>
+                  <iframe class="embed-responsive-item" [src]="safeVideoUrl()"
+                          frameborder="0" allowfullscreen *ngIf="safeVideoUrl()"></iframe>
                 </div>
                 <i tooltip="ແກ້ໄຂວີດີໂອ" class="fa fa-edit editLocation" *ngIf="!checkEditVideo" (click)="checkEditVideo=true"></i>
               </div>
               <!-- Video Update -->
 
               <div class="col-lg-12 col-xs-12">
-                  <h4><strong>ຂໍ້ມູນຕິດຕໍ່:</strong> <i tooltip="ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່" class="fa fa-edit editIcon" *ngIf="!checkEditContact" (click)="checkEditContact=true"></i></h4>
+                <h4>
+                  <strong>ຂໍ້ມູນຕິດຕໍ່:</strong> 
+                  <i 
+                    tooltip="ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່" 
+                    class="fa fa-edit editIcon" 
+                    *ngIf="!checkEditContact" 
+                    (click)="viewEditContact()">
+                  </i>
+                </h4>
                 <div class="row" *ngIf="!checkEditContact">
                   <div class="col-lg-6 col-md-6 col-xs-12">
                     <p>ເບີໂທ:</p>
-                    <p><strong>02099833266</strong></p>
+                    <p><strong>{{transportation['tel']}}</strong></p>
                   </div>
                   <div class="col-lg-6 col-md-6 col-xs-12">
                     <p>ອີເມວ:</p>
-                    <p><strong>yourthor.yiaveu@gmail.com</strong></p>
+                    <p><strong>{{transportation['email']}}</strong></p>
                   </div>
                 </div>
   
@@ -255,74 +266,41 @@
                 <div class="box">
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-xs-12">
+                      <div class="col-lg-6 col-md-6 col-xs-12" *ngFor="let service of transportation['services']; let i=index;">
                         <div class="box box-success">
                           <div class="box-header">
                             <div class="box-title">
-                              <strong>1. ລົດບັດສ໌</strong>
+                              <strong>{{i + 1}}. {{service['vehicle']}}</strong>
                             </div>
-                            <div class="box-tools"><i class="fa fa-edit editIcon" (click)="checkUpdateService=true"></i> <i class="fa fa-close closeIcon"></i></div>
+                            <div class="box-tools"><i class="fa fa-edit editIcon" (click)="viewEditService(i, service)"></i> <i class="fa fa-close closeIcon"></i></div>
                           </div>
                           <div class="box-body">
-                              <table class="table table-condensed">
-                                <tr>
-                                  <th>ລຳດັບ</th>
-                                  <th>ຕົ້ນທາງ</th>
-                                  <th>ປາຍທາງ</th>
-                                  <th>ລາຄາ</th>
-                                </tr>
-                                <tr>
-                                  <td>1</td>
-                                  <td>ວຽງຈັນ</td>
-                                  <td>ຊຽງຂວາງ</td>
-                                  <td>110000 ກີບ</td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>ວຽງຈັນ</td>
-                                  <td>ປາກເຊ</td>
-                                  <td>110000 ກີບ</td>
-                                </tr>
-                              </table>
+                            <table class="table table-condensed">
+                              <tr>
+                                <th>ລຳດັບ</th>
+                                <th>ຕົ້ນທາງ</th>
+                                <th>ປາຍທາງ</th>
+                                <th>ລາຄາ</th>
+                              </tr>
+                              <tr *ngFor="let distance of service['distances']; let j=index;">
+                                <td>{{j + 1}}</td>
+                                <td>
+                                  <p>{{distance['from']}}</p>
+                                </td>
+                                <td>
+                                  <p>{{distance['to']}}</p>
+                                </td>
+                                <td>
+                                  <p>{{distance['price']}}</p>
+                                </td>
+                              </tr>
+                            </table>
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-lg-6 col-md-6 col-xs-12">
-                          <div class="box box-success">
-                            <div class="box-header">
-                              <div class="box-title">
-                                <strong>2. ລົດບັດສ໌ VIP</strong>
-                              </div>
-                              <div class="box-tools"><i class="fa fa-edit editIcon" (click)="checkUpdateService=true"></i> <i class="fa fa-close closeIcon"></i></div>
-                            </div>
-                            <div class="box-body">
-                                <table class="table table-condensed">
-                                  <tr>
-                                    <th>ລຳດັບ</th>
-                                    <th>ຕົ້ນທາງ</th>
-                                    <th>ປາຍທາງ</th>
-                                    <th>ລາຄາ</th>
-                                  </tr>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>ວຽງຈັນ</td>
-                                    <td>ຊຽງຂວາງ</td>
-                                    <td>130000 ກີບ</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>ວຽງຈັນ</td>
-                                    <td>ປາກເຊ</td>
-                                    <td>130000 ກີບ</td>
-                                  </tr>
-                                </table>
-                            </div>
-                          </div>
-                        </div>
-
                       <div class="col-lg-12 col-xs-12 text-right" *ngIf="!checkAddService">
-                          <a tooltip="ເພີ່ມບໍລິການໃໝ່" href="javascript:event" class="color-green" (click)="addNewService()"><i class="fa fa-plus"></i> ເພີ່ມບໍລິການ</a>
+                          <a tooltip="ເພີ່ມບໍລິການໃໝ່" href="javascript:event" class="color-green" (click)="checkAddService=true"><i class="fa fa-plus"></i> ເພີ່ມບໍລິການ</a>
                       </div>
                       
                     </div>
@@ -338,8 +316,13 @@
                     <div class="box-body">
                       <form novalidate [formGroup]="addNewServiceForm" (ngSubmit)="saveNewService()">
                         <div class="form-group">
-                          <span>ຍານພາຫະນະ</span>
-                          <input type="text" class="form-control" id="service_name" formControlName="service_name" placeholder="ຍານພາຫະນະ">
+                          <span>ຍານພາຫະນະບໍລິການ</span>
+                          <input 
+                              type="text" 
+                              class="form-control" 
+                              id="service_name" 
+                              formControlName="service_name" 
+                              placeholder="ຍານພາຫະນະບໍລິການ">
                         </div>
                         <div class="row">
                           <div class="col-lg-push-1 col-lg-11 col-md-push-1 col-md-11 col-sm-push1 col-sm-11 col-xs-push-1 col-xs-11">
@@ -387,7 +370,7 @@
                           </div>
                         </div>
                         <div class="text-right">
-                            <button type="button" class="btn btn-danger" (click)="checkAddService=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                          <button type="reset" class="btn btn-danger" (click)="checkAddService=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
                           <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
                         </div>
                       </form>
@@ -408,34 +391,26 @@
                 </div>
                 <div class="col-lg-12 col-xs-12">
                   <div class="row" *ngIf="!checkEditSocial">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="small-box">
-                        <div class="box-header">
-                          <p><span style="font-size: 16px;">ເຟດບູກ:</span></p>
-                          <div class="box-tools">
-                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
-                              <i class="fa fa-close closeIcon" ></i>
+                    <div class="col-lg-12 col-xs-12">
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" *ngFor="let social of transportation['socials']; let i=index">
+                          <div class="small-box">
+                            <div class="box-header">
+                              <p><a href="{{social['url']}}" target="_blank"><span style="font-size: 16px;">{{social['name']}}</span></a></p>
+                              <div class="box-tools">
+                                  <i class="fa fa-edit editIcon" (click)="viewEditSocial(i, social)"></i>
+                                  <i class="fa fa-close closeIcon" (click)="deleteSocial(i, social)"></i>
+                              </div>
+                              <div>
+                                    <strong>{{social['url']}}</strong>
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                                <strong>www.facebook.com/yourthor.yiaveu</strong>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="small-box">
-                        <div class="box-header">
-                          <p><span style="font-size: 16px;">tweeter:</span></p>
-                          <div class="box-tools">
-                              <i class="fa fa-edit editIcon" (click)="checkEditSocial=true"></i>
-                              <i class="fa fa-close closeIcon" ></i>
-                          </div>
-                          <div><strong>www.tweeter.com/yourthor.yiaveu</strong></div>
                         </div>
                       </div>
                     </div>
                     <div class="col-lg-12 col-xs-12 text-right" *ngIf="!checkAddSocial">
-                        <a tooltip="ເພີ່ມສື່ອອນໄລ" href="javascript:event(0)" class="color-green" (click)="checkAddSocial=true"><i class="fa fa-plus"></i> ເພີ່ມສື່</a>
+                        <a tooltip="ເພີ່ມສື່ອອນໄລ" href="javascript:event" class="color-green" (click)="checkAddSocial=true"><i class="fa fa-plus"></i> ເພີ່ມສື່</a>
                     </div>
                     <div class="col-lg-12 col-xs-12" *ngIf="checkAddSocial">
                       <form novalidate [formGroup]="addNewSocialForm" (ngSubmit)="saveNewSocial()">
@@ -489,8 +464,22 @@
                       </table>
                     </form>
                 </div>
-                <div class="col-lg-12 col-xs-12 text-center">
-                    <a href="javascript:event(0)" class="closeIcon" style="font-size: 16px;"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                <div class="col-lg-12 col-xs-12 text-center" *ngIf="transportation['published']">
+                    <a href="javascript:event" class="closeIcon" style="font-size: 16px;" (click)="deleteTransportation()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                </div>
+                <div class="col-lg-12 col-xs-12" *ngIf="!transportation['published']">
+                  <div class="row">
+                      <div class="col-lg-6 col-xs-6">
+                          <a href="javascript:event" class="btn btn-danger" style="font-size: 16px;" (click)="deleteTransportation()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                      </div>
+                      <div class="col-lg-6 col-xs-6 text-right">
+                        <button type="button" class="btn btn-success" *ngIf="!checkPublished()"><i class="fa fa-thumbs-up" (click)="sendNotification()"></i> ສົ່ງຂໍ້ມູນໄປກວດສອບ</button>
+                        <span *ngIf="checkPublished()">
+                          <button type="button" class="btn btn-success"><i class="fa fa-thumbs-up"></i> ຂໍ້ມູນຖືກຕ້ອງແລ້ວ</button>
+                          <button type="button" class="btn btn-danger"><i class="fa fa-thumbs-down"></i> ຂໍ້ມູນຍັງບໍ່ຖືກຕ້ອງ</button>
+                        </span>
+                      </div>
+                  </div>
                 </div>
               </div>
         </div>
@@ -513,19 +502,22 @@
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        <h3><strong>ລົດບັດສ໌</strong></h3>
-          <table class="table table-condensed">
+          <h3 *ngIf="!checkEditService">
+              <strong>{{i + 1}}. {{update_service['vehicle']}}</strong>
+              <i tooltip="ແກ້ໄຂ" class="fa fa-edit editIcon" (click)="viewUpdateService()"></i>
+          </h3>
+          <table class="table table-condensed" *ngIf="checkEditService">
             <tr>
               <td>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="service_name" formControlName="service_name" placeholder="ຍານພາຫະນະ">
+                  <input type="text" class="form-control input-sm" [(ngModel)]="service_name" placeholder="ຍານພາຫະນະບໍລິການ">
                 </div>
               </td>
-              <td style="width: 40px">
-                <button type="button" class="btn btn-primary btn-block"><i class="fa fa-save"></i></button>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="updateService()"><i class="fa fa-save"></i></button>
               </td>
-              <td style="width: 40px">
-                <button type="button" class="btn btn-danger btn-block"><i class="fa fa-close"></i></button>
+              <td>
+                <button type="button" class="btn btn-danger" (click)="checkEditService=false"><i class="fa fa-close"></i></button>
               </td>
             </tr>
           </table>
@@ -538,41 +530,78 @@
                 <div class="box-body scrollbar">
                   <table class="table table-condensed">
                     <tr>
-                      <th style="width: 10px">ລຳດັບ</th>
+                      <th>ລຳດັບ</th>
                       <th>ຕົ້ນທາງ</th>
                       <th>ປາຍທາງ</th>
                       <th>ລາຄາ</th>
-                      <th style="width: 10px"></th>
-                      <th style="width: 10px"></th>
+                      <th style="width: 40px;"></th>
+                      <th style="width: 40px;"></th>
                     </tr>
-                    <tr>
+                    <tr *ngFor="let dtance of update_service['distances']; let j=index;">
                       <td>{{j + 1}}</td>
                       <td>
-                          <div class="form-group">
-                              <input type="text" class="form-control input-sm" id="from" placeholder="ຕົ້ນທາງ">
-                          </div>
-                      </td>
-                      <td>
-                        <div class="form-group">
-                            <input type="text" class="form-control input-sm" id="to" placeholder="ປາຍທາງ">
+                        <p *ngIf="!checkEditDistances[j]">{{dtance['from']}}</p>
+                        <div class="form-group" *ngIf="checkEditDistances[j]">
+                          <input type="text" class="form-control input-sm" [(ngModel)]="distance['from']" placeholder="ຕົ້ນທາງ">
                         </div>
                       </td>
                       <td>
-                        <div class="form-group">
-                            <input type="number" class="form-control input-sm" id="price" placeholder="ລາຄາ">
+                        <p *ngIf="!checkEditDistances[j]">{{dtance['to']}}</p>
+                        <div class="form-group" *ngIf="checkEditDistances[j]">
+                          <input type="text" class="form-control input-sm" [(ngModel)]="distance['to']" placeholder="ປາຍທາງ">
                         </div>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                        <p *ngIf="!checkEditDistances[j]">{{dtance['price']}}</p>
+                        <div class="form-group" *ngIf="checkEditDistances[j]">
+                          <input type="text" class="form-control input-sm" [(ngModel)]="distance['price']" placeholder="ລາຄາ">
+                        </div>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button>
+                        <button type="button" class="btn btn-success" *ngIf="!checkEditDistances[i]" (click)="viewUpdateDistance(j, dtance)"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" *ngIf="checkEditDistances[i]" (click)="updateDistance(i)"><i class="fa fa-save"></i></button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" *ngIf="!checkEditDistances[i]" (click)="deleteDistance(i, type._id)"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-danger" *ngIf="checkEditDistances[i]" (click)="checkEditDistances[i]=false"><i class="fa fa-close"></i></button>
                       </td>
                     </tr>
                   </table>
-                    <div class="text-right">
-                      <a href="javascript:event" class="color-green"><i class="fa fa-plus"></i> ເພີ່ມ</a>
-                    </div>
+                  <div class="text-right" *ngIf="!checkAddDistance">
+                    <a href="javascript:event" class="color-green" (click)="checkAddDistance=true"><i class="fa fa-plus"></i> ເພີ່ມ</a>
+                  </div>
+                  <div *ngIf="checkAddDistance">
+                    <form novalidate [formGroup]="addNewDistanceForm" (ngSubmit)="saveNewDistance()">
+                      <table class="table table-condensed">
+                        <tr>
+                          <td>
+                            <div class="form-group">
+                              <span>ຕົ້ນທາງ</span>
+                              <input type="text" class="form-control input-sm" formControlName="from" placeholder="ຕົ້ນທາງ">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
+                              <span>ປາຍທາງ</span>
+                              <input type="text" class="form-control input-sm" formControlName="to" placeholder="ປາຍທາງ">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
+                              <span>ລາຄາ</span>
+                              <input type="text" class="form-control input-sm" formControlName="price" placeholder="ລາຄາ">
+                            </div>
+                          </td>
+                          <td style="width: 40px;">
+                            <button type="submit" class="btn btn-primary" (click)="updateDistance(i)"><i class="fa fa-save"></i></button>
+                          </td>
+                          <td style="width: 40px;">
+                            <button type="reset" class="btn btn-danger" (click)="checkEditDistances=false"><i class="fa fa-close"></i></button>
+                          </td>
+                        </tr>
+                      </table>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>

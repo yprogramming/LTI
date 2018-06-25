@@ -1,5 +1,5 @@
-import { LoadersCssModule } from 'angular2-loaders-css';
-import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
+import { NgProgressModule } from 'ngx-progressbar';
+import { ShelterService } from './../services/shelter.service';
 import { TooltipModule } from 'ngx-tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImageCropperModule } from 'ngx-img-cropper';
@@ -24,6 +24,7 @@ const shel_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     ShelterRoutingModule,
     AgmCoreModule.forRoot({
@@ -32,20 +33,11 @@ const shel_component = [
     NguiAutoCompleteModule,
     ImageCropperModule,
     TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    })
+    NgProgressModule
   ],
   declarations: [
     ...shel_component
-  ]
+  ],
+  providers: [ ShelterService ]
 })
 export class ShelterModule { }

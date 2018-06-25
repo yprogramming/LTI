@@ -65,13 +65,17 @@
                     <li [hidden]="!userForm.controls['user_permission'].hasError('required')">ຕ້ອງເລືອກສະຖານະຜູ້ໃຊ້ລະບົບ</li>
                   </ul>
                   <div class="form-group" style="margin-top: 10px;">
-                    <input type="file" class="form-control" (change)="fileChangeListener($event)">
+                    <input type="file" accept="image/*" class="form-control" (change)="fileChangeListener($event)">
                   </div>
+                  <ul class="error-message-one" *ngIf="userForm.controls['user_profile'].errors && userForm.controls['user_profile'].dirty">
+                    <li class="error-message-one" [hidden]="!userForm.controls['user_profile'].hasError('required')">ຍັງບໍ່ເລືອກຮູບ</li>
+                  </ul>
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                     <div class="small-box">
-                        <div class="box-header" *ngIf="userForm.value['user_profile']">
-                          <div class="box-tools"><i class="fa fa-close closeIcon" (click)="userForm.get('user_profile').setValue(null)"></i></div>
+                        <div class="box-header">
+                          
+                          <!-- <div class="box-tools"><i class="fa fa-close closeIcon" (click)="userForm.get('user_profile').setValue(null)"></i></div> -->
                         </div>
                         <div class="inner">
                             <img [src]="userForm.value['user_profile']?userForm.value['user_profile']:'assets/img/ic_user.jpg'" alt="profile">

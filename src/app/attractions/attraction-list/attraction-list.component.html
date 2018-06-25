@@ -19,12 +19,12 @@
         <div class="small-box bg-orange">
           <div class="box-header">
               <h4 class="box-title" style="color: white;"><strong>{{attractions['name']}}</strong></h4>
-              <div class="box-tools" style="color: white;">
+              <div class="box-tools" style="color: white;" *ngIf="attractions['published']">
                   <i class="fa fa-check"></i>
               </div>
           </div>
           <div class="inner">
-              <img [src]="attractions['images'][0]" alt="" style="width: 100%;">
+              <img [src]="getImage(attractions['images'][0])" alt="" style="width: 100%;" *ngIf="attractions['images']">
               <p>ບ້ານ{{attractions['address']['village']}} ເມືອງ{{attractions['address']['district']['district']}} ແຂວງ{{attractions['address']['district']['province']['province']}}</p>
           </div>
           <div class="icon">

@@ -43,6 +43,7 @@ export class CompanyInsertComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
   provinces: Array<Object> = [];
   districts: Array<Object> = [];
   villages: Array<string> = [];
@@ -94,8 +95,10 @@ export class CompanyInsertComponent implements OnInit {
       for (let k = 0; k < vils.length; k++) {
         this.villages[k] = vils[k].village;
       }
-      this.companyTourForm.get('com_province').setValue(this.provinces[0]['_id']);
-      this.companyTourForm.get('com_district').setValue(this.districts[0]['_id']);
+      if (this.provinces.length  > 0) {
+        this.companyTourForm.get('com_province').setValue(this.provinces[0]['_id']);
+        this.companyTourForm.get('com_district').setValue(this.districts[0]['_id']);
+      }
       this.progress.done();
     }, (error) => {
       if (error.status === 405) {
@@ -129,12 +132,34 @@ export class CompanyInsertComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.getCurrentLocationLatLong();
+  }
+
+  getCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    this.lat = $event.coords.lat;
+    this.lng = $event.coords.lng;
+    this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    this.setFormLocationLatLong();
+  }
+
+  setFormLocationLatLong() {
+    this.companyTourForm.get('com_lat').setValue(this.lat);
+    this.companyTourForm.get('com_long').setValue(this.lng);
+  }
+
+  setCurrentLocationLatLong() {
+    this.getCurrentLocationLatLong();
+    this.setFormLocationLatLong();
   }
 
   safeVideoUrl(url: string): SafeResourceUrl {
@@ -228,11 +253,6 @@ export class CompanyInsertComponent implements OnInit {
         break;
       }
     }
-  }
-
-  setCurrentLocationLatLong() {
-    this.companyTourForm.get('com_lat').setValue(this.lat);
-    this.companyTourForm.get('com_long').setValue(this.lng);
   }
 
   saveCompanyTour() {

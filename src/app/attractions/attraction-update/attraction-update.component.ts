@@ -69,6 +69,7 @@ export class AttractionUpdateComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,6 +84,7 @@ export class AttractionUpdateComponent implements OnInit {
     private attractionsService: AttractionsService
   ) {
 
+    this.attractions = {};
     this.progress.start();
 
     // Create Forms
@@ -158,6 +160,7 @@ export class AttractionUpdateComponent implements OnInit {
          this.attractions = att.json()['data'];
          this.lat = this.attractions['location']['lat'];
          this.lng = this.attractions['location']['long'];
+         this.label = this.attractions['name'];
        }, (error) => {
          if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
@@ -176,7 +179,7 @@ export class AttractionUpdateComponent implements OnInit {
              color: 'black',
              title: 'Error'
            }).subscribe((ok) => {
-             this.router.navigate(['/dashboard', 'company']);
+             this.router.navigate(['/dashboard', 'attraction']);
            });
          } else {
            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
@@ -185,7 +188,7 @@ export class AttractionUpdateComponent implements OnInit {
              color: 'black',
              title: 'Error'
            }).subscribe((ok) => {
-            this.router.navigate(['/dashboard', 'company']);
+            this.router.navigate(['/dashboard', 'attraction']);
           });
          }
        });
@@ -230,7 +233,17 @@ export class AttractionUpdateComponent implements OnInit {
 
   }
 
-  safeVideoUrl(url: string): SafeResourceUrl {
+  cancelVideo() {
+    this.updateVideoForm.reset();
+    this.checkEditVideo = false;
+  }
+  safeVideoUrl(): SafeResourceUrl {
+    let url = '';
+    if (this.updateVideoForm.value['att_video'] && this.updateVideoForm.valid) {
+      url = this.updateVideoForm.value['att_video'];
+    } else if (this.attractions['video_url']) {
+      url = this.attractions['video_url'];
+    }
     const new_url = url.split('&')[0];
     const urlArray = new_url.split('=');
     if (urlArray[0] === 'https://www.youtube.com/watch?v') {
@@ -352,13 +365,33 @@ export class AttractionUpdateComponent implements OnInit {
     });
   }
 
+  checkPublished() {
+    return StaticFunc.published(this.attractions['published']);
+  }
+
   setCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    if (this.checkEditLocation) {
+      this.lat = $event.coords.lat;
+      this.lng = $event.coords.lng;
+      this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    }
+  }
+
+  cancelLocation() {
+    this.lat = this.attractions['location']['lat'];
+    this.lng = this.attractions['location']['long'];
+    this.label = this.attractions['name'];
+    this.checkEditLocation = false;
   }
 
   changeDistrict() {
@@ -378,7 +411,7 @@ export class AttractionUpdateComponent implements OnInit {
   }
 
   changeVillage() {
-    const current_district_id = this.updateAddressForm.get('ano_district').value;
+    const current_district_id = this.updateAddressForm.get('att_district').value;
     for (let i = 0; i < this.districts.length; i++) {
       if (this.districts[i]['_id'] === current_district_id) {
         this.villages = [];
@@ -391,10 +424,11 @@ export class AttractionUpdateComponent implements OnInit {
     }
   }
 
-  cancelLocation() {
-    this.lat = this.attractions['location']['lat'];
-    this.lng = this.attractions['location']['long'];
-    this.checkEditLocation = false;
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
   }
 
   viewEditName() {
@@ -485,6 +519,12 @@ export class AttractionUpdateComponent implements OnInit {
         if (res) {
           this.attractionsService.updateAttractions(data).subscribe((success) => {
             this.attractions['name'] = this.updateTittleForm.value['att_name'];
+            for (let i = 0; i < this.attractions_types.length; i++) {
+              if (this.attractions_types[i]['_id'] === this.updateTittleForm.value['att_type']) {
+                this.attractions['attractions_type']['_id'] = this.updateTittleForm.value['att_type'];
+                this.attractions['attractions_type']['name'] = this.attractions_types[i]['name'];
+              }
+            }
             this.checkEditName = false;
           }, (error) => {
             if (error.status === 405) {
@@ -505,7 +545,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -566,7 +606,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -667,7 +707,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -726,7 +766,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -785,7 +825,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -839,7 +879,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -874,7 +914,7 @@ export class AttractionUpdateComponent implements OnInit {
         if (res) {
           this.attractionsService.updateAttractions(data).subscribe((success) => {
             this.attractions['activities'] = this.updateActivityForm.value['att_activity'];
-            this.checkEditRule = false;
+            this.checkEditActivity = false;
           }, (error) => {
             if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
@@ -894,7 +934,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -919,7 +959,7 @@ export class AttractionUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່ຂອງບໍລິສັດນຳທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່ຂອງສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -950,7 +990,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -974,7 +1014,7 @@ export class AttractionUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂວີດີໂອ URL ຂອງບໍລິສັດນຳທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂວີດີໂອ URL ຂອງສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -1004,7 +1044,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -1031,7 +1071,7 @@ export class AttractionUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນສື່ອອນໄລຂອງບໍລິສັດນຳທ່ຽວນີ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນສື່ອອນໄລຂອງສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -1062,7 +1102,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -1087,7 +1127,7 @@ export class AttractionUpdateComponent implements OnInit {
       }).subscribe((res) => {
         if (res) {
           const data = {
-            ano_id: this.attractions['_id'],
+            att_id: this.attractions['_id'],
             social: this.addNewSocialForm.value
           };
           this.attractionsService.insertSocial(data).subscribe((success) => {
@@ -1112,7 +1152,7 @@ export class AttractionUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -1128,16 +1168,16 @@ export class AttractionUpdateComponent implements OnInit {
   }
 
   deleteAttractions() {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'ບັນທືກ',
+      okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
       color: 'black',
       title: 'Delete'
     }).subscribe((res) => {
       if (res) {
         this.attractionsService.deleteAttractions(this.attractions['_id']).subscribe((success) => {
-          this.coolDialogs.alert('ລົບຂໍ້ມູນບໍລິສັດນຳທ່ຽວສຳເລັດແລ້ວ', {
+          this.coolDialogs.alert('ລົບຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
@@ -1164,7 +1204,7 @@ export class AttractionUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -1177,7 +1217,7 @@ export class AttractionUpdateComponent implements OnInit {
   }
 
   deleteImage(i, image) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຮູບນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຮູບນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1210,7 +1250,7 @@ export class AttractionUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -1223,7 +1263,7 @@ export class AttractionUpdateComponent implements OnInit {
   }
 
   deleteSocial(i, social) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບສື່ອອນໄລນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບສື່ອອນໄລນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1256,7 +1296,7 @@ export class AttractionUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

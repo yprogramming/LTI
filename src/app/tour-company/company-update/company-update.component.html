@@ -14,7 +14,7 @@
                   <div class="box-header">
                     <div class="form-group">
                       <label for="res_images">ເພີ່ມຮູບ</label>
-                      <input type="file"  id="com_images" (change)="fileChangeListener($event)">
+                      <input type="file" accept="image/*" id="com_images" (change)="fileChangeListener($event)">
                     </div>
                     <div class="box-tools"><a href="javascript:event" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
                   </div>
@@ -25,7 +25,7 @@
                           <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
                         </div>
                         <div class="inner">
-                            <img [src]="image" alt="image {{i}}">
+                            <img [src]="getImage(image)" alt="image {{i}}">
                         </div>
                       </div>
                     </div>
@@ -35,7 +35,7 @@
         </div>
         <div class="row" *ngIf="!checkEditProfile">
             <div class="col-lg-12 col-xs-12">
-              <img [src]="tour_company['images'][0]" alt="Photo 1" *ngIf="tour_company['images']">
+              <img [src]="getImage(tour_company['images'][0])" alt="Photo 1" *ngIf="tour_company['images']">
               <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
             </div>
         </div>
@@ -125,20 +125,20 @@
             <div class="col-lg-12 col-xs-12">
               <div class="map">
                 <agm-map 
-                  [latitude]="lat"
-                  [longitude]="lng"
-                  [zoom]="zoom"
-                  [disableDefaultUI]="true"
-                  [zoomControl]="true">
-                  
-                  <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                      [radius]="5000"
-                      [fillColor]="'red'"
-                      [circleDraggable]="true"
-                      [editable]="true">
-                  </agm-circle>
-
-                </agm-map>
+                    [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
+                    
+                    <agm-marker 
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
+  
+                  </agm-map>
               </div>
               <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation" (click)="checkEditLocation=true"></i>
               <div class="text-right saveLocationButton" *ngIf="checkEditLocation">
@@ -188,7 +188,7 @@
                           <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
                       </td>
                       <td style="width: 10px">
-                          <button type="button" class="btn btn-danger" (click)="checkEditVideo=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                          <button type="button" class="btn btn-danger" (click)="cancelVideo()"><i class="fa fa-close"></i> ຍົກເລີກ</button>
                       </td>
                     </tr>
                   </table>
@@ -197,8 +197,8 @@
             </div>
             <div class="col-lg-12 col-xs-12">
               <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" [src]="safeVideoUrl(tour_company['video_url'])"
-                        frameborder="0" allowfullscreen></iframe>
+                <iframe class="embed-responsive-item" [src]="safeVideoUrl()"
+                        frameborder="0" allowfullscreen *ngIf="safeVideoUrl()"></iframe>
               </div>
               <i tooltip="ແກ້ໄຂວີດີໂອ" class="fa fa-edit editLocation" *ngIf="!checkEditVideo" (click)="viewEditVideo()"></i>
             </div>
@@ -337,8 +337,22 @@
                     </table>
                   </form>
               </div>
-              <div class="col-lg-12 col-xs-12 text-center">
-                  <a href="javascript:event" class="closeIcon" style="font-size: 16px;"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+              <div class="col-lg-12 col-xs-12 text-center" *ngIf="tour_company['published']">
+                  <a href="javascript:event" class="closeIcon" style="font-size: 16px;" (click)="deleteCompany()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+              </div>
+              <div class="col-lg-12 col-xs-12" *ngIf="!tour_company['published']">
+                <div class="row">
+                    <div class="col-lg-6 col-xs-6">
+                        <a href="javascript:event" class="btn btn-danger" style="font-size: 16px;" (click)="deleteCompany()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                    </div>
+                    <div class="col-lg-6 col-xs-6 text-right">
+                      <button type="button" class="btn btn-success" *ngIf="!checkPublished()"><i class="fa fa-thumbs-up"></i> ສົ່ງຂໍ້ມູນໄປກວດສອບ</button>
+                      <span *ngIf="checkPublished()">
+                        <button type="button" class="btn btn-success"><i class="fa fa-thumbs-up"></i> ຂໍ້ມູນຖືກຕ້ອງແລ້ວ</button>
+                        <button type="button" class="btn btn-danger"><i class="fa fa-thumbs-down"></i> ຂໍ້ມູນຍັງບໍ່ຖືກຕ້ອງ</button>
+                      </span>
+                    </div>
+                </div>
               </div>
             </div>
       </div>

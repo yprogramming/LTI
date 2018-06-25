@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row" *ngIf="provinces.length && restaurant_types.length">
   <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
     <h2 class="text-center"><strong>ເພີ່ມຮ້ານອາຫານໃຫມ່</strong></h2>
     <div class="box box-primary">
@@ -16,20 +16,20 @@
                     <label>ຊື່ຮ້ານອາຫານ</label>
                     <input type="text" class="form-control" id="res_name" formControlName="res_name" placeholder="ຊື່ຮ້ານອາຫານ">
                   </div>
+                  <ul class="error-message-one" *ngIf="restaurantForm.controls['res_name'].errors && restaurantForm.controls['res_name'].dirty">
+                    <li [hidden]="!restaurantForm.controls['res_name'].hasError('required')">ຊື່ຮ້ານອາຫານຫ້າມວ່າງ</li>
+                  </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດຮ້ານອາຫານ</span>
                   <select class="form-control select2" id="res_type" formControlName="res_type" style="width: 100%;">
-                    <option value="A" selected="selected">ປະເພດ A</option>
-                    <option value="B">ປະເພດ B</option>
-                    <option value="C">ປະເພດ C</option>
-                    <option value="D">ປະເພດ D</option>
-                    <option value="E">ປະເພດ E</option>
-                    <option value="F">ປະເພດ F</option>
-                    <option value="G">ປະເພດ G</option>
+                    <option *ngFor="let type of restaurant_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
-                  </div>
+                </div>
+                <ul class="error-message-one" *ngIf="restaurantForm.controls['res_type'].errors && restaurantForm.controls['res_type'].dirty">
+                  <li [hidden]="!restaurantForm.controls['res_type'].hasError('required')">ເພີ່ມປະເພດຮ້ານອາຫານກ່ອນ</li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -39,28 +39,16 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ແຂວງ</span>
-                    <select class="form-control select2" id="res_province" formControlName="res_province" style="width: 100%;">
-                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                      <option value="B">ວຽງຈັນ</option>
-                      <option value="C">ຊຽງຂວາງ</option>
-                      <option value="D">ໄຊຍະບູລີ</option>
-                      <option value="E">ຄຳມ່ວນ</option>
-                      <option value="F">ຜົ້ງສາລີ</option>
-                      <option value="G">ຈຳປາສັກ</option>
+                    <select class="form-control select2" id="res_province" formControlName="res_province" style="width: 100%;" (change)="changeDistrict()">
+                      <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ເມືອງ</span>
-                    <select class="form-control select2" id="res_district" formControlName="res_district" style="width: 100%;">
-                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                      <option value="B">ໄຊທານີ</option>
-                      <option value="C">ສີໂຄດຕະບອງ</option>
-                      <option value="D">ໄກສອນ</option>
-                      <option value="E">A</option>
-                      <option value="F">B</option>
-                      <option value="G">C</option>
+                    <select class="form-control select2" id="res_district" formControlName="res_district" style="width: 100%;" (change)="changeVillage()">
+                      <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                     </select>
                   </div>
                 </div>
@@ -77,6 +65,9 @@
                         formControlName="res_village" 
                         placeholder="ບ້ານ">
                 </div>
+                <ul class="error-message-one" *ngIf="restaurantForm.controls['res_village'].errors && restaurantForm.controls['res_village'].dirty">
+                  <li [hidden]="!restaurantForm.controls['res_village'].hasError('required')">ຊື່ບ້ານຫ້າມວ່າງ</li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -87,19 +78,19 @@
                     [latitude]="lat"
                     [longitude]="lng"
                     [zoom]="zoom"
-                    [disableDefaultUI]="true"
-                    [zoomControl]="true">
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
                     
-                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                        [radius]="5000"
-                        [fillColor]="'red'"
-                        [circleDraggable]="true"
-                        [editable]="true">
-                    </agm-circle>
-
+                    <agm-marker
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
+  
                   </agm-map>
                 </div>
-                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+                <button type="button" class="btn btn-success btn-round" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
@@ -112,6 +103,11 @@
                     <span>ລອງຕິຈຸດ</span>
                   <input type="text" class="form-control" readonly id="res_long" formControlName="res_long" placeholder="ລອງຕິຈຸດ">
                 </div>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <ul class="error-message-one" *ngIf="restaurantForm.controls['res_long'].errors && restaurantForm.controls['res_long'].dirty">
+                  <li [hidden]="!restaurantForm.controls['res_long'].hasError('required')">ຄລິກເລືອກລັດຕິຈຸດ ແລະ ລອງຕິຈຸດຈາກແຜນທີ່</li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -131,12 +127,19 @@
                   <span>ເບີໂທ</span>
                   <input type="text" class="form-control"  id="res_tel" formControlName="res_tel" placeholder="ເບີໂທຕິດຕໍ່">
                 </div>
+                <ul class="error-message-one" *ngIf="restaurantForm.controls['res_tel'].errors && restaurantForm.controls['res_tel'].dirty">
+                  <li [hidden]="!restaurantForm.controls['res_tel'].hasError('required')">ເບີໂທຕິດຕໍ່ຫ້າມວ່າງ</li>
+                </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <span>ອີເມວ</span>
                   <input type="email" class="form-control"  id="res_email" formControlName="res_email" placeholder="ອີເມວຕິດຕໍ່">
                 </div>
+                <ul class="error-message-many" *ngIf="restaurantForm.controls['res_email'].errors && restaurantForm.controls['res_email'].dirty">
+                  <li [hidden]="!restaurantForm.controls['res_email'].hasError('required')">ອີເມວຫ້າມວ່າງ</li>
+                  <li [hidden]="!restaurantForm.controls['res_email'].hasError('simpleEmailRule')">ອີເມວບໍ່ຖືກຕ້ອງ</li>
+                </ul>
               </div>
             </div>
             <!-- Contact -->
@@ -157,13 +160,20 @@
                     <td>{{i + 1}}</td>
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" id="res_social_name" formControlName="res_social_name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
+                            <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                         </div>
+                        <ul class="error-message-one" *ngIf="social.controls['name'].errors && social.controls['name'].dirty">
+                          <li [hidden]="!social.controls['name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                        </ul>
                     </td>
                     <td>
                       <div class="form-group">
-                          <input type="text" class="form-control input-sm" id="res_social_url" formControlName="res_social_url" placeholder="URL">
+                          <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                       </div>
+                      <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
+                        <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                        <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
+                      </ul>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
@@ -180,8 +190,11 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
-                  <input type="file"  id="res_images" (change)="fileChangeListener($event, null)">
+                  <input type="file" accept="image/*" id="res_images" (change)="fileChangeListener($event, null)">
                 </div>
+                <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
+                  <li [hidden]="restaurantForm.value['images'].length">ຕ້ອງເລືອກຮູບຮ້ານອາຫານຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                </ul>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of restaurantForm.value['images']; let i=index">
                   <div class="small-box">
@@ -201,10 +214,13 @@
                 <span>ວີດີໂອ URL</span>
                 <input type="text" class="form-control" id="res_video" formControlName="res_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
               </div>
+              <ul class="error-message-one" *ngIf="restaurantForm.controls['res_video'].errors && restaurantForm.controls['res_video'].dirty">
+                <li [hidden]="!restaurantForm.controls['res_video'].hasError('url')">(https://www.youtube.com/...)</li>
+              </ul>
             </div>
-            <div class="col-lg-12 col-xs-12">
+            <div class="col-lg-12 col-xs-12" *ngIf="restaurantForm.value['res_video'] && restaurantForm.controls['res_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(restaurantForm.value['res_video'])"
                           frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
@@ -235,43 +251,46 @@
                                   <div class="row">
                                     <div class="col-lg-6 col-md-6 col-xs-12">
                                         <div class="form-group">
-                                            <span>ຊື່ເມນູອາຫານ</span>
-                                            <input type="text" class="form-control input-sm" id="food_name" formControlName="food_name" placeholder="ຊື່ຮ້ານອາຫານ">
-                                          </div>
-                                          <div class="form-group">
-                                            <span>ປະເພດອາຫານ</span>
-                                            <select class="form-control select2 input-sm" id="food_type" formControlName="food_type" style="width: 100%;">
-                                              <option value="A" selected="selected">ປະເພດ A</option>
-                                              <option value="B">ປະເພດ B</option>
-                                              <option value="C">ປະເພດ C</option>
-                                              <option value="D">ປະເພດ D</option>
-                                              <option value="E">ປະເພດ E</option>
-                                              <option value="F">ປະເພດ F</option>
-                                              <option value="G">ປະເພດ G</option>
-                                            </select>
-                                          </div>
-                                          <div class="form-group">
-                                            <span>ລາຄາ</span>
-                                            <input type="number" class="form-control input-sm" id="food_price" formControlName="food_price" placeholder="ລາຄາ">
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="res_images">ເລືອກຮູບ</label>
-                                            <input type="file"  id="food_images" (change)="fileChangeListener($event, i)">
-                                          </div>
+                                          <span>ຊື່ເມນູອາຫານ</span>
+                                          <input type="text" class="form-control input-sm" id="food_name" formControlName="food_name" placeholder="ຊື່ຮ້ານອາຫານ">
+                                        </div>
+                                        <ul class="error-message-one" *ngIf="food.controls['food_name'].errors && food.controls['food_name'].dirty">
+                                          <li [hidden]="!food.controls['food_name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                                        </ul>
+                                        <div class="form-group">
+                                          <span>ປະເພດອາຫານ</span>
+                                          <select class="form-control select2 input-sm" id="food_type" formControlName="food_type" style="width: 100%;">
+                                            <option *ngFor="let type of food_types" value="{{type['_id']}}">{{type['name']}}</option>
+                                          </select>
+                                        </div>
+                                        <ul class="error-message-one" *ngIf="food.controls['food_type'].errors && food.controls['food_type'].dirty">
+                                          <li [hidden]="!food.controls['food_type'].hasError('required')">ເພີ່ມປະເພດອາຫານກ່ອນ</li>
+                                        </ul>
+                                        <div class="form-group">
+                                          <span>ລາຄາ</span>
+                                          <input type="number" class="form-control input-sm" id="food_price" formControlName="food_price" placeholder="ລາຄາ">
+                                        </div>
+                                        <ul class="error-message-many" *ngIf="food.controls['food_price'].errors && food.controls['food_price'].dirty">
+                                          <li [hidden]="!food.controls['food_price'].hasError('required')">ລາຄາຫ້າມວ່າງ</li>
+                                          <li [hidden]="!food.controls['food_price'].hasError('min')">ລາຄາຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+                                        </ul>
+                                        <div class="form-group">
+                                          <label for="res_images">ເລືອກຮູບ</label>
+                                          <input type="file" accept="image/*" id="food_images" (change)="fileChangeListener($event, i)">
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-xs-12" *ngIf="food.get('image').value">
-                                        <div class="small-box">
-                                            <div class="box-header">
-                                              <div class="box-title"><strong>ຮູບ</strong></div>
-                                              <div class="box-tools"><i class="fa fa-close closeIcon" (click)="food.get('image').setValue(null)"></i></div>
-                                            </div>
-                                            <div class="inner">
-                                                <img [src]="food.get('image').value" alt="image {{i + 1}}">
-                                            </div>
+                                    <div class="col-lg-6 col-md-6 col-xs-12">
+                                      <div class="small-box">
+                                        <div class="box-header">
+                                          <div class="box-title"><strong>ຮູບ</strong></div>
+                                          <div class="box-tools" *ngIf="food.controls['image'].errors && food.controls['image'].dirty">
+                                              <span class="error-message-one" [hidden]="!food.controls['image'].hasError('required')">ບໍ່ມີຮູບ</span>
                                           </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-xs-12" *ngIf="!food.get('image').value">
-                                        <img src="http://placehold.it/150x100" alt="...">
+                                        </div>
+                                        <div class="inner">
+                                            <img [src]="food.get('image').value?food.get('image').value:'assets/img/ic_image.png'" alt="image {{i + 1}}">
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>

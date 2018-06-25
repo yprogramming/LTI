@@ -2,6 +2,11 @@
   <div class="col-lg-12 col-xs-12">
     <div class="box">
       <div class="box-header">
+        <div class="user-block">
+          <img class="img-circle" [src]="user['profile']?getImage(user['profile']):'assets/img/ic_user.jpg'" alt="User Image">
+          <span class="username">{{user['name']}}</span>
+          <span class="description">{{userPMS(user['permission'])}}</span>
+        </div>
         <h3><strong>ປະຫວັດ{{title}}</strong></h3>
       </div>
       <!-- /.box-header -->
@@ -15,78 +20,14 @@
             <th>ຂໍ້ມູນທີ່{{command}}</th>
             <th>ລະຫັດ</th>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>2018-3-30</td>
-            <td>08:30</td>
-            <td>ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ</td>
-            <td>ນ້ຳຕົກຕາດກວາງຊີ</td>
-            <td>ajhfhjkdkf323</td>
+          <tr *ngFor="let data of checkDatas; let i=index;">
+            <td>{{i + 1}}</td>
+            <td>{{data['_date'] | date:'dd/MM/yyyy'}}</td>
+            <td>{{data['_date'] | date:'HH:mm:ss'}}</td>
+            <td>{{data['_detail']['data']}}</td>
+            <td>{{data['_detail']['title']}}</td>
+            <td>{{data['_detail']['id']}}</td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>2018-3-31</td>
-            <td>08:30</td>
-            <td>ຂໍ້ມູນຮ້ານອາຫານ</td>
-            <td>ຮ້ານອາຫານສາຍລົມເຢັນ</td>
-            <td>kjfdkdmckfkld</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>2018-4-1</td>
-            <td>09:40</td>
-            <td>ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ</td>
-            <td>ບໍລິສັດນຳທ່ຽວສີວົງໄຂ</td>
-            <td>jfksjlkfjoreirj</td>
-          </tr>
-          <tr>
-              <td>4</td>
-              <td>2018-3-30</td>
-              <td>08:30</td>
-              <td>ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ</td>
-              <td>ນ້ຳຕົກຕາດກວາງຊີ</td>
-              <td>ajhfhjkdkf323</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>2018-3-31</td>
-              <td>08:30</td>
-              <td>ຂໍ້ມູນຮ້ານອາຫານ</td>
-              <td>ຮ້ານອາຫານສາຍລົມເຢັນ</td>
-              <td>kjfdkdmckfkld</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>2018-4-1</td>
-              <td>09:40</td>
-              <td>ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ</td>
-              <td>ບໍລິສັດນຳທ່ຽວສີວົງໄຂ</td>
-              <td>jfksjlkfjoreirj</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>2018-3-30</td>
-                <td>08:30</td>
-                <td>ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ</td>
-                <td>ນ້ຳຕົກຕາດກວາງຊີ</td>
-                <td>ajhfhjkdkf323</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>2018-3-31</td>
-                <td>08:30</td>
-                <td>ຂໍ້ມູນຮ້ານອາຫານ</td>
-                <td>ຮ້ານອາຫານສາຍລົມເຢັນ</td>
-                <td>kjfdkdmckfkld</td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>2018-4-1</td>
-                <td>09:40</td>
-                <td>ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ</td>
-                <td>ບໍລິສັດນຳທ່ຽວສີວົງໄຂ</td>
-                <td>jfksjlkfjoreirj</td>
-              </tr>
         </table>
       </div>
     </div>

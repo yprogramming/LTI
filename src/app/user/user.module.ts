@@ -10,6 +10,7 @@ import { UserInsertComponent } from './user-insert/user-insert.component';
 import { UserComponent } from './user.component';
 import { UserCheckComponent } from './user-check/user-check.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
+import { NgProgressModule } from 'ngx-progressbar';
 
 const user_component = [
   UserComponent,
@@ -26,17 +27,7 @@ const user_component = [
     UserRoutingModule,
     ImageCropperModule,
     TooltipModule,
-    NgxCoolDialogsModule.forRoot({
-      theme: 'material', // available themes: 'default' | 'material' | 'dark'
-      okButtonText: 'Yes',
-      cancelButtonText: 'No',
-      color: 'black',
-      titles: {
-        alert: 'Dialog',
-        confirm: 'Confirmation',
-        prompt: 'Dialog'
-      }
-    })
+    NgProgressModule
   ],
   declarations: [
     ...user_component

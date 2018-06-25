@@ -171,8 +171,8 @@ export class AttractionTypeComponent implements OnInit {
   }
 
   deleteType(i, id) {
-    this.coolDialogs.confirm(`ໝັ້ນໃຈວ່າຈະລົບຂໍ້ມູນປະເພດສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?
-                            (ຖ້າລົບສະຖານທີ່ທ່ອງທ່ຽວທັງໝົດຂອງປະເພດນີ້ຈະຖືກລົບໝົດດ້ວຍ)`, {
+    this.coolDialogs.confirm(`ລົບຂໍ້ມູນປະເພດສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?
+                            (ຖ້າລົບ ສະຖານທີ່ທ່ອງທ່ຽວທັງໝົດຂອງປະເພດນີ້ຈະຖືກລົບໄປດ້ວຍ)`, {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ບັນທືກ',
       cancelButtonText: 'ຍົກເລີກ',

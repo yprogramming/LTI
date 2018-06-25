@@ -1,0 +1,29 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+             [speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+             [color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
+<div class="box box-widget">
+    <div class="box-header with-border">
+      <div class="user-block">
+        <img src="assets/img/ic_warning.png" alt="User Image">
+        <span class="username">{{notification['_detail']['title']}}</span>
+        <span class="description">{{notification['_detail']['data']}} {{notification['_date']}}</span>
+      </div>
+      <!-- /.user-block -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <h3><strong>ສິ່ງທີ່ຄວນປັບປຸງແກ້ໄຂຄືນ</strong></h3>
+      <p>
+          {{notification['_message']}}
+      </p>
+      <div class="row">
+        <div class="col-lg-6 col-xs-6">
+          <strong>ກວດສອບຂໍ້ມູນໂດຍຜູ້ບັນາທິການ</strong>
+        </div>
+        <div class="col-lg-6 col-xs-6 text-right">
+          <a [routerLink]="notification['_detail']['path']" class="btn btn-warning btn-lg"><i class="fa fa-edit"></i> ແກ້ໄຂຂໍ້ມູນ</a>
+        </div>
+      </div>
+    </div>
+</div>

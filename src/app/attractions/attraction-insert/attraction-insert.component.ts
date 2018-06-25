@@ -42,6 +42,7 @@ export class AttractionInsertComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
   provinces: Array<Object> = [];
   districts: Array<Object> = [];
   villages: Array<string> = [];
@@ -49,9 +50,9 @@ export class AttractionInsertComponent implements OnInit {
 
   constructor(
     formBuilder: FormBuilder,
-    private safeSanitizer: DomSanitizer,
     private firebaseStorage: AngularFireStorage,
     private firebaseStorageRef: AngularFireStorage,
+    private safeSanitizer: DomSanitizer,
     public progress: NgProgress,
     private coolDialogs: NgxCoolDialogsService,
     private router: Router,
@@ -153,12 +154,38 @@ export class AttractionInsertComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getCurrentLocationLatLong();
+  }
+
+  attSubForm(formGroup) {
+    return <FormGroup> formGroup;
+  }
+
+  getCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    this.lat = $event.coords.lat;
+    this.lng = $event.coords.lng;
+    this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    this.setFormLocationLatLong();
+  }
+
+  setFormLocationLatLong() {
+    this.attractionsForm.get('att_lat').setValue(this.lat);
+    this.attractionsForm.get('att_long').setValue(this.lng);
+  }
+
+  setCurrentLocationLatLong() {
+    this.getCurrentLocationLatLong();
+    this.setFormLocationLatLong();
   }
 
   safeVideoUrl(url: string): SafeResourceUrl {
@@ -252,11 +279,6 @@ export class AttractionInsertComponent implements OnInit {
         break;
       }
     }
-  }
-
-  setCurrentLocationLatLong() {
-    this.attractionsForm.get('att_lat').setValue(this.lat);
-    this.attractionsForm.get('att_long').setValue(this.lng);
   }
 
   saveAttractions() {

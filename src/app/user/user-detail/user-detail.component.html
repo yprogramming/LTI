@@ -4,9 +4,9 @@
       <div class="box box-widget">
         <div class="box-header with-border">
           <div class="user-block">
-            <img class="img-circle" src="assets/img/user8-128x128.jpg" alt="User Image">
-            <span class="username">ສົມແກ້ວ ສີວົງສາ</span>
-            <span class="description">ພະນັກງານ IT</span>
+            <img class="img-circle" [src]="user['profile']?getImage(user['profile']):'assets/img/ic_user.jpg'" alt="User Image">
+            <span class="username">{{user['name']}}</span>
+            <span class="description">{{userPMS(user['permission'])}}</span>
           </div>
           <!-- /.user-block -->
         </div>
@@ -39,20 +39,10 @@
                                 <th>ວັນທີ່</th>
                                 <th>ເວລາ</th>
                               </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>2018-3-30</td>
-                                <td>08:30</td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>2018-3-31</td>
-                                <td>08:30</td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>2018-4-1</td>
-                                <td>09:40</td>
+                              <tr *ngFor="let login of user['logins']; let i=index;">
+                                <td>{{i + 1}}</td>
+                                <td>{{login['login_date'] | date:'dd/MM/yyyy'}}</td>
+                                <td>{{login['login_date'] | date:'HH:mm:ss'}}</td>
                               </tr>
                             </table>
                           </div>
@@ -72,23 +62,11 @@
                                   <th>ເວລາ</th>
                                   <th>ອອກໂດຍ</th>
                                 </tr>
-                                <tr>
-                                  <td>1</td>
-                                  <td>2018-3-30</td>
-                                  <td>17:30</td>
-                                  <td>ເຈົ້າຂອງເອງ</td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>2018-4-1</td>
-                                  <td>09:30</td>
-                                  <td>Session ໝົດອາຍຸ</td>
-                                </tr>
-                                <tr>
-                                  <td>3</td>
-                                  <td>2018-4-1</td>
-                                  <td>17:30</td>
-                                  <td>ເຈົ້າຂອງເອງ</td>
+                                <tr *ngFor="let logout of user['logouts']; let i=index;">
+                                  <td>{{i + 1}}</td>
+                                  <td>{{logout['logout_date'] | date:'dd/MM/yyyy'}}</td>
+                                  <td>{{logout['logout_date'] | date:'HH:mm:ss'}}</td>
+                                  <td>{{logout['logout_by']}}</td>
                                 </tr>
                               </table>
                             </div>

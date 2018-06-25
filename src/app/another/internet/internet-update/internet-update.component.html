@@ -14,7 +14,7 @@
                     <div class="box-header">
                       <div class="form-group">
                         <label for="res_images">ເພີ່ມຮູບ</label>
-                        <input type="file"  id="int_images" (change)="fileChangeListener($event)">
+                        <input type="file" accept="image/*" id="int_images" (change)="fileChangeListener($event)">
                       </div>
                       <div class="box-tools"><a tooltip="ຍົກເລີກການແກ້ໄຂ" href="javascript:event" class="closeIcon" (click)="checkEditProfile=false">ຍົກເລີກ</a></div>
                     </div>
@@ -25,7 +25,7 @@
                                 <div class="box-tools"><i tooltip="ລົບ" class="fa fa-close closeIcon" (click)="deleteImage(i, image)"></i></div>
                               </div>
                               <div class="inner">
-                                  <img [src]="image" alt="image {{1}}">
+                                  <img [src]="getImage(image)" alt="image {{1}}">
                               </div>
                             </div>
                           </div>
@@ -35,7 +35,7 @@
           </div>
           <div class="row" *ngIf="!checkEditProfile">
               <div class="col-lg-12 col-xs-12">
-                  <img [src]="internet_center['images'][0]" alt="profile" *ngIf="internet_center['images']">
+                  <img [src]="getImage(internet_center['images'][0])" alt="profile" *ngIf="internet_center['images']">
                   <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
               </div>
           </div>
@@ -124,15 +124,15 @@
                     [latitude]="lat"
                     [longitude]="lng"
                     [zoom]="zoom"
-                    [disableDefaultUI]="true"
-                    [zoomControl]="true">
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
                     
-                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                        [radius]="5000"
-                        [fillColor]="'red'"
-                        [circleDraggable]="true"
-                        [editable]="true">
-                    </agm-circle>
+                    <agm-marker
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
   
                   </agm-map>
                 </div>
@@ -295,8 +295,22 @@
                       </table>
                     </form>
                 </div>
-                <div class="col-lg-12 col-xs-12 text-center">
+                <div class="col-lg-12 col-xs-12 text-center" *ngIf="internet_center['published']">
                     <a href="javascript:event" class="closeIcon" style="font-size: 16px;" (click)="deleteInternet()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                </div>
+                <div class="col-lg-12 col-xs-12" *ngIf="!internet_center['published']">
+                  <div class="row">
+                      <div class="col-lg-6 col-xs-6">
+                          <a href="javascript:event" class="btn btn-danger" style="font-size: 16px;" (click)="deleteInternet()"><i class="fa fa-trash"></i> ລົບຂໍ້ມູນທັງໝົດ</a>
+                      </div>
+                      <div class="col-lg-6 col-xs-6 text-right">
+                        <button type="button" class="btn btn-success" *ngIf="!checkPublished()"><i class="fa fa-thumbs-up"></i> ສົ່ງຂໍ້ມູນໄປກວດສອບ</button>
+                        <span *ngIf="checkPublished()">
+                          <button type="button" class="btn btn-success"><i class="fa fa-thumbs-up"></i> ຂໍ້ມູນຖືກຕ້ອງແລ້ວ</button>
+                          <button type="button" class="btn btn-danger"><i class="fa fa-thumbs-down"></i> ຂໍ້ມູນຍັງບໍ່ຖືກຕ້ອງ</button>
+                        </span>
+                      </div>
+                  </div>
                 </div>
               </div>
         </div>

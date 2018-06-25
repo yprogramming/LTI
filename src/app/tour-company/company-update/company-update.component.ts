@@ -61,6 +61,7 @@ export class CompanyUpdateComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -125,6 +126,7 @@ export class CompanyUpdateComponent implements OnInit {
          this.tour_company = tour_company.json()['data'];
          this.lat = this.tour_company['location']['lat'];
          this.lng = this.tour_company['location']['long'];
+         this.label = this.tour_company['name'];
        }, (error) => {
          if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
@@ -197,7 +199,17 @@ export class CompanyUpdateComponent implements OnInit {
 
   }
 
-  safeVideoUrl(url: string): SafeResourceUrl {
+  cancelVideo() {
+    this.updateVideoForm.reset();
+    this.checkEditVideo = false;
+  }
+  safeVideoUrl(): SafeResourceUrl {
+    let url = '';
+    if (this.updateVideoForm.value['res_video'] && this.updateVideoForm.valid) {
+      url = this.updateVideoForm.value['res_video'];
+    } else if (this.tour_company['video_url']) {
+      url = this.tour_company['video_url'];
+    }
     const new_url = url.split('&')[0];
     const urlArray = new_url.split('=');
     if (urlArray[0] === 'https://www.youtube.com/watch?v') {
@@ -319,13 +331,33 @@ export class CompanyUpdateComponent implements OnInit {
     });
   }
 
+  checkPublished() {
+    return StaticFunc.published(this.tour_company['published']);
+  }
+
   setCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    if (this.checkEditLocation) {
+      this.lat = $event.coords.lat;
+      this.lng = $event.coords.lng;
+      this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    }
+  }
+
+  cancelLocation() {
+    this.lat = this.tour_company['location']['lat'];
+    this.lng = this.tour_company['location']['long'];
+    this.label = this.tour_company['name'];
+    this.checkEditLocation = false;
   }
 
   changeDistrict() {
@@ -358,10 +390,11 @@ export class CompanyUpdateComponent implements OnInit {
     }
   }
 
-  cancelLocation() {
-    this.lat = this.tour_company['location']['lat'];
-    this.lng = this.tour_company['location']['long'];
-    this.checkEditLocation = false;
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
   }
 
   viewEditName() {
@@ -453,7 +486,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -554,7 +587,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -614,7 +647,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -674,7 +707,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -730,7 +763,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -784,7 +817,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -842,7 +875,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -892,7 +925,7 @@ export class CompanyUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງບັນທືກຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -909,7 +942,7 @@ export class CompanyUpdateComponent implements OnInit {
 
 
   deleteCompany() {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຂໍ້ມູນບໍລິສັດນຳທ່ຽວນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຂໍ້ມູນບໍລິສັດນຳທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ບັນທືກ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -945,7 +978,7 @@ export class CompanyUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -958,7 +991,7 @@ export class CompanyUpdateComponent implements OnInit {
   }
 
   deleteImage(i, image) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບຮູບນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຮູບນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -991,7 +1024,7 @@ export class CompanyUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -1004,7 +1037,7 @@ export class CompanyUpdateComponent implements OnInit {
   }
 
   deleteSocial(i, social) {
-    this.coolDialogs.confirm('ໝັ້ນໃຈວ່າຈະລົບສື່ອອນໄລນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຂໍ້ມູນສື່ອອນໄລນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1037,7 +1070,7 @@ export class CompanyUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

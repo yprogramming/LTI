@@ -1,4 +1,7 @@
-
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <div class="row">
   <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
     <h2 class="text-center"><strong>ເພີ່ມສະຖານທີ່ພັກອາໄສໃຫມ່</strong></h2>
@@ -17,18 +20,15 @@
                     <label>ຊື່ສະຖານທີ່ພັກອາໄສ</label>
                     <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກອາໄສ">
                   </div>
+                  <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_name'].errors && shelterForm.controls['shelt_name'].dirty">
+                    <li [hidden]="!shelterForm.controls['shelt_name'].hasError('required')">ຊື່ສະຖານທີ່ພັກອາໄສຫ້າມວ່າງ</li>
+                  </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດສະຖານທີ່ພັກອາໄສ</span>
                   <select class="form-control select2" id="shelt_type" formControlName="shelt_type" style="width: 100%;">
-                    <option value="A" selected="selected">ປະເພດ A</option>
-                    <option value="B">ປະເພດ B</option>
-                    <option value="C">ປະເພດ C</option>
-                    <option value="D">ປະເພດ D</option>
-                    <option value="E">ປະເພດ E</option>
-                    <option value="F">ປະເພດ F</option>
-                    <option value="G">ປະເພດ G</option>
+                    <option *ngFor="let type of shelter_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
                   </div>
               </div>
@@ -42,45 +42,36 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ແຂວງ</span>
-                    <select class="form-control select2" id="shelt_province" formControlName="shelt_province" style="width: 100%;">
-                      <option value="A" selected="selected">ນະຄອນຫຼວງວຽງຈັນ</option>
-                      <option value="B">ວຽງຈັນ</option>
-                      <option value="C">ຊຽງຂວາງ</option>
-                      <option value="D">ໄຊຍະບູລີ</option>
-                      <option value="E">ຄຳມ່ວນ</option>
-                      <option value="F">ຜົ້ງສາລີ</option>
-                      <option value="G">ຈຳປາສັກ</option>
+                    <select class="form-control select2" id="shelt_province" formControlName="shelt_province" style="width: 100%;" (change)="changeDistrict()">
+                      <option *ngFor="let province of provinces; let i=index" value="{{province._id}}"><span>{{province.province}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ເມືອງ</span>
-                    <select class="form-control select2" id="shelt_district" formControlName="shelt_district" style="width: 100%;">
-                      <option value="A" selected="selected">ໄຊເສດຖາ</option>
-                      <option value="B">ໄຊທານີ</option>
-                      <option value="C">ສີໂຄດຕະບອງ</option>
-                      <option value="D">ໄກສອນ</option>
-                      <option value="E">A</option>
-                      <option value="F">B</option>
-                      <option value="G">C</option>
+                    <select class="form-control select2" id="shelt_district" formControlName="shelt_district" style="width: 100%;" (change)="changeVillage()">
+                      <option *ngFor="let district of districts; let j=index" value="{{district._id}}"><span>{{district.district}}</span></option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <span>ບ້ານ</span>
-                  <input 
-                        type="text" 
-                        class="form-control" 
-                        id="shelt_village" 
-                        ngui-auto-complete
-                        [source]="villages"
-                        z-index="4"
-                        formControlName="shelt_village" 
-                        placeholder="ບ້ານ">
+                  <div class="form-group">
+                    <span>ບ້ານ</span>
+                    <input 
+                          type="text" 
+                          class="form-control" 
+                          id="shelt_village" 
+                          ngui-auto-complete
+                          [source]="villages"
+                          z-index="4"
+                          formControlName="shelt_village" 
+                          placeholder="ບ້ານ">
+                  </div>
+                  <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_village'].errors && shelterForm.controls['shelt_village'].dirty">
+                    <li [hidden]="!shelterForm.controls['shelt_village'].hasError('required')">ຊື່ບ້ານຫ້າມວ່າງ</li>
+                  </ul>
                 </div>
-              </div>
             </div>
             <!-- Address row -->
             
@@ -93,19 +84,19 @@
                     [latitude]="lat"
                     [longitude]="lng"
                     [zoom]="zoom"
-                    [disableDefaultUI]="true"
-                    [zoomControl]="true">
+                    [disableDefaultUI]="false"
+                    [zoomControl]="true"
+                    (mapClick)="changeLocation($event)">
                     
-                    <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-                        [radius]="5000"
-                        [fillColor]="'red'"
-                        [circleDraggable]="true"
-                        [editable]="true">
-                    </agm-circle>
-
+                    <agm-marker 
+                        [latitude]="lat" 
+                        [longitude]="lng" 
+                        [label]="label">
+                      </agm-marker>
+  
                   </agm-map>
                 </div>
-                <button type="button" class="btn btn-success btn-round"><i class="fa fa-map-marker"></i></button>
+                <button type="button" class="btn btn-success btn-round" (click)="setCurrentLocationLatLong()"><i class="fa fa-map-marker"></i></button>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
@@ -118,6 +109,11 @@
                     <span>ລອງຕິຈຸດ</span>
                   <input type="text" class="form-control" readonly formControlName="shelt_long" id="shelt_long" placeholder="ລອງຕິຈຸດ">
                 </div>
+              </div>
+              <div class="col-lg-12 col-xs-12">
+                <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_long'].errors && shelterForm.controls['shelt_long'].dirty">
+                  <li [hidden]="!shelterForm.controls['shelt_long'].hasError('required')">ຄລິກເລືອກລັດຕິຈຸດ ແລະ ລອງຕິຈຸດຈາກແຜນທີ່</li>
+                </ul>
               </div>
             </div>
             <!-- Map row -->
@@ -140,12 +136,19 @@
                     <span>ເບີໂທ</span>
                     <input type="text" class="form-control"  id="shelt_tel" formControlName="shelt_tel" placeholder="ເບີໂທຕິດຕໍ່">
                   </div>
+                  <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_tel'].errors && shelterForm.controls['shelt_tel'].dirty">
+                    <li [hidden]="!shelterForm.controls['shelt_tel'].hasError('required')">ເບີໂທຕິດຕໍ່ຫ້າມວ່າງ</li>
+                  </ul>
                 </div>
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ອີເມວ</span>
                     <input type="email" class="form-control"  id="shelt_email" formControlName="shelt_email" placeholder="ອີເມວຕິດຕໍ່">
                   </div>
+                  <ul class="error-message-many" *ngIf="shelterForm.controls['shelt_email'].errors && shelterForm.controls['shelt_email'].dirty">
+                    <li [hidden]="!shelterForm.controls['shelt_email'].hasError('required')">ອີເມວຫ້າມວ່າງ</li>
+                    <li [hidden]="!shelterForm.controls['shelt_email'].hasError('simpleEmailRule')">ອີເມວບໍ່ຖືກຕ້ອງ</li>
+                  </ul>
                 </div>
               </div>
               <!-- Contact -->
@@ -168,11 +171,18 @@
                         <div class="form-group">
                             <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                         </div>
+                        <ul class="error-message-one" *ngIf="social.controls['name'].errors && social.controls['name'].dirty">
+                          <li [hidden]="!social.controls['name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
+                        </ul>
                     </td>
                     <td>
                       <div class="form-group">
                           <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                       </div>
+                      <ul class="error-message-many" *ngIf="social.controls['url'].errors && social.controls['url'].dirty">
+                        <li [hidden]="!social.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                        <li [hidden]="!social.controls['url'].hasError('url')">(http or https://www.example.com/...)</li>
+                      </ul>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" (click)="removeSocial(i)"><i class="fa fa-minus"></i></button>
@@ -189,8 +199,11 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
-                  <input type="file"  id="shelt_images" (change)="fileChangeListener($event, null)">
+                  <input type="file" accept="image/*" id="shelt_images" (change)="fileChangeListener($event, null)">
                 </div>
+                <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
+                  <li [hidden]="shelterForm.value['images'].length">ຕ້ອງເລືອກຮູບຂອງທີ່ພັກອາໄສຢ່າງໜ້ອຍ 1 ຮູບ</li>
+                </ul>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let image of shelterForm.value['images']; let j=index">
                 <div class="small-box">
@@ -207,13 +220,16 @@
             <div class="row">
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
-                  <span>ວີດີໂອ URL</span>
-                  <input type="text" class="form-control" id="shelt_video" formControlName="shelt_video" placeholder="ລິ້ງວີດີໂອຈາກ Youtube ຫຼື ອື່ນໆ">
+                  <span>Youtube ວີດີໂອ URL</span>
+                  <input type="text" class="form-control" id="shelt_video" formControlName="shelt_video" placeholder="Youtube ວີດີໂອ URL">
                 </div>
+                <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_video'].errors && shelterForm.controls['shelt_video'].dirty">
+                  <li [hidden]="!shelterForm.controls['shelt_video'].hasError('url')">(https://www.youtube.com/...)</li>
+                </ul>
               </div>
-              <div class="col-lg-12 col-xs-12">
+              <div class="col-lg-12 col-xs-12" *ngIf="shelterForm.value['shelt_video'] && shelterForm.controls['shelt_video'].valid">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs"
+                    <iframe class="embed-responsive-item" [src]="safeVideoUrl(shelterForm.value['shelt_video'])"
                             frameborder="0" allowfullscreen></iframe>
                   </div>
               </div>
@@ -245,30 +261,36 @@
                                   <div class="row">
                                     <div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                          <span>ແບບຫ້ອງ</span>
-                                          <input type="text" class="form-control input-sm" formControlName="style" placeholder="ແບບຫ້ອງ">
+                                          <span>ແບບຫ້ອງນອນ</span>
+                                          <input type="text" class="form-control input-sm" formControlName="style" placeholder="ແບບຫ້ອງນອນ">
                                         </div>
+                                        <ul class="error-message-one" *ngIf="room.controls['style'].errors && room.controls['style'].dirty">
+                                          <li [hidden]="!room.controls['style'].hasError('required')">ສະໄຕຫ້ອງນອນຫ້າມວ່າງ</li>
+                                        </ul>
                                         <div class="form-group">
                                           <span>ລາຄາ</span>
-                                          <input type="text" class="form-control input-sm" formControlName="price" placeholder="ລາຄາ">
+                                          <input type="number" class="form-control input-sm" formControlName="price" placeholder="ລາຄາ">
                                         </div>
+                                        <ul class="error-message-many" *ngIf="room.controls['price'].errors && room.controls['price'].dirty">
+                                          <li [hidden]="!room.controls['price'].hasError('required')">ລາຄາຫ້າມວ່າງ</li>
+                                          <li [hidden]="!room.controls['price'].hasError('min')">ລາຄາຄວນຫຼາຍກວ່າ 0 ກີບ</li>
+                                        </ul>
                                         <div class="form-group">
                                           <span for="room_images">ເລືອກຮູບ</span>
-                                          <input type="file"  id="room_image" (change)="fileChangeListener($event, j)">
+                                          <input type="file" accept="image/*" id="room_image" (change)="fileChangeListener($event, j)">
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-md-4 col-sm-6 col-xs-12" *ngIf="room.get('room_image').value">
+                                    <div class="col-lg-5 col-md-4 col-sm-6 col-xs-12">
                                         <div class="small-box">
                                             <div class="box-header">
-                                              <div class="box-tools"><i class="fa fa-close closeIcon" (click)="room.get('room_image').setValue(null)"></i></div>
+                                              <ul class="error-message-one" *ngIf="room.controls['room_image'].errors && room.controls['room_image'].dirty">
+                                                <li [hidden]="!room.controls['room_image'].hasError('required')">ບໍ່ມີຮູບ</li>
+                                              </ul>
                                             </div>
                                             <div class="inner">
-                                                <img [src]="room.get('room_image').value" alt="image {{i + 1}}">
+                                                <img [src]="room.get('room_image').value?room.get('room_image').value:'assets/img/ic_image.png'" alt="image {{i + 1}}">
                                             </div>
                                           </div>
-                                    </div>
-                                    <div class="col-lg-5 col-md-4 col-sm-6 col-xs-12" *ngIf="!room.get('room_image').value">
-                                        <img src="http://placehold.it/150x100" alt="...">
                                     </div>
                                   </div>
                                 </div>

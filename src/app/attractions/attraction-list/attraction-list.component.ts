@@ -56,6 +56,13 @@ export class AttractionListComponent implements OnInit {
   ngOnInit() {
   }
 
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
+  }
+
   checkAttractionsLength() {
     if (this.attractionses.length > 25) {
       return true;

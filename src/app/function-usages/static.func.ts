@@ -66,4 +66,27 @@ export class StaticFunc {
     return 'ພະນັກງານ IT';
   }
 
+  static userMst(str: string) {
+    if (this.decoding(str) === 'master') {
+      return true;
+    }
+    return false;
+  }
+
+  static checkPms(str: string) {
+    if (this.decoding(str) === 'admin') {
+      return true;
+    }
+    return false;
+  }
+
+  static published(pb: boolean) {
+    const user = JSON.parse(localStorage.getItem('lt_token'));
+    const permission = user.data['user_pms'];
+    if ((this.decoding(permission) === 'master') && !pb) {
+      return true;
+    }
+    return false;
+  }
+
 }

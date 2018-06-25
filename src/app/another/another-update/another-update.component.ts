@@ -59,6 +59,7 @@ export class AnotherUpdateComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -118,6 +119,7 @@ export class AnotherUpdateComponent implements OnInit {
          this.another_place = another_place.json()['data'];
          this.lat = this.another_place['location']['lat'];
          this.lng = this.another_place['location']['long'];
+         this.label = this.another_place['name'];
        }, (error) => {
          if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
@@ -301,13 +303,33 @@ export class AnotherUpdateComponent implements OnInit {
     });
   }
 
+  checkPublished() {
+    return StaticFunc.published(this.another_place['published']);
+  }
+
   setCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    if (this.checkEditLocation) {
+      this.lat = $event.coords.lat;
+      this.lng = $event.coords.lng;
+      this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    }
+  }
+
+  cancelLocation() {
+    this.lat = this.another_place['location']['lat'];
+    this.lng = this.another_place['location']['long'];
+    this.label = this.another_place['name'];
+    this.checkEditLocation = false;
   }
 
   changeDistrict() {
@@ -340,12 +362,12 @@ export class AnotherUpdateComponent implements OnInit {
     }
   }
 
-  cancelLocation() {
-    this.lat = this.another_place['location']['lat'];
-    this.lng = this.another_place['location']['long'];
-    this.checkEditLocation = false;
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
   }
-
 
   viewEditName() {
     this.updateTittleForm.get('ano_name').setValue(this.another_place['name']);
@@ -431,7 +453,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -532,7 +554,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -592,7 +614,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -652,7 +674,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -708,7 +730,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -766,7 +788,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -795,7 +817,6 @@ export class AnotherUpdateComponent implements OnInit {
             social: this.addNewSocialForm.value
           };
           this.anotherService.insertSocial(data).subscribe((success) => {
-            console.log(success.json()['data']);
             this.another_place['socials'].push(success.json()['data']);
             this.addNewSocialForm.reset();
           }, (error) => {
@@ -817,7 +838,7 @@ export class AnotherUpdateComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງບັນທືກຂໍຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -869,7 +890,7 @@ export class AnotherUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -915,7 +936,7 @@ export class AnotherUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
@@ -961,7 +982,7 @@ export class AnotherUpdateComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

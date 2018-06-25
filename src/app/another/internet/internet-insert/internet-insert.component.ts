@@ -43,6 +43,7 @@ export class InternetInsertComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
   provinces: Array<Object> = [];
   districts: Array<Object> = [];
   villages: Array<string> = [];
@@ -95,8 +96,10 @@ export class InternetInsertComponent implements OnInit {
       for (let k = 0; k < vils.length; k++) {
         this.villages[k] = vils[k].village;
       }
-      this.internetForm.get('int_province').setValue(this.provinces[0]['_id']);
-      this.internetForm.get('int_district').setValue(this.districts[0]['_id']);
+      if (this.provinces.length  > 0) {
+        this.internetForm.get('int_province').setValue(this.provinces[0]['_id']);
+        this.internetForm.get('int_district').setValue(this.districts[0]['_id']);
+      }
       this.progress.done();
     }, (error) => {
       if (error.status === 405) {
@@ -130,12 +133,34 @@ export class InternetInsertComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.getCurrentLocationLatLong();
+  }
+
+  getCurrentLocationLatLong() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
       });
     }
+  }
+
+  changeLocation($event) {
+    this.lat = $event.coords.lat;
+    this.lng = $event.coords.lng;
+    this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    this.setFormLocationLatLong();
+  }
+
+  setFormLocationLatLong() {
+    this.internetForm.get('int_lat').setValue(this.lat);
+    this.internetForm.get('int_long').setValue(this.lng);
+  }
+
+  setCurrentLocationLatLong() {
+    this.getCurrentLocationLatLong();
+    this.setFormLocationLatLong();
   }
 
   initAddress() {
@@ -217,11 +242,6 @@ export class InternetInsertComponent implements OnInit {
         break;
       }
     }
-  }
-
-  setCurrentLocationLatLong() {
-    this.internetForm.get('int_lat').setValue(this.lat);
-    this.internetForm.get('int_long').setValue(this.lng);
   }
 
   saveInternetCenter() {

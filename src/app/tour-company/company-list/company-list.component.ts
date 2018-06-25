@@ -55,6 +55,13 @@ export class CompanyListComponent implements OnInit {
   ngOnInit() {
   }
 
+  getImage(imageUrl) {
+    if (navigator.onLine) {
+      return imageUrl;
+    }
+    return 'assets/img/ic_image.png';
+  }
+
   checkCompanyLength() {
     if (this.tour_companies.length > 25) {
       return true;

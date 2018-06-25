@@ -15,7 +15,7 @@
           <div class="box-body">
             <table class="table table-condensed">
               <tr>
-                <th>ປະເພດສະຖານທີ່ທ່ອງທ່ຽວທັງໝົດ</th>
+                <th>ປະເພດສະຖານທີ່ທ່ອງທ່ຽວ</th>
                 <th style="width: 40px"></th>
               </tr>
               <tr>
@@ -33,7 +33,7 @@
         </form>
       </div>
 
-      <div class="box">
+      <div class="box" *ngIf="attractions_types.length">
         <div class="box-header">
           <p class="box-title"><strong>ປະເພດສະຖານທີ່ທ່ອງທ່ຽວທັງໝົດ</strong></p>
         </div>

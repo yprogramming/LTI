@@ -39,6 +39,7 @@ export class AnotherInsertComponent implements OnInit {
   // initial center position for the map
   lat: number;
   lng: number;
+  label: string;
   provinces: Array<Object> = [];
   districts: Array<Object> = [];
   villages: Array<string> = [];
@@ -90,8 +91,10 @@ export class AnotherInsertComponent implements OnInit {
       for (let k = 0; k < vils.length; k++) {
         this.villages[k] = vils[k].village;
       }
-      this.anotherForm.get('ano_province').setValue(this.provinces[0]['_id']);
-      this.anotherForm.get('ano_district').setValue(this.districts[0]['_id']);
+      if (this.provinces.length  > 0) {
+        this.anotherForm.get('ano_province').setValue(this.provinces[0]['_id']);
+        this.anotherForm.get('ano_district').setValue(this.districts[0]['_id']);
+      }
       this.progress.done();
     }, (error) => {
       if (error.status === 405) {
@@ -124,6 +127,37 @@ export class AnotherInsertComponent implements OnInit {
 
    }
 
+   ngOnInit() {
+    this.getCurrentLocationLatLong();
+  }
+
+  getCurrentLocationLatLong() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        this.label = 'ຈຸດທີ່ຕັ້ງປະຈຸບັນ';
+      });
+    }
+  }
+
+  changeLocation($event) {
+    this.lat = $event.coords.lat;
+    this.lng = $event.coords.lng;
+    this.label = 'ຈຸດທີ່ຖືກເລືອກ';
+    this.setFormLocationLatLong();
+  }
+
+  setFormLocationLatLong() {
+    this.anotherForm.get('ano_lat').setValue(this.lat);
+    this.anotherForm.get('ano_long').setValue(this.lng);
+  }
+
+  setCurrentLocationLatLong() {
+    this.getCurrentLocationLatLong();
+    this.setFormLocationLatLong();
+  }
+
   initSocial() {
     return new FormGroup({
       name: new FormControl(null, [Validators.required]),
@@ -131,14 +165,6 @@ export class AnotherInsertComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-      });
-    }
-  }
 
   initAddress() {
       this.districts = this.provinces[0]['districts'];
@@ -212,11 +238,6 @@ export class AnotherInsertComponent implements OnInit {
         break;
       }
     }
-  }
-
-  setCurrentLocationLatLong() {
-    this.anotherForm.get('ano_lat').setValue(this.lat);
-    this.anotherForm.get('ano_long').setValue(this.lng);
   }
 
   saveAnotherPlace() {
