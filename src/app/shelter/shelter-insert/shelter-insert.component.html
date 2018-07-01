@@ -4,10 +4,10 @@
 ></ng-progress>
 <div class="row">
   <div class="col-lg-push-2 col-lg-8 col-md-12 col-xs-12">
-    <h2 class="text-center"><strong>ເພີ່ມສະຖານທີ່ພັກອາໄສໃຫມ່</strong></h2>
+    <h2 class="text-center"><strong>ເພີ່ມສະຖານທີ່ພັກແຮມໃຫມ່</strong></h2>
     <div class="box box-primary">
         <div class="box-header with-border">
-          <p class="box-title">ກະລຸນາເພີ່ມຂໍ້ມູນຂອງສະຖານທີ່ພັກອາໃສໃຫ້ຄົບຖ້ວນ ແລະ ຖືກຕ້ອງ</p>
+          <p class="box-title">ກະລຸນາເພີ່ມຂໍ້ມູນຂອງສະຖານທີ່ພັກແຮມໃຫ້ຄົບຖ້ວນ ແລະ ຖືກຕ້ອງ</p>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -17,16 +17,16 @@
             <div class="row">
               <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
-                    <label>ຊື່ສະຖານທີ່ພັກອາໄສ</label>
-                    <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກອາໄສ">
+                    <label>ຊື່ສະຖານທີ່ພັກແຮມ</label>
+                    <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກແຮມ">
                   </div>
                   <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_name'].errors && shelterForm.controls['shelt_name'].dirty">
-                    <li [hidden]="!shelterForm.controls['shelt_name'].hasError('required')">ຊື່ສະຖານທີ່ພັກອາໄສຫ້າມວ່າງ</li>
+                    <li [hidden]="!shelterForm.controls['shelt_name'].hasError('required')">ຊື່ສະຖານທີ່ພັກແຮມຫ້າມວ່າງ</li>
                   </ul>
               </div>
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
-                  <span>ປະເພດສະຖານທີ່ພັກອາໄສ</span>
+                  <span>ປະເພດສະຖານທີ່ພັກແຮມ</span>
                   <select class="form-control select2" id="shelt_type" formControlName="shelt_type" style="width: 100%;">
                     <option *ngFor="let type of shelter_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>

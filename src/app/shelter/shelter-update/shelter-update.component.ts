@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { StaticFunc } from './../../function-usages/static.func';
 import { CustomValidators } from 'ng2-validation';
 import { ShelterService } from './../../services/shelter.service';
@@ -40,6 +41,7 @@ export class ShelterUpdateComponent implements OnInit {
   uploadImageChecked: Boolean = false;
   savingChecked: Boolean = false;
   savedChecked: Boolean = false;
+  feedbackChecked: Boolean = false;
 
   // Forms
   updateTittleForm: FormGroup;
@@ -51,6 +53,7 @@ export class ShelterUpdateComponent implements OnInit {
   updateSocailForm: FormGroup;
   updateRoomForm: FormGroup;
   addNewRoomForm: FormGroup;
+  feedbackForm: FormGroup;
 
 
   // Address data
@@ -82,7 +85,8 @@ export class ShelterUpdateComponent implements OnInit {
     private query: ActivatedRoute,
     private coolDialogs: NgxCoolDialogsService,
     private addressService: AddressService,
-    private shelterService: ShelterService
+    private shelterService: ShelterService,
+    private notificationService: NotificationService
   ) {
     this.progress.start();
     // Create Forms
@@ -126,6 +130,10 @@ export class ShelterUpdateComponent implements OnInit {
       style: [null, [Validators.required]],
       price: [null, [Validators.required]],
       room_image: [null, [Validators.required]]
+    });
+
+    this.feedbackForm = formBuilder.group({
+      message: ['', [Validators.required]]
     });
 
     // Setting image cropper
@@ -512,7 +520,7 @@ export class ShelterUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຊື່ສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຊື່ສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -570,7 +578,7 @@ export class ShelterUpdateComponent implements OnInit {
         address: this.updateAddressForm.value
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນທິ່ຢຸ່ຂອງສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນທິ່ຢຸ່ຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -677,7 +685,7 @@ export class ShelterUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ປ່ຽນແປງຈຸດທີ່ຕັ້ງຂອງສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ປ່ຽນແປງຈຸດທີ່ຕັ້ງຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -737,7 +745,7 @@ export class ShelterUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນລາຍລະອຽດຂອງສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນລາຍລະອຽດຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -791,7 +799,7 @@ export class ShelterUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂວີດີໂອ URL ຂອງສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂວີດີໂອ URL ຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -846,7 +854,7 @@ export class ShelterUpdateComponent implements OnInit {
         }
       };
 
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່ຂອງສະຖານທີ່ນີ້ແທ້ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນຕິດຕໍ່ຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -1249,7 +1257,7 @@ export class ShelterUpdateComponent implements OnInit {
   }
 
   deleteShelter() {
-    this.coolDialogs.confirm('ລົບຂໍ້ມູນສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+    this.coolDialogs.confirm('ລົບຂໍ້ມູນສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1298,7 +1306,7 @@ export class ShelterUpdateComponent implements OnInit {
   }
 
   deleteImage(i, image) {
-    this.coolDialogs.confirm('ຈະລົບຮູບນີ້ແທ້ບໍ?', {
+    this.coolDialogs.confirm('ລົບຮູບຂອງສະຖານທີ່ພັກແຮມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1424,6 +1432,179 @@ export class ShelterUpdateComponent implements OnInit {
             });
           } else {
             this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  allowPublish() {
+    this.coolDialogs.confirm('ຂໍ້ມູນຂອງສະຖານທີ່ພັກແຮມນີ້ຖືກຕ້ອງແລ້ວແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ຖືກຕ້ອງແລ້ວ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Publish'
+    }).subscribe((ok) => {
+      if (ok) {
+        const data = {
+          shelt_id: this.shelter['_id'],
+          title: 'ອະນຸຍາດໃຫ້ສະຖານທີ່ພັກແຮມ ' + this.shelter['name'] + ' ສະແດງຂຶ້ນສາທາລະນະ',
+          _field: {
+            published: true
+          }
+        };
+        this.shelterService.updateShelter(data).subscribe((res) => {
+          this.shelter['published'] = true;
+        }, (error) => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  sendNotification() {
+    this.coolDialogs.confirm('ສົ່ງຂໍ້ມູນສະຖານທີ່ພັກແຮມນີ້ໄປກວດສອບແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Send'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: null,
+          detail: {
+              id: this.shelter['_id'],
+              data: 'ຂໍ້ມູນສະຖານທີ່ພັກແຮມ',
+              datastore: 'shelters',
+              title: this.shelter['name'],
+              path: ['/dashboard', 'shelter', 'detail', this.shelter['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງໄປກວດສອບສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  feedbackNotification() {
+
+    if (!this.feedbackForm.valid) {
+      StaticFunc.triggerForm(this.feedbackForm);
+      return;
+    }
+
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງກັບ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Feedback'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: this.feedbackForm.value['message'],
+          detail: {
+              id: this.shelter['_id'],
+              data: 'ຂໍ້ມູນສະຖານທີ່ພັກແຮມ',
+              datastore: 'shelters',
+              title: this.shelter['name'],
+              path: ['/dashboard', 'shelter', 'detail', this.shelter['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ShelterService } from './../services/shelter.service';
 import { TooltipModule } from 'ngx-tooltip';
@@ -27,6 +28,7 @@ const shel_component = [
     FormsModule,
     ReactiveFormsModule,
     ShelterRoutingModule,
+    PipesModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBXoeOmRRzSl0b4iUBadAz8M-_Zva0DpfQ'
     }),

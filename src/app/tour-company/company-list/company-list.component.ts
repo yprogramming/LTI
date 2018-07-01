@@ -11,6 +11,7 @@ import { CompanyService } from '../../services/company.service';
 })
 export class CompanyListComponent implements OnInit {
 
+  search_keyword: string;
   tour_companies: Array<Object> = [];
   constructor(
     public progress: NgProgress,

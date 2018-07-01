@@ -1,3 +1,4 @@
+import { NotificationService } from './../../../services/notification.service';
 import { StaticFunc } from './../../../function-usages/static.func';
 import { InternetService } from './../../../services/internet.service';
 import { AddressService } from './../../../services/address.service';
@@ -36,6 +37,7 @@ export class InternetUpdateComponent implements OnInit {
   uploadImageChecked: Boolean = false;
   savingChecked: Boolean = false;
   savedChecked: Boolean = false;
+  feedbackChecked: Boolean = false;
 
   // Forms
   updateTittleForm: FormGroup;
@@ -44,6 +46,7 @@ export class InternetUpdateComponent implements OnInit {
   updateContactForm: FormGroup;
   addNewSocialForm: FormGroup;
   updateSocailForm: FormGroup;
+  feedbackForm: FormGroup;
   uploadPercent: any;
 
   // Address data
@@ -70,7 +73,8 @@ export class InternetUpdateComponent implements OnInit {
     private query: ActivatedRoute,
     private coolDialogs: NgxCoolDialogsService,
     private addressService: AddressService,
-    private internetService: InternetService
+    private internetService: InternetService,
+    private notificationService: NotificationService
   ) {
 
     this.progress.start();
@@ -99,6 +103,10 @@ export class InternetUpdateComponent implements OnInit {
       _id: [null, [Validators.required]],
       name: [null, [Validators.required]],
       url: [null, [Validators.required, CustomValidators.url]]
+    });
+
+    this.feedbackForm = formBuilder.group({
+      message: ['', [Validators.required]]
     });
 
     // Setting image cropper
@@ -985,6 +993,179 @@ export class InternetUpdateComponent implements OnInit {
             });
           } else {
             this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  allowPublish() {
+    this.coolDialogs.confirm('ຂໍ້ມູນຂອງສູນອິນເຕີເນັດນີ້ຖືກຕ້ອງແລ້ວແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ຖືກຕ້ອງແລ້ວ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Publish'
+    }).subscribe((ok) => {
+      if (ok) {
+        const data = {
+          int_id: this.internet_center['_id'],
+          title: 'ອະນຸຍາດໃຫ້ສະຖານທີ່ ' + this.internet_center['name'] + ' ສະແດງຂຶ້ນສາທາລະນະ',
+          _field: {
+            published: true
+          }
+        };
+        this.internetService.updateInternet(data).subscribe((res) => {
+          this.internet_center['published'] = true;
+        }, (error) => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  sendNotification() {
+    this.coolDialogs.confirm('ສົ່ງຂໍ້ມູນສູນອິນເຕີເນັດນີ້ໄປກວດສອບແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Send'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: null,
+          detail: {
+              id: this.internet_center['_id'],
+              data: 'ຂໍ້ມູນສູນອິນເຕີເນັດ',
+              datastore: 'internets',
+              title: this.internet_center['name'],
+              path: ['/dashboard', 'another', 'detail', this.internet_center['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງໄປກວດສອບສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  feedbackNotification() {
+
+    if (!this.feedbackForm.valid) {
+      StaticFunc.triggerForm(this.feedbackForm);
+      return;
+    }
+
+    this.coolDialogs.confirm('ສົ່ງກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງກັບ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Feedback'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: this.feedbackForm.value['message'],
+          detail: {
+              id: this.internet_center['_id'],
+              data: 'ຂໍ້ມູນສູນອິນເຕີເນັດ',
+              datastore: 'internets',
+              title: this.internet_center['name'],
+              path: ['/dashboard', 'another', 'internet', 'detail', this.internet_center['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

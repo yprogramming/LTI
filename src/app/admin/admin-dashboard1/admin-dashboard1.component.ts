@@ -173,7 +173,7 @@ export class AdminDashboard1Component implements OnInit {
       ],
       xkey: 'y',
       ykeys: ['item1', 'item2', 'item3', 'item4'],
-      labels: ['ສທ (ຄັ້ງ)', 'ຮຫ (ຄັ້ງ)', 'ທສ (ຄັ້ງ)', 'ສສ (ຄັ້ງ)'],
+      labels: ['ສທ (ຄັ້ງ)', 'ຮຫ (ຄັ້ງ)', 'ສຮ (ຄັ້ງ)', 'ສສ (ຄັ້ງ)'],
       lineColors: ['#00a65a', '#dd4b39', '#0073b7', '#f39c12'],
       hideHover: 'auto'
     });

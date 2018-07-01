@@ -79,7 +79,7 @@ export class ShelterTypeComponent implements OnInit {
 
   saveShelterType() {
     if (this.shelterTypeForm.valid) {
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນປະເພດສະຖານທີ່ພັກອາໄສນີ້ແທ້ບໍ?', {
+      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນປະເພດສະຖານທີ່ພັກແຮມນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -124,7 +124,7 @@ export class ShelterTypeComponent implements OnInit {
 
   updateType(i) {
     if (this.new_name.trim()) {
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນປະເພດສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?', {
+      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນປະເພດສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -158,7 +158,7 @@ export class ShelterTypeComponent implements OnInit {
                 title: 'Error'
               });
             } else {
-              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+              this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງແກ້ໄຂຂໍ້ມູນ', {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
@@ -172,8 +172,8 @@ export class ShelterTypeComponent implements OnInit {
   }
 
   deleteType(i, id) {
-    this.coolDialogs.confirm(`ລົບຂໍ້ມູນປະເພດສະຖານທີ່ພັກອາໄສນີ້ແທ້ ຫຼື ບໍ?
-                            (ຖ້າລົບ ສະຖານທີ່ພັກອາໄສທັງໝົດຂອງປະເພດນີ້ຈະຖືກລົບໄປດ້ວຍ)`, {
+    this.coolDialogs.confirm(`ລົບຂໍ້ມູນປະເພດສະຖານທີ່ພັກແຮມນີ້ແທ້ ຫຼື ບໍ?
+                            (ຖ້າລົບ ສະຖານທີ່ພັກແຮມທັງໝົດຂອງປະເພດນີ້ຈະຖືກລົບໄປດ້ວຍ)`, {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -202,7 +202,7 @@ export class ShelterTypeComponent implements OnInit {
               title: 'Error'
             });
           } else {
-            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນ', {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

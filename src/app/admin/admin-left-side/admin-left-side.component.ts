@@ -1,3 +1,4 @@
+import { Router, NavigationEnd } from '@angular/router';
 import { StaticFunc } from './../../function-usages/static.func';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -10,17 +11,19 @@ import { NgForm } from '@angular/forms';
 export class AdminLeftSideComponent implements OnInit {
 
   user: Object;
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) {
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationEnd) {
+        if (localStorage.getItem('lt_token')) {
+          this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
+        }
+      }
+    });
+   }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
-    const clearUserInterval = setInterval(() => {
-      try {
-        this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
-      } catch (e) {
-        clearInterval(clearUserInterval);
-      }
-    }, 3000);
   }
 
   getImage(imageUrl) {
@@ -36,7 +39,9 @@ export class AdminLeftSideComponent implements OnInit {
 
   checkUserPms() {
     if (
-      (this.user['user_pms'] === StaticFunc.en_fixed_string('master')) || (this.user['user_pms'] === StaticFunc.en_fixed_string('admin'))
+      (this.user['user_pms'] === StaticFunc.en_fixed_string('master'))
+      ||
+      (this.user['user_pms'] === StaticFunc.en_fixed_string('admin'))
     ) {
       return true;
     }

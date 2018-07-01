@@ -47,7 +47,7 @@
                     <li [hidden]="userForm.controls['user_confirm'].hasError('required') && !userForm.controls['user_confirm'].hasError('mismatchedPasswords')">ລະຫັດຜ່ານບໍ່ກົງກັນ</li>
                   </ul>
                   <!-- checkbox -->
-                  <div class="row">
+                  <div class="row" *ngIf="checkUserPms()">
                     <div class="col-xs-6">
                         <label>
                             <input type="radio" value="admin" formControlName="user_permission">
@@ -83,7 +83,7 @@
                       </div>
                 </div>
                 <div class="col-xs-12 text-right">
-                    <button type="reset" class="btn btn-danger btn-flat"><i class="fa fa-user-times"></i> ຍົກເລີກ</button>
+                    <button type="button" class="btn btn-danger btn-flat" (click)="resetForm()"><i class="fa fa-user-times"></i> ຍົກເລີກ</button>
                   <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-user-plus"></i> ເພີ່ມຜູ້ໃຊ້</button>
                 </div>
               </div>

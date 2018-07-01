@@ -1,3 +1,4 @@
+import { UserGaurdService } from './../../auth-guard/user-gaurd.service';
 import { AddressComponent } from './../../address/address.component';
 import { RestaurantComponent } from './../../restaurant/restaurant.component';
 import { AttractionsComponent } from './../../attractions/attractions.component';
@@ -47,6 +48,7 @@ const routes: Routes = [{
     },
     {
       path: 'user',
+      canActivate: [ UserGaurdService ],
       loadChildren: './../../user/user.module#UserModule'
     },
     {

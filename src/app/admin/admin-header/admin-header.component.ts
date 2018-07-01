@@ -3,8 +3,8 @@ import { NgProgress } from 'ngx-progressbar';
 import { StaticFunc } from './../../function-usages/static.func';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { UserService } from './../../services/user.service';
-import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-admin-header',
@@ -13,8 +13,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminHeaderComponent implements OnInit {
 
-  clearUserInterval: any;
-  clearNotificationInterval: any;
   user: Object  = {};
   notifications: Object = {};
 
@@ -25,36 +23,24 @@ export class AdminHeaderComponent implements OnInit {
     private coolDialogs: NgxCoolDialogsService,
     private notificationService: NotificationService
   ) {
-    this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
-    if (StaticFunc.userMst(this.user['user_pms'])) {
-      this.notificationService.getMstNotifications().subscribe((notifications) => {
-        this.notifications['length'] = notifications.json()['length'];
-        this.notifications['data'] = notifications.json()['data'];
-          console.log(this.notifications);
-      }, (error) => { });
-    } else {
-      this.notificationService.getUsrNotifications().subscribe((notifications) => {
-        this.notifications = notifications.json()['data'];
-          console.log(this.notifications);
-      }, (error) => {});
-    }
-    this.clearUserInterval = setInterval(() => {
-      this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
-    }, 3000);
-
-    this.clearNotificationInterval = setInterval(() => {
-      if (StaticFunc.userMst(this.user['user_pms'])) {
-        this.notificationService.getMstNotifications().subscribe((notifications) => {
-          this.notifications['length'] = notifications.json()['length'];
-          this.notifications['data'] = notifications.json()['data'];
-        }, (error) => {console.log(error); });
-      } else {
-        this.notificationService.getUsrNotifications().subscribe((notifications) => {
-          this.notifications['length'] = notifications.json()['length'];
-          this.notifications['data'] = notifications.json()['data'];
-        }, (error) => {});
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationEnd) {
+        if (localStorage.getItem('lt_token')) {
+          this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
+          if (StaticFunc.userMst(this.user['user_pms'])) {
+            this.notificationService.getMstNotifications().subscribe((notifications) => {
+              this.notifications['length'] = notifications.json()['length'];
+              this.notifications['data'] = notifications.json()['data'];
+            }, (error) => { });
+          } else {
+            this.notificationService.getUsrNotifications().subscribe((notifications) => {
+              this.notifications = notifications.json()['data'];
+                console.log(this.notifications);
+            }, (error) => {});
+          }
+        }
       }
-    }, 10000);
+    });
   }
 
   ngOnInit() {
@@ -74,8 +60,6 @@ export class AdminHeaderComponent implements OnInit {
   doLogout() {
     this.progress.start();
     this.logoutService.logoutUser().subscribe((success) => {
-      clearInterval(this.clearUserInterval);
-      clearInterval(this.clearNotificationInterval);
       localStorage.removeItem('lt_token');
       this.router.navigate(['/login']);
       this.progress.done();

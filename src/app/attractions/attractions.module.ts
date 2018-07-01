@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { NgProgressModule } from 'ngx-progressbar';
 import { AttractionsService } from './../services/attractions.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -27,6 +28,7 @@ const att_component = [
     FormsModule,
     ReactiveFormsModule,
     AttractionsRoutingModule,
+    PipesModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBXoeOmRRzSl0b4iUBadAz8M-_Zva0DpfQ'
     }),

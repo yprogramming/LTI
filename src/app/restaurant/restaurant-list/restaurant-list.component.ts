@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RestaurantListComponent implements OnInit {
 
+  search_keyword: string;
   restaurants: Array<Object> = [];
   constructor(
     public progress: NgProgress,

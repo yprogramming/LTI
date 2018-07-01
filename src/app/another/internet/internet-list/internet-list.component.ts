@@ -11,6 +11,7 @@ import { InternetService } from '../../../services/internet.service';
 })
 export class InternetListComponent implements OnInit {
 
+  search_keyword: string;
   internet_centers: Array<Object> = [];
   constructor(
     public progress: NgProgress,

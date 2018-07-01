@@ -12,6 +12,7 @@ import { AttractionsService } from '../../services/attractions.service';
 })
 export class AttractionListComponent implements OnInit {
 
+  search_keyword: string;
   attractionses: Array<Object> = [];
   constructor(
     public progress: NgProgress,

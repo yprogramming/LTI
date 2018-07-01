@@ -54,7 +54,7 @@ export class UserInsertComponent implements OnInit {
         ]
       ],
       user_confirm: [null, [Validators.required]],
-      user_permission: [null, [Validators.required]],
+      user_permission: ['user', [Validators.required]],
       user_profile: [null, [Validators.required]]
     });
     this.userForm.setValidators(PasswordValidators.mismatchedPasswords('user_pass', 'user_confirm'));
@@ -201,7 +201,7 @@ export class UserInsertComponent implements OnInit {
               this.savedChecked = true;
               setTimeout(() => {
                 this.savedChecked = false;
-                this.userForm.reset();
+                this.resetForm();
               }, 4000);
             }, (error) => {
               if (error.status === 405) {
@@ -242,5 +242,22 @@ export class UserInsertComponent implements OnInit {
     } else {
       StaticFunc.triggerForm(this.userForm);
     }
+
   }
+
+  resetForm() {
+    this.userForm.reset();
+    this.userForm.get('user_permission').setValue('user');
+  }
+
+  checkUserPms() {
+    const user = JSON.parse(localStorage.getItem('lt_token'))['data'];
+    if (
+      user['user_pms'] === StaticFunc.en_fixed_string('master')
+    ) {
+      return true;
+    }
+    return false;
+  }
+
 }

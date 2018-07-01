@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { StaticFunc } from './../../function-usages/static.func';
 import { RestaurantService } from './../../services/restaurant.service';
 import { AddressService } from './../../services/address.service';
@@ -40,6 +41,7 @@ export class RestaurantUpdateComponent implements OnInit {
   uploadImageChecked: Boolean = false;
   savingChecked: Boolean = false;
   savedChecked: Boolean = false;
+  feedbackChecked: Boolean = false;
 
   // Forms
   updateTittleForm: FormGroup;
@@ -51,6 +53,7 @@ export class RestaurantUpdateComponent implements OnInit {
   updateSocailForm: FormGroup;
   updateFoodForm: FormGroup;
   addNewFoodForm: FormGroup;
+  feedbackForm: FormGroup;
 
   // Address data
   provinces: Array<Object> = [];
@@ -82,7 +85,8 @@ export class RestaurantUpdateComponent implements OnInit {
     private query: ActivatedRoute,
     private coolDialogs: NgxCoolDialogsService,
     private addressService: AddressService,
-    private restaurantService: RestaurantService
+    private restaurantService: RestaurantService,
+    private notificationService: NotificationService
   ) {
     this.progress.start();
     // Create Forms
@@ -128,6 +132,10 @@ export class RestaurantUpdateComponent implements OnInit {
       add_food_type: [null, [Validators.required]],
       add_food_price: [null, [Validators.required]],
       add_image: [null, [Validators.required]]
+    });
+
+    this.feedbackForm = formBuilder.group({
+      message: ['', [Validators.required]]
     });
 
     // Setting image cropper
@@ -1451,6 +1459,179 @@ export class RestaurantUpdateComponent implements OnInit {
             });
           } else {
             this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  allowPublish() {
+    this.coolDialogs.confirm('ຂໍ້ມູນຂອງຮ້ານອາຫານນີ້ຖືກຕ້ອງແລ້ວແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ຖືກຕ້ອງແລ້ວ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Publish'
+    }).subscribe((ok) => {
+      if (ok) {
+        const data = {
+          res_id: this.restaurant['_id'],
+          title: 'ອະນຸຍາດໃຫ້ຮ້ານອາຫານ ' + this.restaurant['name'] + ' ສະແດງຂຶ້ນສາທາລະນະ',
+          _field: {
+            published: true
+          }
+        };
+        this.restaurantService.updateRestaurant(data).subscribe((res) => {
+          this.restaurant['published'] = true;
+        }, (error) => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  sendNotification() {
+    this.coolDialogs.confirm('ສົ່ງຂໍ້ມູນຮ້ານອາຫານນີ້ໄປກວດສອບແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Send'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: null,
+          detail: {
+              id: this.restaurant['_id'],
+              data: 'ຂໍ້ມູນຮ້ານອາຫານ',
+              datastore: 'restaurants',
+              title: this.restaurant['name'],
+              path: ['/dashboard', 'restaurant', 'detail', this.restaurant['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງໄປກວດສອບສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  feedbackNotification() {
+
+    if (!this.feedbackForm.valid) {
+      StaticFunc.triggerForm(this.feedbackForm);
+      return;
+    }
+
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງກັບ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Feedback'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: this.feedbackForm.value['message'],
+          detail: {
+              id: this.restaurant['_id'],
+              data: 'ຂໍ້ມູນຮ້ານອາຫານ',
+              datastore: 'restaurants',
+              title: this.restaurant['name'],
+              path: ['/dashboard', 'restaurant', 'detail', this.restaurant['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

@@ -348,7 +348,7 @@ saveTransportation() {
   this.imageLengthUpload = this.transportationForm.value['images'].length;
   if (this.transportationForm.valid && this.imageLengthUpload > 0) { // ຖ້າມີຮູບທີ່ຈະອັບໂຫຼດ
 
-    this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວນີ້ແທ້ ຫຼື ບໍ?', {
+    this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານີຂົນສົ່ງໂດຍສານນີ້ແທ້ ຫຼື ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ບັນທືກ',
       cancelButtonText: 'ຍົກເລີກ',

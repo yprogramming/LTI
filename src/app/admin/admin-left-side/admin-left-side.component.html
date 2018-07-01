@@ -5,7 +5,7 @@
     <a [routerLink]="['/dashboard','profile',en_user_id(user['user_id'])]" *ngIf="user">
       <div class="user-panel">
         <div class="pull-left image">
-          <img [src]="user.user_profile?getImage(user.user_profile):'assets/img/ic_user.jpg'" class="img-circle" alt="User Image">
+          <img [src]="user['user_profile']?getImage(user['user_profile']):'assets/img/ic_user.jpg'" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <h4><strong>{{user.user_name}}</strong></h4>

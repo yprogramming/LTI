@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { NgProgressModule } from 'ngx-progressbar';
 import { TooltipModule } from 'ngx-tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,8 +23,10 @@ const com_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     TourCompanyRoutingModule,
+    PipesModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBXoeOmRRzSl0b4iUBadAz8M-_Zva0DpfQ'
     }),

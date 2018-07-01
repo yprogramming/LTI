@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { StaticFunc } from './../../function-usages/static.func';
 import { CompanyService } from './../../services/company.service';
@@ -37,6 +38,7 @@ export class CompanyUpdateComponent implements OnInit {
   uploadImageChecked: Boolean = false;
   savingChecked: Boolean = false;
   savedChecked: Boolean = false;
+  feedbackChecked: Boolean = false;
 
   // Forms
   updateTittleForm: FormGroup;
@@ -46,6 +48,7 @@ export class CompanyUpdateComponent implements OnInit {
   updateVideoForm: FormGroup;
   addNewSocialForm: FormGroup;
   updateSocailForm: FormGroup;
+  feedbackForm: FormGroup;
   uploadPercent: any;
 
   // Address data
@@ -73,7 +76,8 @@ export class CompanyUpdateComponent implements OnInit {
     private query: ActivatedRoute,
     private coolDialogs: NgxCoolDialogsService,
     private addressService: AddressService,
-    private tourCompanyService: CompanyService
+    private tourCompanyService: CompanyService,
+    private notificationService: NotificationService
   ) {
 
     this.progress.start();
@@ -106,6 +110,10 @@ export class CompanyUpdateComponent implements OnInit {
       _id: [null, [Validators.required]],
       name: [null, [Validators.required]],
       url: [null, [Validators.required]]
+    });
+
+    this.feedbackForm = formBuilder.group({
+      message: ['', [Validators.required]]
     });
 
     // Setting image cropper
@@ -1071,6 +1079,179 @@ export class CompanyUpdateComponent implements OnInit {
             });
           } else {
             this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງລົບຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  allowPublish() {
+    this.coolDialogs.confirm('ຂໍ້ມູນຂອງບໍລິສັດນຳທ່ຽວນີ້ຖືກຕ້ອງແລ້ວແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ຖືກຕ້ອງແລ້ວ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Publish'
+    }).subscribe((ok) => {
+      if (ok) {
+        const data = {
+          com_id: this.tour_company['_id'],
+          title: 'ອະນຸຍາດໃຫ້ບໍລິສັດນຳທ່ຽວ ' + this.tour_company['name'] + ' ສະແດງຂຶ້ນສາທາລະນະ',
+          _field: {
+            published: true
+          }
+        };
+        this.tourCompanyService.updateTourCompany(data).subscribe((res) => {
+          this.tour_company['published'] = true;
+        }, (error) => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  sendNotification() {
+    this.coolDialogs.confirm('ສົ່ງຂໍ້ມູນບໍລິສັດນຳທ່ຽວນີ້ໄປກວດສອບແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Send'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: null,
+          detail: {
+              id: this.tour_company['_id'],
+              data: 'ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ',
+              datastore: 'tourcompanies',
+              title: this.tour_company['name'],
+              path: ['/dashboard', 'shelter', 'detail', this.tour_company['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງໄປກວດສອບສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  feedbackNotification() {
+
+    if (!this.feedbackForm.valid) {
+      StaticFunc.triggerForm(this.feedbackForm);
+      return;
+    }
+
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+      theme: 'material', // available themes: 'default' | 'material' | 'dark'
+      okButtonText: 'ສົ່ງກັບ',
+      cancelButtonText: 'ຍົກເລີກ',
+      color: 'black',
+      title: 'Feedback'
+    }).subscribe((res) => {
+      if (res) {
+        const user_id = JSON.parse(localStorage.getItem('lt_token'))['data']['user_id'];
+        const notification_info = {
+          user: user_id,
+          message: this.feedbackForm.value['message'],
+          detail: {
+              id: this.tour_company['_id'],
+              data: 'ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ',
+              datastore: 'tourcompanies',
+              title: this.tour_company['name'],
+              path: ['/dashboard', 'company', 'detail', this.tour_company['_id']]
+          }
+        };
+        this.notificationService.createNotification(notification_info).subscribe((success) => {
+          this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
+            theme: 'material', // available themes: 'default' | 'material' | 'dark'
+            okButtonText: 'OK',
+            color: 'black',
+            title: 'Error'
+          });
+        }, error => {
+          if (error.status === 405) {
+            this.coolDialogs.alert(error.json()['message'], {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Warning'
+            }).subscribe(() => {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            });
+          } else if (error.status <= 423 && error.status >= 400) {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
+              theme: 'material', // available themes: 'default' | 'material' | 'dark'
+              okButtonText: 'OK',
+              color: 'black',
+              title: 'Error'
+            });
+          } else {
+            this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດໃນຂະນະຢືນຢັນຂໍ້ມູນ', {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',

@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TransportationListComponent implements OnInit {
 
+  search_keyword: string;
   transportations: Array<Object> = [];
   constructor(
     public progress: NgProgress,

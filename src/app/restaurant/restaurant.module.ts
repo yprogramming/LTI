@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { RestaurantService } from './../services/restaurant.service';
 import { TooltipModule } from 'ngx-tooltip';
 import { ImageCropperModule } from 'ngx-img-cropper';
@@ -29,6 +30,7 @@ const res_component = [
     FormsModule,
     ReactiveFormsModule,
     RestaurantRoutingModule,
+    PipesModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBXoeOmRRzSl0b4iUBadAz8M-_Zva0DpfQ'
     }),

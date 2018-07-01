@@ -127,3 +127,12 @@ agm-map {
   top: 48%;
   left: 41%;
 }
+
+
+.feedback-detail {
+  margin-top: 15rem;
+}
+
+.error-message-one{
+  color: rgb(223, 113, 113);
+}

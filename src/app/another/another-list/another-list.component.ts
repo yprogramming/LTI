@@ -11,6 +11,7 @@ import { AnotherService } from '../../services/another.service';
 })
 export class AnotherListComponent implements OnInit {
 
+  search_keyword: string;
   another_places: Array<Object> = [];
   constructor(
     public progress: NgProgress,

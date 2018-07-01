@@ -310,7 +310,7 @@ export class ShelterInsertComponent implements OnInit {
   saveShelter() {
     this.imageLengthUpload = this.shelterForm.value['images'].length;
     if (this.shelterForm.valid && this.imageLengthUpload > 0) { // ຖ້າມີຮູບທີ່ຈະອັບໂຫຼດ
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານທີ່ພັກອາໄສນີ້ແທ້ບໍ?', {
+      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານທີ່ພັກແຮມນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',

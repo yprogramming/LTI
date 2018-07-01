@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShelterListComponent implements OnInit {
 
+  search_keyword: string;
   shelters: Array<Object> = [];
   constructor(
     public progress: NgProgress,

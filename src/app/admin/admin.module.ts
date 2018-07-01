@@ -19,6 +19,7 @@ import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminComponent } from './admin.component';
 import { ReportModule } from '../report/report.module';
 import { RouterModule } from '@angular/router';
+import { UserGaurdService } from '../auth-guard/user-gaurd.service';
 
 const admin_component = [
   AdminComponent,
@@ -43,6 +44,9 @@ const admin_component = [
   declarations: [
     ...admin_component
   ],
-  providers: [DashboardService]
+  providers: [
+    DashboardService,
+    UserGaurdService
+  ]
 })
 export class AdminModule { }

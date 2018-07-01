@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { InternetService } from './../services/internet.service';
 import { AnotherService } from './../services/another.service';
 import { NgProgressModule } from 'ngx-progressbar';
@@ -28,7 +29,9 @@ const another_component = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
+    PipesModule,
     AnotherRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBXoeOmRRzSl0b4iUBadAz8M-_Zva0DpfQ'
