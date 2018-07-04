@@ -1,3 +1,4 @@
+import { NotificationGaurd } from './../auth-guard/notification.guard';
 import { NotificationListComponent } from './notification-list/notification-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -12,7 +13,8 @@ const routes: Routes = [{
         component: NotificationListComponent,
       }, {
         path: 'detail/:id',
-        component: NotificationDetailComponent
+        component: NotificationDetailComponent,
+        canActivate: [ NotificationGaurd ]
       }
     ]
   }];

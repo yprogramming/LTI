@@ -1,3 +1,4 @@
+import { NotificationGaurd } from './auth-guard/notification.guard';
 import { NotificationService } from './services/notification.service';
 import { AddressService } from './services/address.service';
 import { LoginedService } from './auth-guard/logined.service';
@@ -77,6 +78,7 @@ import { LoginService } from './auth-guard/login.service';
     LoginService,
     LoginedService,
     AddressService,
+    NotificationGaurd,
     NotificationService
   ],
   bootstrap: [AppComponent]

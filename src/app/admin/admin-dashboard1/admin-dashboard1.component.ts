@@ -185,11 +185,28 @@ export class AdminDashboard1Component implements OnInit {
       resize: true,
       colors: ['#00a65a', '#dd4b39', '#0073b7', '#f39c12'],
       data: [
-        { label: 'ສທ (ຄັ້ງ)', value: 12 },
-        { label: 'ຮຫ (ຄັ້ງ)', value: 30 },
-        { label: 'ທສ (ຄັ້ງ)', value: 20 },
-        { label: 'ສສ (ຄັ້ງ)', value: 20 }
+        { label: 'ສທ (ຄັ້ງ)', value: 0 },
+        { label: 'ຮຫ (ຄັ້ງ)', value: 0 },
+        { label: 'ສຮ (ຄັ້ງ)', value: 0 },
+        { label: 'ສສ (ຄັ້ງ)', value: 0 }
       ],
+    });
+
+    this.dashboardService.allPlaceViews().subscribe((respone) => {
+      const place_views = respone.json()['data'];
+      this.donutChart = Morris.Donut({
+        element: 'sales-chart',
+        resize: true,
+        colors: ['#00a65a', '#dd4b39', '#0073b7', '#f39c12'],
+        data: [
+          { label: 'ສທ (ຄັ້ງ)', value: place_views['attractions']['views'] },
+          { label: 'ຮຫ (ຄັ້ງ)', value: place_views['restaurants']['views'] },
+          { label: 'ສຮ (ຄັ້ງ)', value: place_views['shelters']['views'] },
+          { label: 'ສສ (ຄັ້ງ)', value: place_views['transportations']['views'] }
+        ],
+      });
+    }, (error) => {
+      console.log(error);
     });
 
     /*this.linechart = Morris.Line({

@@ -88,6 +88,8 @@ export class NotificationListComponent implements OnInit {
             okButtonText: 'OK',
             color: 'black',
             title: 'Error'
+          }).subscribe(() => {
+            this.router.navigate(['/dashboard']);
           });
         } else {
           this.coolDialogs.alert('ເກີດຂໍ້ຜິດພາດລະຫວ່າງຮ້ອງຂໍຂໍ້ມູນຈາກເຊີເວີ', {
