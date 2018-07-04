@@ -1,3 +1,5 @@
+import { NgProgressModule } from 'ngx-progressbar';
+import { ReportService } from './../services/report.service';
 import { ReportRoutingModule } from './report-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,10 +23,12 @@ const rep_component = [
 @NgModule({
   imports: [
     CommonModule,
-    ReportRoutingModule
+    ReportRoutingModule,
+    NgProgressModule
   ],
   declarations: [
     ...rep_component
-  ]
+  ],
+  providers: [ ReportService ]
 })
 export class ReportModule { }

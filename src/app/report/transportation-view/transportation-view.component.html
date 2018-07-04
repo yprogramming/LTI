@@ -1,4 +1,7 @@
-<!-- Content Header (Page header) -->
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <section class="content-header">
     <h1>
       Dashboard
@@ -17,7 +20,7 @@
 
   <!-- Main content -->
   <section class="content">
-    <div class="box box-widget">
+    <div class="box box-widget" *ngIf="transportation_views_report.length">
       <div class="box-header">
         <h3 class="text-center">
           <strong>ລາຍງານຍອດເຂົ້າເບີ່ງສະຖານີຂົນສົ່ງໂດຍສານ</strong>
@@ -33,165 +36,13 @@
             <th>ແຂວງ</th>
             <th>ຍອດເຂົ້າເບີ່ງ</th>
           </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>999 ຄັ້ງ</td>
+          <tr *ngFor="let transportation_view of transportation_views_report; let i=index;">
+            <td>{{i + 1}}</td>
+            <td>{{transportation_view['name']}}</td>
+            <td>{{transportation_view['address']['village']}}</td>
+            <td>{{transportation_view['address']['district']}}</td>
+            <td>{{transportation_view['address']['province']}}</td>
+            <td>{{transportation_view['total_views']}}</td>
           </tr>
         </table>
       </div>

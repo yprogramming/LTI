@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { NotificationService } from './../../services/notification.service';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { Router } from '@angular/router';
@@ -24,10 +25,11 @@ export class NotificationListComponent implements OnInit {
     progress.start();
     this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
     if (StaticFunc.userMst(this.user['user_pms'])) {
-      this.notificationService.getMstAllNotifications().subscribe((notifications) => {
+      const subscript: Subscription = this.notificationService.getMstAllNotifications().subscribe((notifications) => {
         this.notifications['length'] = notifications.json()['length'];
         this.notifications['data'] = notifications.json()['data'];
         progress.done();
+        subscript.unsubscribe();
       }, (error) => {
         progress.done();
         if (error.status === 405) {
@@ -59,12 +61,15 @@ export class NotificationListComponent implements OnInit {
             this.router.navigate(['/dashboard']);
           });
         }
+        subscript.unsubscribe();
        });
     } else {
-      this.notificationService.getUsrAllNotifications().subscribe((notifications) => {
+      const subscript: Subscription = this.notificationService.getUsrAllNotifications().subscribe((notifications) => {
         this.notifications['length'] = notifications.json()['length'];
         this.notifications['data'] = notifications.json()['data'];
+        console.log(this.notifications);
         progress.done();
+        subscript.unsubscribe();
       }, (error) => {
         progress.done();
         if (error.status === 405) {
@@ -92,6 +97,7 @@ export class NotificationListComponent implements OnInit {
             title: 'Error'
           });
         }
+        subscript.unsubscribe();
       });
     }
   }
@@ -101,6 +107,14 @@ export class NotificationListComponent implements OnInit {
 
   checkUserPMS() {
     return StaticFunc.userMst(this.user['user_pms']);
+  }
+
+  viewedNotification(notification_id: string) {
+    const subscript: Subscription = this.notificationService.viewedNotification(notification_id).subscribe((res) => {
+      subscript.unsubscribe();
+    }, (error) => {
+      subscript.unsubscribe();
+    });
   }
 
 }

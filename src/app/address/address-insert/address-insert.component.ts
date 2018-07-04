@@ -4,6 +4,7 @@ import { AddressService } from './../../services/address.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StaticFunc } from '../../function-usages/static.func';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-address-insert',
@@ -79,7 +80,7 @@ export class AddressInsertComponent implements OnInit {
   saveAddress() {
     if (this.addressForm.valid) {
       this.savingChecked = true;
-      this.addressService.insertAddress(this.addressForm.value).subscribe((success) => {
+      const insertSubscript: Subscription = this.addressService.insertAddress(this.addressForm.value).subscribe((success) => {
         this.savingChecked = false;
         this.savedChecked = true;
         setTimeout(() => {
@@ -95,16 +96,18 @@ export class AddressInsertComponent implements OnInit {
             }
           }
           this.addressForm.reset();
+          insertSubscript.unsubscribe();
         }, 3000);
       }, (error) => {
         if (error.status === 405) {
-          this.coolDialogs.alert(error.json()['message'], {
+          const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
             title: 'Warning'
           }).subscribe((res) => {
             localStorage.clear();
+            dialogSubscript.unsubscribe();
             this.router.navigate(['/login']);
           });
         } else if (error.status <= 423 && error.status >= 400) {
@@ -117,6 +120,7 @@ export class AddressInsertComponent implements OnInit {
             title: 'Error'
           });
         }
+        insertSubscript.unsubscribe();
       });
     } else {
       StaticFunc.triggerForm(this.addressForm);

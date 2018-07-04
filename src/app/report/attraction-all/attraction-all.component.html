@@ -1,4 +1,7 @@
-<!-- Content Header (Page header) -->
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
+[color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
+></ng-progress>
 <section class="content-header">
     <h1>
       <a [routerLink]="['/dashboard']"><i class="fa fa-dashboard"></i> Dashboard</a>
@@ -17,7 +20,7 @@
 
   <!-- Main content -->
   <section class="content">
-    <div class="box box-widget">
+    <div class="box box-widget" *ngIf="attractionses_report.length">
       <div class="box-header">
         <h3 class="text-center">
           <strong>ລາຍງານຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ</strong>
@@ -33,150 +36,14 @@
             <th>ເມືອງ</th>
             <th>ແຂວງ</th>
           </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
+          <tr *ngFor="let attractions of attractionses_report; let i=index;">
+            <td>{{i + 1}}</td>
+            <td>{{attractions['name']}}</td>
+            <td>{{attractions['attractions_type']['name']}}</td>
+            <td>{{attractions['address']['village']}}</td>
+            <td>{{attractions['address']['district']['district']}}</td>
+            <td>{{attractions['address']['district']['province']['province']}}</td>
           </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-            <td>999</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-            <td>xxx xxx</td>
-          </tr>
-          <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
-            <tr>
-              <td>999</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-              <td>xxx xxx</td>
-            </tr>
         </table>
       </div>
     </div>

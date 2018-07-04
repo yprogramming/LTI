@@ -5,6 +5,7 @@ import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { UserService } from './../../services/user.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit} from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-admin-header',
@@ -28,15 +29,21 @@ export class AdminHeaderComponent implements OnInit {
         if (localStorage.getItem('lt_token')) {
           this.user = JSON.parse(localStorage.getItem('lt_token'))['data'];
           if (StaticFunc.userMst(this.user['user_pms'])) {
-            this.notificationService.getMstNotifications().subscribe((notifications) => {
+            const subscript: Subscription = this.notificationService.getMstNotifications().subscribe((notifications) => {
               this.notifications['length'] = notifications.json()['length'];
               this.notifications['data'] = notifications.json()['data'];
-            }, (error) => { });
+              subscript.unsubscribe();
+            }, (error) => {
+              subscript.unsubscribe();
+            });
           } else {
-            this.notificationService.getUsrNotifications().subscribe((notifications) => {
-              this.notifications = notifications.json()['data'];
-                console.log(this.notifications);
-            }, (error) => {});
+            const subscript: Subscription = this.notificationService.getUsrNotifications().subscribe((notifications) => {
+              this.notifications['length'] = notifications.json()['length'];
+              this.notifications['data'] = notifications.json()['data'];
+              subscript.unsubscribe();
+            }, (error) => {
+              subscript.unsubscribe();
+            });
           }
         }
       }
@@ -57,15 +64,24 @@ export class AdminHeaderComponent implements OnInit {
     return 'assets/img/ic_user.jpg';
   }
 
+  viewedNotification(notification_id: string) {
+    const subscript: Subscription = this.notificationService.viewedNotification(notification_id).subscribe((res) => {
+      subscript.unsubscribe();
+    }, (error) => {
+      subscript.unsubscribe();
+    });
+  }
+
   doLogout() {
     this.progress.start();
-    this.logoutService.logoutUser().subscribe((success) => {
+    const logoutSubscription: Subscription = this.logoutService.logoutUser().subscribe((success) => {
       localStorage.removeItem('lt_token');
       this.router.navigate(['/login']);
       this.progress.done();
+      logoutSubscription.unsubscribe();
     }, (error) => {
       if (error.status === 405) {
-        this.coolDialogs.alert(error.json()['message'], {
+        const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
@@ -73,12 +89,14 @@ export class AdminHeaderComponent implements OnInit {
         }).subscribe((res) => {
           localStorage.clear();
           this.router.navigate(['/login']);
+          dialogSubscript.unsubscribe();
         });
       } else {
         localStorage.clear();
         this.router.navigate(['/login']);
       }
       this.progress.done();
+      logoutSubscription.unsubscribe();
     });
   }
 

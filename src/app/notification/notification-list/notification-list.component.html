@@ -11,7 +11,7 @@
       <div class="box-body">
         <ul class="nav nav-stacked" style="padding: 0px;" *ngIf="checkUserPMS()">
           <li class="no-padding" *ngFor="let notification of notifications['data']">
-            <a [routerLink]="notification['_detail']['path']">
+            <a [routerLink]="notification['_detail']['path']" (click)="viewedNotification(notification['_id'])">
               <div class="info-box" style="margin: 0px;">
                 <span class="info-box-icon {{notification['viewed']?'bg-green':'bg-red'}}"><i class="fa {{notification['viewed']?'fa-check':notification['_detail']['icon']}}"></i></span>
                 <div class="info-box-content">

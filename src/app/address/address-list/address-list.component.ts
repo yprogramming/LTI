@@ -4,6 +4,7 @@ import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { AddressService } from './../../services/address.service';
 import { NgProgress } from 'ngx-progressbar';
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-address-list',
@@ -34,21 +35,23 @@ export class AddressListComponent implements OnInit {
     this.districtUpdateForm = formBuilder.group({
       add_district: ['', [Validators.required]]
     });
-    addressService.getProvinces().subscribe((data: any) => {
+    const getAddressSubscript: Subscription = addressService.getProvinces().subscribe((data: any) => {
       this.provinces = data.json()['data'];
       for (let i = 0; i < this.provinces.length; i++) {
         this.checkVisible[i] = [];
       }
       progress.done();
+      getAddressSubscript.unsubscribe();
     }, (error) => {
       if (error.status === 405) {
-        this.coolDialogs.alert(error.json()['message'], {
+        const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
           title: 'Warning'
         }).subscribe((res) => {
           localStorage.clear();
+          dialogSubscript.unsubscribe();
           this.router.navigate(['/login']);
         });
       } else if (error.status <= 423 && error.status >= 400) {
@@ -67,6 +70,7 @@ export class AddressListComponent implements OnInit {
         });
       }
       progress.done();
+      getAddressSubscript.unsubscribe();
     });
    }
 
@@ -79,7 +83,7 @@ export class AddressListComponent implements OnInit {
         province_id: id,
         prov_new_name: newName
       };
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນແຂວງນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນແຂວງນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -87,28 +91,20 @@ export class AddressListComponent implements OnInit {
         title: 'Update'
       }).subscribe((res) => {
         if (res) {
-          this.addressService.updateProvince(data).subscribe((success) => {
+          const uProvinceSubscribt: Subscription = this.addressService.updateProvince(data).subscribe((success) => {
             this.provinces[i]['province'] = newName;
             this.checkProvinceUpdate[i] = false;
-            // const alertSubscription: Subscription = this.coolDialogs.alert('ແກ້ໄຂຂໍ້ມູນແຂວງສຳເລັດແລ້ວ', {
-            //   theme: 'material', // available themes: 'default' | 'material' | 'dark'
-            //   okButtonText: 'OK',
-            //   color: 'black',
-            //   title: 'Update'
-            // }).subscribe(() => {
-            //   this.provinces[i]['province'] = newName;
-            //   this.checkProvinceUpdate[i] = false;
-            //   alertSubscription.unsubscribe();
-            // });
+            uProvinceSubscribt.unsubscribe();
           }, (error) => {
             if (error.status === 405) {
-              this.coolDialogs.alert(error.json()['message'], {
+              const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
                 title: 'Warning'
               }).subscribe(() => {
                 localStorage.clear();
+                dialogSubscript.unsubscribe();
                 this.router.navigate(['/login']);
               });
             } else if (error.status <= 423 && error.status >= 400) {
@@ -126,17 +122,19 @@ export class AddressListComponent implements OnInit {
                 title: 'Error'
               });
             }
+            uProvinceSubscribt.unsubscribe();
           });
+          confirmSubscript.unsubscribe();
         } else {
           this.checkProvinceUpdate[i] = false;
+          confirmSubscript.unsubscribe();
         }
       });
     }
   }
 
   deleteProvince(i, id) {
-    console.log(i, id);
-    this.coolDialogs.confirm('ລົບຂໍ້ມູນແຂວງນີ້ແທ້ບໍ?', {
+    const confirmSubscript: Subscription = this.coolDialogs.confirm('ລົບຂໍ້ມູນແຂວງນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -144,18 +142,19 @@ export class AddressListComponent implements OnInit {
       title: 'Delete'
     }).subscribe((res) => {
       if (res) {
-        this.addressService.deleteProvince(id).subscribe((success) => {
-          console.log('delete success fully');
+        const dProvinceSubscription: Subscription = this.addressService.deleteProvince(id).subscribe((success) => {
           this.provinces.splice(i, 1);
+          dProvinceSubscription.unsubscribe();
         }, (error) => {
           if (error.status === 405) {
-            this.coolDialogs.alert(error.json()['message'], {
+            const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
               title: 'Warning'
             }).subscribe(() => {
               localStorage.clear();
+              dialogSubscript.unsubscribe();
               this.router.navigate(['/login']);
             });
           } else if (error.status <= 423 && error.status >= 400) {
@@ -173,8 +172,10 @@ export class AddressListComponent implements OnInit {
               title: 'Error'
             });
           }
+          dProvinceSubscription.unsubscribe();
         });
       }
+      confirmSubscript.unsubscribe();
     });
   }
 
@@ -214,7 +215,7 @@ export class AddressListComponent implements OnInit {
         district_id: id,
         dis_new_name: this.districtUpdateForm.value.add_district
       };
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -222,28 +223,20 @@ export class AddressListComponent implements OnInit {
         title: 'Update'
       }).subscribe((res) => {
         if (res) {
-          this.addressService.updateDistrict(data).subscribe((success) => {
+          const uDistrictSubscript: Subscription = this.addressService.updateDistrict(data).subscribe((success) => {
             this.provinces[i]['districts'][j].district = this.districtUpdateForm.value.add_district;
             this.checkVisible[i][j] = false;
-            // const alertSubscription: Subscription = this.coolDialogs.alert('ແກ້ໄຂຂໍ້ມູນເມືອງສຳເລັດແລ້ວ', {
-            //   theme: 'material', // available themes: 'default' | 'material' | 'dark'
-            //   okButtonText: 'OK',
-            //   color: 'black',
-            //   title: 'Update'
-            // }).subscribe(() => {
-            //   this.provinces[i]['districts'][j].district = this.districtUpdateForm.value.add_district;
-            //   this.checkVisible[i][j] = false;
-            //   alertSubscription.unsubscribe();
-            // });
+            uDistrictSubscript.unsubscribe();
           }, (error) => {
             if (error.status === 405) {
-              this.coolDialogs.alert(error.json()['message'], {
+              const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
                 title: 'Warning'
               }).subscribe(() => {
                 localStorage.clear();
+                dialogSubscript.unsubscribe();
                 this.router.navigate(['/login']);
               });
             } else if (error.status <= 423 && error.status >= 400) {
@@ -261,10 +254,12 @@ export class AddressListComponent implements OnInit {
                 title: 'Error'
               });
             }
+            uDistrictSubscript.unsubscribe();
           });
         } else {
           this.checkVisible[i][j] = false;
         }
+        confirmSubscript.unsubscribe();
       });
     }
     // console.log(i, j, id, this.districtUpdateForm.value);
@@ -276,7 +271,7 @@ export class AddressListComponent implements OnInit {
         province_id: id,
         new_district: newDis
       };
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -284,28 +279,20 @@ export class AddressListComponent implements OnInit {
         title: 'Insert'
       }).subscribe((res) => {
         if (res) {
-          this.addressService.insertDistrict(data).subscribe((success) => {
+          const aDistrictSubscript: Subscription = this.addressService.insertDistrict(data).subscribe((success) => {
             this.provinces[i]['districts'].push(success.json()['data']);
             this.checkAddNewDistrict[i] = false;
-            // const alertSubscription: Subscription = this.coolDialogs.alert('ບັນທືກຂໍ້ມູນສຳເລັດແລ້ວ', {
-            //   theme: 'material', // available themes: 'default' | 'material' | 'dark'
-            //   okButtonText: 'OK',
-            //   color: 'black',
-            //   title: 'Insert'
-            // }).subscribe(() => {
-            //   this.provinces[i]['districts'].push(success.json()['data']);
-            //   this.checkAddNewDistrict[i] = false;
-            //   alertSubscription.unsubscribe();
-            // });
+            aDistrictSubscript.unsubscribe();
           }, (error) => {
             if (error.status === 405) {
-              this.coolDialogs.alert(error.json()['message'], {
+              const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
                 title: 'Warning'
               }).subscribe(() => {
                 localStorage.clear();
+                dialogSubscript.unsubscribe();
                 this.router.navigate(['/login']);
               });
             } else if (error.status <= 423 && error.status >= 400) {
@@ -323,15 +310,17 @@ export class AddressListComponent implements OnInit {
                 title: 'Error'
               });
             }
+            aDistrictSubscript.unsubscribe();
           });
         }
+        confirmSubscript.unsubscribe();
       });
     }
   }
 
 
   deleteDistrict(i, j, id) {
-    this.coolDialogs.confirm('ລົບຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
+    const confirmSubscription: Subscription = this.coolDialogs.confirm('ລົບຂໍ້ມູນເມືອງນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -339,18 +328,19 @@ export class AddressListComponent implements OnInit {
       title: 'Delete'
     }).subscribe((res) => {
       if (res) {
-        this.addressService.deleteDistrict(id).subscribe((success) => {
-          console.log('delete success fully');
+        const dDistrictSubscription: Subscription = this.addressService.deleteDistrict(id).subscribe((success) => {
           this.provinces[i]['districts'].splice(j, 1);
+          dDistrictSubscription.unsubscribe();
         }, (error) => {
           if (error.status === 405) {
-            this.coolDialogs.alert(error.json()['message'], {
+            const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
               title: 'Warning'
             }).subscribe(() => {
               localStorage.clear();
+              dialogSubscript.unsubscribe();
               this.router.navigate(['/login']);
             });
           } else if (error.status <= 423 && error.status >= 400) {
@@ -370,6 +360,7 @@ export class AddressListComponent implements OnInit {
           }
         });
       }
+      confirmSubscription.unsubscribe();
     });
   }
 

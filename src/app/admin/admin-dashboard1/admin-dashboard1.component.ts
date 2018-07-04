@@ -73,10 +73,11 @@ export class AdminDashboard1Component implements OnInit {
       }
     };
     progress.start();
-    dashboardService.allPlaceLength().subscribe((data) => {
+    const dashboardSubscript: Subscription = dashboardService.allPlaceLength().subscribe((data) => {
       const places = data.json();
       this.allPlacesCount = places['data'];
       this.progress.done();
+      dashboardSubscript.unsubscribe();
     }, (error) => {
       this.progress.done();
       if (error.status === 405) {
@@ -105,6 +106,7 @@ export class AdminDashboard1Component implements OnInit {
           title: 'Error'
         });
       }
+      dashboardSubscript.unsubscribe();
     });
   }
   ngOnInit() {

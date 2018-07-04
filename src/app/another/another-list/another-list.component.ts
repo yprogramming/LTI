@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Router } from '@angular/router';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { NgProgress } from 'ngx-progressbar';
@@ -21,18 +22,20 @@ export class AnotherListComponent implements OnInit {
   ) {
     this.progress.start();
 
-    this.anotherService.getAnothers().subscribe((anothers) => {
+    const anotherSubscript: Subscription = this.anotherService.getAnothers().subscribe((anothers) => {
       this.another_places = anothers.json()['data'];
       this.progress.done();
+      anotherSubscript.unsubscribe();
     }, (error) => {
       if (error.status === 405) {
-        this.coolDialogs.alert(error.json()['message'], {
+        const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
           title: 'Warning'
         }).subscribe(() => {
           localStorage.clear();
+          dialogSubscript.unsubscribe();
           this.router.navigate(['/login']);
         });
       } else if (error.status <= 423 && error.status >= 400) {
@@ -51,6 +54,7 @@ export class AnotherListComponent implements OnInit {
         });
       }
       this.progress.done();
+      anotherSubscript.unsubscribe();
     });
 
    }

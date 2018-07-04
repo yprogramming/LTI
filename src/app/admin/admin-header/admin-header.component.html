@@ -26,11 +26,11 @@
               <span class="label label-danger" *ngIf="notifications['length']">{{notifications['length']}}</span>
             </a>
           <ul class="dropdown-menu">
-            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ' + notifications['length'] + 'ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
+            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ ' + notifications['length'] + ' ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
             <li>
               <!-- inner menu: contains the actual data -->
               <ul class="menu">
-                <li *ngFor="let notification of notifications['data']">
+                <li *ngFor="let notification of notifications['data']" (click)="viewedNotification(notification['_id'])">
                   <a [routerLink]="notification['_detail']['path']">
                     <i class="fa {{notification['_detail']['icon']}} text-red"></i> {{notification['_detail']['title']}}
                   </a>
@@ -46,7 +46,7 @@
               <span class="label label-danger" *ngIf="notifications['length']">{{notifications['length']}}</span>
             </a>
           <ul class="dropdown-menu">
-            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ' + notifications['length'] + 'ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
+            <li class="header"><strong>{{notifications['length']?'ມີແຈ້ງເຕືອນໃໝ່ທັງໝົດ ' + notifications['length'] + ' ຄັ້ງ': 'ບໍ່ມີແຈ້ງເຕືອນ'}}</strong></li>
             <li>
               <!-- inner menu: contains the actual data -->
               <ul class="menu">

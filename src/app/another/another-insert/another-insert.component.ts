@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { AnotherService } from './../../services/another.service';
 import { Router } from '@angular/router';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
@@ -84,7 +85,7 @@ export class AnotherInsertComponent implements OnInit {
 
     this.uploadPercent = [];
 
-    this.addressService.getProvinces().subscribe((provinces) => {
+    const addressSubscript: Subscription = this.addressService.getProvinces().subscribe((provinces) => {
       this.provinces = provinces.json()['data'];
       this.districts = this.provinces[0]['districts'];
       const vils = this.districts[0]['villages'];
@@ -96,15 +97,17 @@ export class AnotherInsertComponent implements OnInit {
         this.anotherForm.get('ano_district').setValue(this.districts[0]['_id']);
       }
       this.progress.done();
+      addressSubscript.unsubscribe();
     }, (error) => {
       if (error.status === 405) {
-        this.coolDialogs.alert(error.json()['message'], {
+        const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
           theme: 'material', // available themes: 'default' | 'material' | 'dark'
           okButtonText: 'OK',
           color: 'black',
           title: 'Warning'
         }).subscribe(() => {
           localStorage.clear();
+          dialogSubscript.unsubscribe();
           this.router.navigate(['/login']);
         });
       } else if (error.status <= 423 && error.status >= 400) {
@@ -123,6 +126,7 @@ export class AnotherInsertComponent implements OnInit {
         });
       }
       progress.done();
+      addressSubscript.unsubscribe();
     });
 
    }
@@ -248,7 +252,7 @@ export class AnotherInsertComponent implements OnInit {
     // if there are any files for upload
     if (this.anotherForm.valid && this.imageLengthUpload > 0) { // ຖ້າມີຮູບທີ່ຈະອັບໂຫຼດ
 
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານທີ່ນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນສະຖານທີ່ນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -266,38 +270,33 @@ export class AnotherInsertComponent implements OnInit {
             const imageUrls: Array<string> = [];
             for (let i = 0; i < this.imageLengthUpload; i++) {
               this.uploadPercent[i] = 0;
-              /*const test = setInterval(() => {
-                this.uploadPercent[i] += 10;
-                if (this.uploadPercent[i] === 100) {
-                  clearInterval(test);
-                  resolve('OK all images are uploaded to storage');
-                }
-              }, 2000);*/
               const image = this.anotherForm.value['images'][i]; // ເອົາຮູບຈາກຟອມມາເກັບໄວ້
               const imageObject = image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
               const imageName = StaticFunc.ramdomText() + Date.now().toString() + '.' + imageObject; // ກຳນົດຊີ່ຮູບໃຫມ່
               const anotherUpload = anotherRef.child(imageName).putString(image, 'data_url'); // ອັບໂຫຼດຂຶ້ນ Firebase Storage
-              anotherUpload.percentageChanges().subscribe((percent) => {
+              const uploadSubscript: Subscription = anotherUpload.percentageChanges().subscribe((percent) => {
                 this.uploadPercent[i] = percent;                                                  // ເອົາເປີເຊັນການອັບໂຫຼດຂອງແຕ່ລະຮູບ
 
                 if ( percent === 100) {                                                   // ເມື່ອໃດອັບໂຫລດສຳເລັດ ຮ້ອງຂໍ URL
+                  uploadSubscript.unsubscribe();
                   this.imageIndexUpload += 1;
                   setTimeout(() => {
                     const imageUrl: AngularFireStorageReference = this.firebaseStorageRef.ref('Anothers/' + imageName);  // ກຳໜົດ Reference
-                    imageUrl.getDownloadURL().subscribe((url) => {
+                    const downloadSubscript: Subscription = imageUrl.getDownloadURL().subscribe((url) => {
                       imageUrls[i] = url;                            // ເກັບ URL ຄືນໄວ້ໃນຟອມ
                       checkFinished += 1;
+                      downloadSubscript.unsubscribe();
                       if (checkFinished === this.imageLengthUpload) {              // ອັບໂຫຼດໝົດເມື່ອໃດ ອອກຈາກໂພຼມິດສ໌ນີ້ທັງທີ່
                         resolve(imageUrls);
                       }
                     }, (err) => {
-                      console.log(err);
+                      downloadSubscript.unsubscribe();
                       reject('ດາວໂຫຼດ URL ຂອງຮູບທີ່ ' + i + ' ລົົ້ມເຫຼວ');
                     });
                   }, 3000);
                 }
               }, (error) => {
-                console.log(error);
+                uploadSubscript.unsubscribe();
                 reject('ອັບໂຫຼດຮູບທີ່ ' + i + ' ລົົ້ມເຫຼວ');
               });
             }
@@ -306,9 +305,11 @@ export class AnotherInsertComponent implements OnInit {
             const imageUrls: Array<string> = data;
             this.imageUploadMessage = 'ກຳລັງບັນທຶກຂໍ້ມູນ...';
             this.savingChecked = true;
-            this.anotherService.insertAnother(this.anotherForm.value, imageUrls).subscribe((success) => {
+            const insertSubscript: Subscription = this.anotherService.insertAnother(this.anotherForm.value, imageUrls)
+            .subscribe((success) => {
               this.savingChecked = false;
               this.savedChecked = true;
+              insertSubscript.unsubscribe();
               setTimeout(() => {
                 this.checkImageAfterTrigerForm = false;
                 this.savedChecked = false;
@@ -335,13 +336,14 @@ export class AnotherInsertComponent implements OnInit {
               this.savingChecked = false;
               this.uploadImageChecked = false;
               if (error.status === 405) {
-                this.coolDialogs.alert(error.json()['message'], {
+                const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                   theme: 'material', // available themes: 'default' | 'material' | 'dark'
                   okButtonText: 'OK',
                   color: 'black',
                   title: 'Warning'
                 }).subscribe(() => {
                   localStorage.clear();
+                  dialogSubscript.unsubscribe();
                   this.router.navigate(['/login']);
                 });
               } else if (error.status <= 423 && error.status >= 400) {
@@ -359,6 +361,7 @@ export class AnotherInsertComponent implements OnInit {
                   title: 'Error'
                 });
               }
+              insertSubscript.unsubscribe();
             });
           }).catch((save_error) => {
             this.savedChecked = false;
@@ -372,6 +375,7 @@ export class AnotherInsertComponent implements OnInit {
             });
           });
         }
+        confirmSubscript.unsubscribe();
       });
     } else {
       this.checkImageAfterTrigerForm = true;

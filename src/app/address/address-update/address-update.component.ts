@@ -5,6 +5,7 @@ import { AddressService } from './../../services/address.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-address-update',
@@ -47,28 +48,31 @@ export class AddressUpdateComponent implements OnInit {
     query.params.subscribe((dis_id) => {
      if (dis_id.id) {
      this.disid = dis_id.id;
-      addressService.getDistricts(this.disid).subscribe((district) => {
+      const addressSubscript: Subscription = addressService.getDistricts(this.disid).subscribe((district) => {
         this.district = district.json()['data'];
         this.progress.done();
+        addressSubscript.unsubscribe();
       }, (error) => {
         this.progress.done();
         if (error.status === 405) {
-          this.coolDialogs.alert(error.json()['message'], {
+          const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
             title: 'Warning'
           }).subscribe((ok) => {
             localStorage.clear();
+            dialogSubscript.unsubscribe();
             this.router.navigate(['/login']);
           });
         } else if (error.status <= 423 && error.status >= 400) {
-          this.coolDialogs.alert(error.json()['message'], {
+          const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
             title: 'Error'
           }).subscribe((ok) => {
+            dialogSubscript.unsubscribe();
             this.router.navigate(['/dashboard', 'address']);
           });
         } else {
@@ -79,6 +83,7 @@ export class AddressUpdateComponent implements OnInit {
             title: 'Error'
           });
         }
+        addressSubscript.unsubscribe();
       });
      }
     });
@@ -101,7 +106,7 @@ export class AddressUpdateComponent implements OnInit {
         village_id: id,
         vil_new_name: this.updateVillageForm.value.add_village
       };
-      this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -109,19 +114,21 @@ export class AddressUpdateComponent implements OnInit {
         title: 'Update'
       }).subscribe((res) => {
         if (res) {
-          this.addressService.updateVillage(data).subscribe((success) => {
+          const uVillageSubscript: Subscription = this.addressService.updateVillage(data).subscribe((success) => {
             this.district['villages'][i].village = this.updateVillageForm.value.add_village;
             this.updateVillageForm.reset();
             this.checkVillageUpdate[i] = false;
+            uVillageSubscript.unsubscribe();
           }, (error) => {
             if (error.status === 405) {
-              this.coolDialogs.alert(error.json()['message'], {
+              const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
                 title: 'Warning'
               }).subscribe(() => {
                 localStorage.clear();
+                dialogSubscript.unsubscribe();
                 this.router.navigate(['/login']);
               });
             } else if (error.status <= 423 && error.status >= 400) {
@@ -139,10 +146,12 @@ export class AddressUpdateComponent implements OnInit {
                 title: 'Error'
               });
             }
+            uVillageSubscript.unsubscribe();
           });
         } else {
           this.checkVillageUpdate[i] = false;
         }
+        confirmSubscript.unsubscribe();
       });
     }
     // console.log(i, id, this.updateVillageForm.value.att_village);
@@ -164,7 +173,7 @@ export class AddressUpdateComponent implements OnInit {
   }
 
   deleteVillage(i, id) {
-    this.coolDialogs.confirm('ລົບຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
+    const confirmSubscription: Subscription = this.coolDialogs.confirm('ລົບຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ລົບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -172,17 +181,19 @@ export class AddressUpdateComponent implements OnInit {
       title: 'Delete'
     }).subscribe((res) => {
       if (res) {
-        this.addressService.deleteVillage(id).subscribe((success) => {
+        const dVillageSubscript: Subscription = this.addressService.deleteVillage(id).subscribe((success) => {
           this.district['villages'].splice(i, 1);
+          dVillageSubscript.unsubscribe();
         }, (error) => {
           if (error.status === 405) {
-            this.coolDialogs.alert(error.json()['message'], {
+            const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
               theme: 'material', // available themes: 'default' | 'material' | 'dark'
               okButtonText: 'OK',
               color: 'black',
               title: 'Warning'
             }).subscribe(() => {
               localStorage.clear();
+              dialogSubscript.unsubscribe();
               this.router.navigate(['/login']);
             });
           } else if (error.status <= 423 && error.status >= 400) {
@@ -200,8 +211,10 @@ export class AddressUpdateComponent implements OnInit {
               title: 'Error'
             });
           }
+          dVillageSubscript.unsubscribe();
         });
       }
+      confirmSubscription.unsubscribe();
     });
   }
 
@@ -212,7 +225,7 @@ export class AddressUpdateComponent implements OnInit {
         district_id: this.district._id,
         new_village: this.villageForm.value.add_village
       };
-      this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
+      const confirmSubscript: Subscription = this.coolDialogs.confirm('ບັນທືກຂໍ້ມູນບ້ານນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ບັນທືກ',
         cancelButtonText: 'ຍົກເລີກ',
@@ -220,30 +233,21 @@ export class AddressUpdateComponent implements OnInit {
         title: 'Insert'
       }).subscribe((res) => {
         if (res) {
-          this.addressService.insertVillage(data).subscribe((success) => {
+          const aVillageSubscript: Subscription = this.addressService.insertVillage(data).subscribe((success) => {
             this.district['villages'].push(success.json()['data']);
             this.villageForm.reset();
             this.checkInsert = false;
-            // const alertSubscription: Subscription = this.coolDialogs.alert('ບັນທືກຂໍ້ມູນບ້ານສຳເລັດແລ້ວ', {
-            //   theme: 'material', // available themes: 'default' | 'material' | 'dark'
-            //   okButtonText: 'OK',
-            //   color: 'black',
-            //   title: 'Insert'
-            // }).subscribe(() => {
-            //   this.district['villages'].push(success.json()['data']);
-            //   this.villageForm.reset();
-            //   this.checkInsert = false;
-            //   alertSubscription.unsubscribe();
-            // });
+            aVillageSubscript.unsubscribe();
           }, (error) => {
             if (error.status === 405) {
-              this.coolDialogs.alert(error.json()['message'], {
+              const dialogSubscript: Subscription = this.coolDialogs.alert(error.json()['message'], {
                 theme: 'material', // available themes: 'default' | 'material' | 'dark'
                 okButtonText: 'OK',
                 color: 'black',
                 title: 'Warning'
               }).subscribe(() => {
                 localStorage.clear();
+                dialogSubscript.unsubscribe();
                 this.router.navigate(['/login']);
               });
             } else if (error.status <= 423 && error.status >= 400) {
@@ -261,8 +265,10 @@ export class AddressUpdateComponent implements OnInit {
                 title: 'Error'
               });
             }
+            aVillageSubscript.unsubscribe();
           });
         }
+        confirmSubscript.unsubscribe();
       });
     } else {
       StaticFunc.triggerForm(this.villageForm);
