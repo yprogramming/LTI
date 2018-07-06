@@ -8,3 +8,7 @@
   .error-message{
     color: rgb(223, 113, 113);
   }
+
+  img{
+    width: 200px;
+  }

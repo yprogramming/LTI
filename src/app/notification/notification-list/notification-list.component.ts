@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationListComponent implements OnInit {
 
-  notifications: Object = {};
+  notifications: Array<Object> = [];
   user: Object;
 
   constructor(

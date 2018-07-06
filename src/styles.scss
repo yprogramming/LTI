@@ -20,18 +20,37 @@
     font-family: "PhetsarathOT";
 }
 
-
-.loader {
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid blue;
-    border-right: 16px solid green;
-    border-bottom: 16px solid red;
-    border-left: 16px solid pink;
-    width: 120px;
-    height: 120px;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+.logo {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.inverst-background{
+  opacity: .6;
+  position: absolute;
+  background: rgb(105, 104, 104);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+.loader-content {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+}
+.loading {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #00a65a;
+  border-right: 16px solid #dd4b39;
+  border-bottom: 16px solid #0073b7;
+  border-left: 16px solid #f39c12;
+  width: 90px;
+  height: 90px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
   }
   
   @-webkit-keyframes spin {
@@ -42,4 +61,13 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  .img-logo{
+    content: url('assets/img/logo.png');
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 60px;
+    height: 60px;
   }
