@@ -1536,7 +1536,7 @@ export class RestaurantUpdateComponent implements OnInit {
               id: this.restaurant['_id'],
               data: 'ຂໍ້ມູນຮ້ານອາຫານ',
               datastore: 'restaurants',
-              title: this.restaurant['name'],
+              title: 'ແກ້ໄຂ' + this.restaurant['name'],
               path: ['/dashboard', 'restaurant', 'detail', this.restaurant['_id']]
           }
         };
@@ -1545,7 +1545,7 @@ export class RestaurantUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1585,7 +1585,7 @@ export class RestaurantUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1601,16 +1601,16 @@ export class RestaurantUpdateComponent implements OnInit {
               id: this.restaurant['_id'],
               data: 'ຂໍ້ມູນຮ້ານອາຫານ',
               datastore: 'restaurants',
-              title: this.restaurant['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' + this.restaurant['name'] + 'ຄືນ',
               path: ['/dashboard', 'restaurant', 'detail', this.restaurant['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {

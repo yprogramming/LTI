@@ -1070,8 +1070,8 @@ export class InternetUpdateComponent implements OnInit {
               id: this.internet_center['_id'],
               data: 'ຂໍ້ມູນສູນອິນເຕີເນັດ',
               datastore: 'internets',
-              title: this.internet_center['name'],
-              path: ['/dashboard', 'another', 'detail', this.internet_center['_id']]
+              title: 'ແກ້ໄຂ' + this.internet_center['name'],
+              path: ['/dashboard', 'another', 'internet', 'detail', this.internet_center['_id']]
           }
         };
         this.notificationService.createNotification(notification_info).subscribe((success) => {
@@ -1079,7 +1079,7 @@ export class InternetUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1119,7 +1119,7 @@ export class InternetUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1135,16 +1135,16 @@ export class InternetUpdateComponent implements OnInit {
               id: this.internet_center['_id'],
               data: 'ຂໍ້ມູນສູນອິນເຕີເນັດ',
               datastore: 'internets',
-              title: this.internet_center['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' + this.internet_center['name'] + 'ຄືນ',
               path: ['/dashboard', 'another', 'internet', 'detail', this.internet_center['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {

@@ -2,12 +2,12 @@
              [speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
              [color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
 ></ng-progress>
-<div class="box box-widget">
+<div class="box box-widget" *ngIf="notification['_message']">
     <div class="box-header with-border">
       <div class="user-block">
         <img src="assets/img/ic_warning.png" alt="User Image">
         <span class="username">{{notification['_detail']['title']}}</span>
-        <span class="description">{{notification['_detail']['data']}} {{notification['_date']}}</span>
+        <span class="description">{{notification['_detail']['data']}} {{notification['_date'] | date:'dd/MM/yyyy HH:mm:ss'}}</span>
       </div>
       <!-- /.user-block -->
     </div>
@@ -18,10 +18,10 @@
           {{notification['_message']}}
       </p>
       <div class="row">
-        <div class="col-lg-6 col-xs-6">
-          <strong>ກວດສອບຂໍ້ມູນໂດຍຜູ້ບັນາທິການ</strong>
+        <div class="col-lg-10 col-xs-10">
+          <strong>ຜູ້ກວດສອບຂໍ້ມູນ: <span style="font-size: 24px;">ບັນນາທິການ</span></strong>
         </div>
-        <div class="col-lg-6 col-xs-6 text-right">
+        <div class="col-lg-2 col-xs-2 text-right">
           <a [routerLink]="notification['_detail']['path']" class="btn btn-warning btn-lg"><i class="fa fa-edit"></i> ແກ້ໄຂຂໍ້ມູນ</a>
         </div>
       </div>

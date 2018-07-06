@@ -67,7 +67,6 @@ export class NotificationListComponent implements OnInit {
       const subscript: Subscription = this.notificationService.getUsrAllNotifications().subscribe((notifications) => {
         this.notifications['length'] = notifications.json()['length'];
         this.notifications['data'] = notifications.json()['data'];
-        console.log(this.notifications);
         progress.done();
         subscript.unsubscribe();
       }, (error) => {

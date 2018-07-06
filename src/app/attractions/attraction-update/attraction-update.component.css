@@ -150,3 +150,8 @@ agm-map {
 .feedback-detail {
   margin-top: 15rem;
 }
+
+.bg-white {
+  padding: 1px 0px 0px 2px;
+  background-color: white;
+}

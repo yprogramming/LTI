@@ -1382,7 +1382,7 @@ export class AttractionUpdateComponent implements OnInit {
               id: this.attractions['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ',
               datastore: 'attractions',
-              title: this.attractions['name'],
+              title: 'ແກ້ໄຂ' + this.attractions['name'],
               path: ['/dashboard', 'attraction', 'detail', this.attractions['_id']]
           }
         };
@@ -1391,7 +1391,7 @@ export class AttractionUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1447,16 +1447,16 @@ export class AttractionUpdateComponent implements OnInit {
               id: this.attractions['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວ',
               datastore: 'attractions',
-              title: this.attractions['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' + this.attractions['name'] + 'ຄືນ',
               path: ['/dashboard', 'attraction', 'detail', this.attractions['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {

@@ -27,13 +27,13 @@ export class TransportationService {
     return this.http.get(environment.SERVER_ADDRESS + '/api/transportation/type', option);
   }
 
-  getServices() {
+  getServices(type_id: string) {
     const header: Headers = new Headers();
     const user = JSON.parse(localStorage.getItem('lt_token'));
     const token = `${user.token};${user.data.user_id}`;
     header.append('ltitoken',   token);
     const option: RequestOptions = new RequestOptions({headers: header});
-    return this.http.get(environment.SERVER_ADDRESS + '/api/transportation/service', option);
+    return this.http.get(environment.SERVER_ADDRESS + '/api/transportation/service/' + type_id, option);
   }
 
   getTransportation(transportation_id) {

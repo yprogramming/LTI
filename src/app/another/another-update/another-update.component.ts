@@ -1068,7 +1068,7 @@ export class AnotherUpdateComponent implements OnInit {
               id: this.another_place['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ອື່ນໆ',
               datastore: 'anothers',
-              title: this.another_place['name'],
+              title: 'ແກ້ໄຂ' + this.another_place['name'],
               path: ['/dashboard', 'another', 'detail', this.another_place['_id']]
           }
         };
@@ -1077,7 +1077,7 @@ export class AnotherUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1117,7 +1117,7 @@ export class AnotherUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1133,16 +1133,16 @@ export class AnotherUpdateComponent implements OnInit {
               id: this.another_place['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ອື່ນໆ',
               datastore: 'anothers',
-              title: this.another_place['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' + this.another_place['name']  + 'ຄືນ',
               path: ['/dashboard', 'another', 'detail', this.another_place['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'sent'
           });
         }, error => {
           if (error.status === 405) {

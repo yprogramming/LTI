@@ -1156,7 +1156,7 @@ export class CompanyUpdateComponent implements OnInit {
               id: this.tour_company['_id'],
               data: 'ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ',
               datastore: 'tourcompanies',
-              title: this.tour_company['name'],
+              title: 'ແກ້ໄຂ' + this.tour_company['name'],
               path: ['/dashboard', 'shelter', 'detail', this.tour_company['_id']]
           }
         };
@@ -1205,7 +1205,7 @@ export class CompanyUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1221,16 +1221,16 @@ export class CompanyUpdateComponent implements OnInit {
               id: this.tour_company['_id'],
               data: 'ຂໍ້ມູນບໍລິສັດນຳທ່ຽວ',
               datastore: 'tourcompanies',
-              title: this.tour_company['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' +  this.tour_company['name'] + 'ຄືນ',
               path: ['/dashboard', 'company', 'detail', this.tour_company['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {

@@ -2,7 +2,7 @@
              [speed]="300" [showSpinner]="true" [direction]="'leftToRightIncreased'"
              [color]="'red'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"
 ></ng-progress>
-<div class="row">
+<div class="row" *ngIf="notifications.length">
   <div class="col-lg-12 col-xs-12">
     <h3 class="text-center"><strong>ແຈ້ງເຕືອນທັງໝົດ</strong></h3>
   </div>
@@ -28,8 +28,8 @@
               <div class="info-box" style="margin: 0px;">
                 <span class="info-box-icon {{notification['viewed']?'bg-green':'bg-red'}}"><i class="fa {{notification['viewed']?'fa-check':notification['_detail']['icon']}}"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">{{notification['_date']}}</span>
-                  <span class="info-box-number">{{notification['_detail']['titile']}}</span>
+                  <span class="info-box-text">{{notification['_date'] | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                  <h3><strong>{{notification['_detail']['title']}}</strong></h3>
                 </div>
               </div>
             </a>

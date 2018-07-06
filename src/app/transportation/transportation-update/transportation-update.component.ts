@@ -167,9 +167,13 @@ export class TransportationUpdateComponent implements OnInit {
          this.lat = this.transportation['location']['lat'];
          this.lng = this.transportation['location']['long'];
          this.label = this.transportation['name'];
-         for (let i = 0; i < this.transportation['services'].length; i++) {
-           this.v_services[i] = this.transportation['services'][i]['vehicle'];
-         }
+         this.transportationService.getServices(this.transportation['transportation_type']['_id']).subscribe((service_res) => {
+          const services = service_res.json()['data'];
+          for (let i = 0; i < services.length; i++) {
+            this.v_services[i] = services[i]['vehicle'];
+          }
+        }, (error) => {
+        });
        }, (error) => {
          if (error.status === 405) {
            this.coolDialogs.alert(error.json()['message'], {
@@ -311,16 +315,15 @@ export class TransportationUpdateComponent implements OnInit {
       if (res) {
         this.uploadPercent = 0;
         this.uploadImageChecked = true;
-        const new_image = this.data['image'];
-        const transportationRef = this.firebaseStorage.ref('Restaurant');
-        const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
+        const transportationRef = this.firebaseStorage.ref('Transportations');
+        const imageObject = newImage.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
         const imageName = StaticFunc.ramdomText() + Date.now().toString() + '.' + imageObject; // ກຳນົດຊີ່ຮູບໃຫມ່
-        const transportationUpload = transportationRef.child(imageName).putString(new_image, 'data_url'); // ອັບໂຫຼດຂຶ້ນ Firebase Storage
+        const transportationUpload = transportationRef.child(imageName).putString(newImage, 'data_url'); // ອັບໂຫຼດຂຶ້ນ Firebase Storage
         transportationUpload.percentageChanges().subscribe((percent) => {
           this.uploadPercent = percent;
           if (percent === 100) {
             setTimeout(() => {
-              const imageUrl: AngularFireStorageReference = this.firebaseStorageRef.ref('Restaurant/' + imageName);  // ກຳໜົດ Reference
+              const imageUrl: AngularFireStorageReference = this.firebaseStorageRef.ref('Transportations/' + imageName);  // ກຳໜົດ Reference
               imageUrl.getDownloadURL().subscribe((url) => {
                 const image_url = url;
                 this.uploadImageChecked = false;
@@ -765,7 +768,7 @@ export class TransportationUpdateComponent implements OnInit {
   updateDetail() {
     if (this.updateDetailForm.valid) {
       const data = {
-        res_id: this.transportation['_id'],
+        tran_id: this.transportation['_id'],
         title: 'ແກ້ໄຂຂໍ້ມູນລາຍລະອຽດຂອງ \'' + this.transportation['name'] + '\'',
         _field: {
           detail: this.updateDetailForm.value['tran_detail']
@@ -1084,8 +1087,7 @@ export class TransportationUpdateComponent implements OnInit {
   }
 
   updateDistance(index) {
-    console.log(index);
-    if (this.distance['from'].trim() && this.distance['to'].trim() && this.distance['price'].trim()) {
+    if (this.distance['from'].trim() && this.distance['to'].trim() && this.distance['price'] > 0) {
       this.coolDialogs.confirm('ແກ້ໄຂຂໍ້ມູນບໍລິການນີ້ແທ້ ຫຼື ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'ແກ້ໄຂ',
@@ -1099,6 +1101,7 @@ export class TransportationUpdateComponent implements OnInit {
             this.transportation['services'][this.update_service['idx']]['distances'][index]['from'] = data['from'];
             this.transportation['services'][this.update_service['idx']]['distances'][index]['to'] = data['to'];
             this.transportation['services'][this.update_service['idx']]['distances'][index]['price'] = data['price'];
+            this.checkEditDistances[index] = false;
           }, (error) => {
             if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
@@ -1129,7 +1132,7 @@ export class TransportationUpdateComponent implements OnInit {
         }
       });
     } else {
-      this.coolDialogs.alert('ຕົ້ນທາງ, ປາຍທາງ ແລະ ລາຄາຫ້າມວ່າງ...!', {
+      this.coolDialogs.alert('ຕົ້ນທາງ, ປາຍທາງ ແລະ ລາຄາບໍ່ຖືກຕ້ອງ ຫຼື ຍັງວ່າງ', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
         okButtonText: 'OK',
         color: 'black',
@@ -1152,11 +1155,16 @@ export class TransportationUpdateComponent implements OnInit {
             tran_id: this.transportation['_id'],
             tran_name: this.transportation['name'],
             tran_type_id: this.transportation['transportation_type']['_id'],
-            services: this.addNewServiceForm.value
+            service: this.addNewServiceForm.value
           };
           this.transportationService.insertService(data).subscribe((success) => {
             this.transportation['services'].push(success.json()['data']);
-            this.addNewSocialForm.reset();
+            this.addNewServiceForm.reset();
+            if (this.getDistanceLength() > 1) {
+              for (let k = 1; k < this.getDistanceLength(); k++) {
+                this.removeDistance(k);
+              }
+            }
           }, (error) => {
             if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
@@ -1203,12 +1211,14 @@ export class TransportationUpdateComponent implements OnInit {
         if (res) {
           const data = {
             tran_id: this.transportation['_id'],
-            service_id: this.update_service['_id'],
+            service_id: this.update_service['data']['_id'],
             distance: this.addNewDistanceForm.value
           };
-          this.transportationService.insertService(data).subscribe((success) => {
-            this.transportation['services'].push(success.json()['data']);
+          this.transportationService.insertDistance(data).subscribe((success) => {
+            // this.transportation['services'][this.update_service['idx']]['distances'].push(success.json()['data']);
+            this.update_service['data']['distances'].push(success.json()['data']);
             this.addNewSocialForm.reset();
+            this.checkAddDistance = false;
           }, (error) => {
             if (error.status === 405) {
               this.coolDialogs.alert(error.json()['message'], {
@@ -1300,7 +1310,7 @@ export class TransportationUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         const data = {
-          transportation_id_id: this.transportation['_id'],
+          transportation_id: this.transportation['_id'],
           imageUrl: image
         };
         this.transportationService.deleteImage(data).subscribe((success) => {
@@ -1537,7 +1547,7 @@ export class TransportationUpdateComponent implements OnInit {
               id: this.transportation['_id'],
               data: 'ຂໍ້ມູນສະຖານີຂົນສົ່ງໂດຍສານ',
               datastore: 'transportations',
-              title: this.transportation['name'],
+              title: 'ແກ້ໄຂ' + this.transportation['name'],
               path: ['/dashboard', 'transportation', 'detail', this.transportation['_id']]
           }
         };
@@ -1546,7 +1556,7 @@ export class TransportationUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1586,7 +1596,7 @@ export class TransportationUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1602,16 +1612,18 @@ export class TransportationUpdateComponent implements OnInit {
               id: this.transportation['_id'],
               data: 'ຂໍ້ມູນສະຖານີຂົນສົ່ງໂດຍສານ',
               datastore: 'transportations',
-              title: this.transportation['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' + this.transportation['name'] + 'ຄືນ',
               path: ['/dashboard', 'transportation', 'detail', this.transportation['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
+          }).subscribe(() => {
+            this.feedbackChecked = false;
           });
         }, error => {
           if (error.status === 405) {

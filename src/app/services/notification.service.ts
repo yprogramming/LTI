@@ -64,6 +64,16 @@ export class NotificationService {
     return this.http.put(environment.SERVER_ADDRESS + '/api/notification/create', notification, option);
   }
 
+  feedbackNotification(notification: Object) {
+    const header: Headers = new Headers();
+    header.append('Content-Type', 'application/json');
+    const user = JSON.parse(localStorage.getItem('lt_token'));
+    const token = `${user.token};${user.data.user_id}`;
+    header.append('ltitoken',   token);
+    const option: RequestOptions = new RequestOptions({headers: header});
+    return this.http.put(environment.SERVER_ADDRESS + '/api/notification/feedback', notification, option);
+  }
+
   viewedNotification(notification_id: string) {
     const header: Headers = new Headers();
     header.append('Content-Type', 'application/json');

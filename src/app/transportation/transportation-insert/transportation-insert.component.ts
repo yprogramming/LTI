@@ -186,7 +186,7 @@ setCurrentLocationLatLong() {
 }
 
 getServices() {
-  this.transportationService.getServices().subscribe((services) => {
+  this.transportationService.getServices(this.transportationForm.get('tran_type').value).subscribe((services) => {
     this.db_services = services.json()['data'];
     this.getServiceAutocomplete();
   }, (error) => {
@@ -230,6 +230,7 @@ initAddress() {
   for (let k = 0; k < vils.length; k++) {
     this.villages[k] = vils[k].village;
   }
+  this.transportationForm.get('tran_type').setValue(this.transportation_types[0]['_id']);
   this.transportationForm.get('tran_province').setValue(this.provinces[0]['_id']);
   this.transportationForm.get('tran_district').setValue(this.districts[0]['_id']);
 }
@@ -372,7 +373,6 @@ saveTransportation() {
             const transportationUpload = transportationRef.child(imageName).putString(image, 'data_url'); // ອັບໂຫຼດຂຶ້ນ Firebase Storage
             transportationUpload.percentageChanges().subscribe((percent) => {
               this.uploadPercent[i] = percent;                                                  // ເອົາເປີເຊັນການອັບໂຫຼດຂອງແຕ່ລະຮູບ
-              console.log(percent);
               if ( percent === 100) {                                                   // ເມື່ອໃດອັບໂຫລດສຳເລັດ ຮ້ອງຂໍ URL
                 this.imageIndexUpload += 1;
                 setTimeout(() => {

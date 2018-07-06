@@ -35,7 +35,7 @@
         <div class="row" *ngIf="!checkEditProfile">
             <div class="col-lg-12 col-xs-12">
               <img [src]="getImage(shelter['images'][0])" alt="Photo 2" *ngIf="shelter['images']">
-              <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile" (click)="checkEditProfile=true"></i>
+              <i tooltip="ແກ້ໄຂຮູບ" class="fa fa-edit editProfile bg-white" (click)="checkEditProfile=true"></i>
             </div>
         </div>
         <!-- /.user-block -->
@@ -44,20 +44,20 @@
                 <h3>
                   <strong tooltip="ຊື່ທີ່ພັກອາໄສ">{{shelter['name']}}</strong>
                   <span style="font-size: 16px;">
-                    ( <span class="help-text"> ທີ່ພັກອາໄສ </span> )
+                    ( <span class="help-text"> ສະຖານທີ່ພັກແຮມ </span> )
                   </span>
                   <i tooltip="ແກ້ໄຂຊື່ທີ່ພັກອາໄສ" class="fa fa-edit editIcon" (click)="viewEditName()"></i>
                 </h3>
                 <p><span tooltip="ປະເພດທີ່ພັກອາໄສ" style="color: rgb(206, 205, 205);" *ngIf="shelter['shelter_type']">{{shelter['shelter_type']['name']}}</span></p>
             </div>
             <div class="col-lg-12 col-xs-12" *ngIf="checkEditName">
-              <h4 class="text-center"><strong>ແກ້ໄຂຊື່ທີ່ພັກອາໄສ</strong></h4>
+              <h4 class="text-center"><strong>ແກ້ໄຂຊື່ສະຖານທີ່ພັກແຮມ</strong></h4>
               <form novalidate [formGroup]="updateTittleForm" (ngSubmit)="updateTitle()">
                 <table class="table table-condensed">
                   <tr>
                     <td>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ທີ່ພັກອາໄສ">
+                        <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກແຮມ">
                       </div>
                     </td>
                     <td>

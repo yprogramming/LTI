@@ -1509,7 +1509,7 @@ export class ShelterUpdateComponent implements OnInit {
               id: this.shelter['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ພັກແຮມ',
               datastore: 'shelters',
-              title: this.shelter['name'],
+              title: 'ແກ້ໄຂ' + this.shelter['name'],
               path: ['/dashboard', 'shelter', 'detail', this.shelter['_id']]
           }
         };
@@ -1518,7 +1518,7 @@ export class ShelterUpdateComponent implements OnInit {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {
@@ -1558,7 +1558,7 @@ export class ShelterUpdateComponent implements OnInit {
       return;
     }
 
-    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນແທ້ບໍ?', {
+    this.coolDialogs.confirm('ສົ່ງແນະນຳກັບໃຫ້ປັບປຸງຄືນຕາມນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ສົ່ງກັບ',
       cancelButtonText: 'ຍົກເລີກ',
@@ -1574,16 +1574,16 @@ export class ShelterUpdateComponent implements OnInit {
               id: this.shelter['_id'],
               data: 'ຂໍ້ມູນສະຖານທີ່ພັກແຮມ',
               datastore: 'shelters',
-              title: this.shelter['name'],
+              title: 'ປັບປຸງຂໍ້ມູນ' +  this.shelter['name'] + 'ຄືນ',
               path: ['/dashboard', 'shelter', 'detail', this.shelter['_id']]
           }
         };
-        this.notificationService.createNotification(notification_info).subscribe((success) => {
+        this.notificationService.feedbackNotification(notification_info).subscribe((success) => {
           this.coolDialogs.alert('ສົ່ງຄືນສຳເລັດແລ້ວ', {
             theme: 'material', // available themes: 'default' | 'material' | 'dark'
             okButtonText: 'OK',
             color: 'black',
-            title: 'Error'
+            title: 'Sent'
           });
         }, error => {
           if (error.status === 405) {

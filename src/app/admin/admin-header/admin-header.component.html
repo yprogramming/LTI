@@ -52,7 +52,7 @@
               <ul class="menu">
                 <li *ngFor="let notification of notifications['data']">
                   <a [routerLink]="['/dashboard', 'notification', 'detail', notification['_id']]">
-                    <i class="fa fa-users text-aqua"></i> {{notification['_detail']['title']}}
+                    <i class="fa {{notification['_detail']['icon']}} text-red"></i> {{notification['_detail']['title']}}
                   </a>
                 </li>
               </ul>
@@ -74,7 +74,7 @@
 
               <p>
                   {{user['user_name']}} ~<span><small>{{userPMS()}}</small></span>
-                <small>{{user['lg_date']}}</small>
+                <small>{{user['lg_date'] | date:'dd/MM/yyyy HH:mm:ss'}}</small>
               </p>
             </li>
             <!-- Menu Footer-->

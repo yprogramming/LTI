@@ -144,3 +144,8 @@ agm-map {
 .error-message-one{
   color: rgb(223, 113, 113);
 }
+
+.bg-white {
+  padding: 1px 0px 0px 2px;
+  background-color: white;
+}
