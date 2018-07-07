@@ -18,6 +18,7 @@
                 <div class="col-lg-12 col-xs-12">
                     <div class="form-group">
                       <label>ຊື່ສູນອິນເຕີເນັດ</label>
+                      <span style="color: red;" [hidden]="!internetForm.controls['int_name'].hasError('required')">*</span>
                       <input type="text" class="form-control" id="int_name" formControlName="int_name" placeholder="ຊື່ສູນອິນເຕີເນັດ">
                     </div>
                     <ul class="error-message-one" *ngIf="internetForm.controls['int_name'].errors && internetForm.controls['int_name'].dirty">
@@ -50,6 +51,7 @@
                   <div class="col-lg-4 col-sm-4 col-xs-12">
                     <div class="form-group">
                       <span>ບ້ານ</span>
+                      <span style="color: red;" [hidden]="!internetForm.controls['int_village'].hasError('required')">*</span>
                       <input 
                             type="text" 
                             class="form-control" 
@@ -93,12 +95,14 @@
                 <div class="col-lg-6 col-xs-12">
                   <div class="form-group">
                     <span>ລັດຕິຈຸດ</span>
+                    <span style="color: red;" [hidden]="!internetForm.controls['int_lat'].hasError('required')">*</span>
                     <input type="text" class="form-control" readonly id="int_lat" formControlName="int_lat" placeholder="ລັດຕິຈຸດ">
                   </div>
                 </div>
                 <div class="col-lg-6 col-xs-12">
                   <div class="form-group">
                       <span>ລອງຕິຈຸດ</span>
+                      <span style="color: red;" [hidden]="!internetForm.controls['int_long'].hasError('required')">*</span>
                     <input type="text" class="form-control" readonly id="int_long" formControlName="int_long" placeholder="ລອງຕິຈຸດ">
                   </div>
                 </div>
@@ -126,6 +130,7 @@
                   <div class="col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                       <span>ອີເມວ</span>
+                      <span style="color: red;" [hidden]="!internetForm.controls['int_email'].hasError('required')">*</span>
                       <input type="email" class="form-control"  id="int_email" formControlName="int_email" placeholder="ອີເມວຕິດຕໍ່">
                     </div>
                     <ul class="error-message-many" *ngIf="internetForm.controls['int_email'].errors && internetForm.controls['int_email'].dirty">
@@ -136,6 +141,7 @@
                   <div class="col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                       <span>ເບີໂທ</span>
+                      <span style="color: red;" [hidden]="!internetForm.controls['int_tel'].hasError('required')">*</span>
                       <input type="text" class="form-control"  id="int_tel" formControlName="int_tel" placeholder="ເບີໂທຕິດຕໍ່">
                     </div>
                     <ul class="error-message-one" *ngIf="internetForm.controls['int_tel'].errors && internetForm.controls['int_tel'].dirty">
@@ -191,6 +197,7 @@
                 <div class="col-lg-12 col-xs-12">
                   <div class="form-group">
                     <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                    <span style="color: red;" [hidden]="internetForm.value['images'].length">*</span>
                     <input type="file" accept="image/*"  id="int_images" (change)="fileChangeListener($event)">
                   </div>
                   <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">

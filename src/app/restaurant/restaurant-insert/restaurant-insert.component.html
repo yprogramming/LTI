@@ -14,6 +14,7 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <label>ຊື່ຮ້ານອາຫານ</label>
+                    <span style="color: red;" [hidden]="!restaurantForm.controls['res_name'].hasError('required')">*</span>
                     <input type="text" class="form-control" id="res_name" formControlName="res_name" placeholder="ຊື່ຮ້ານອາຫານ">
                   </div>
                   <ul class="error-message-one" *ngIf="restaurantForm.controls['res_name'].errors && restaurantForm.controls['res_name'].dirty">
@@ -23,12 +24,13 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດຮ້ານອາຫານ</span>
+                  <span style="color: red;" [hidden]="!restaurantForm.controls['res_type'].hasError('required')">*</span>
                   <select class="form-control select2" id="res_type" formControlName="res_type" style="width: 100%;">
                     <option *ngFor="let type of restaurant_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
                 </div>
                 <ul class="error-message-one" *ngIf="restaurantForm.controls['res_type'].errors && restaurantForm.controls['res_type'].dirty">
-                  <li [hidden]="!restaurantForm.controls['res_type'].hasError('required')">ເພີ່ມປະເພດຮ້ານອາຫານກ່ອນ</li>
+                  <li [hidden]="!restaurantForm.controls['res_type'].hasError('required')">ຍັງບໍ່ເລືອກປະເພດຮ້ານອາຫານ</li>
                 </ul>
               </div>
             </div>
@@ -55,6 +57,7 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <span>ບ້ານ</span>
+                  <span style="color: red;" [hidden]="!restaurantForm.controls['res_village'].hasError('required')">*</span>
                   <input 
                         type="text" 
                         class="form-control" 
@@ -95,12 +98,14 @@
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                   <span>ລັດຕິຈຸດ</span>
+                  <span style="color: red;" [hidden]="!restaurantForm.controls['res_lat'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly formControlName="res_lat" id="res_lat" placeholder="ລັດຕິຈຸດ">
                 </div>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                     <span>ລອງຕິຈຸດ</span>
+                    <span style="color: red;" [hidden]="!restaurantForm.controls['res_long'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly id="res_long" formControlName="res_long" placeholder="ລອງຕິຈຸດ">
                 </div>
               </div>
@@ -125,6 +130,7 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <span>ເບີໂທ</span>
+                  <span style="color: red;" [hidden]="!restaurantForm.controls['res_tel'].hasError('required')">*</span>
                   <input type="text" class="form-control"  id="res_tel" formControlName="res_tel" placeholder="ເບີໂທຕິດຕໍ່">
                 </div>
                 <ul class="error-message-one" *ngIf="restaurantForm.controls['res_tel'].errors && restaurantForm.controls['res_tel'].dirty">
@@ -134,6 +140,7 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <span>ອີເມວ</span>
+                  <span style="color: red;" [hidden]="!restaurantForm.controls['res_email'].hasError('required')">*</span>
                   <input type="email" class="form-control"  id="res_email" formControlName="res_email" placeholder="ອີເມວຕິດຕໍ່">
                 </div>
                 <ul class="error-message-many" *ngIf="restaurantForm.controls['res_email'].errors && restaurantForm.controls['res_email'].dirty">
@@ -190,6 +197,7 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <span style="color: red;" [hidden]="restaurantForm.value['images'].length">*</span>
                   <input type="file" accept="image/*" id="res_images" (change)="fileChangeListener($event, null)">
                 </div>
                 <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
@@ -211,8 +219,8 @@
             <div class="row">
             <div class="col-lg-12 col-xs-12">
               <div class="form-group">
-                <span>ວີດີໂອ URL</span>
-                <input type="text" class="form-control" id="res_video" formControlName="res_video" placeholder="ວີດີໂອ URL (Youtube, mp4 ...)">
+                <span>Youtube ວີດີໂອ URL</span>
+                <input type="text" class="form-control" id="res_video" formControlName="res_video" placeholder="Youtube ວີດີໂອ URL">
               </div>
               <ul class="error-message-one" *ngIf="restaurantForm.controls['res_video'].errors && restaurantForm.controls['res_video'].dirty">
                 <li [hidden]="!restaurantForm.controls['res_video'].hasError('url')">(https://www.youtube.com/...)</li>
@@ -220,8 +228,8 @@
             </div>
             <div class="col-lg-12 col-xs-12" *ngIf="restaurantForm.value['res_video'] && restaurantForm.controls['res_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(restaurantForm.value['res_video'])"
-                          frameborder="0" allowfullscreen></iframe>
+                  <embed  class="embed-responsive-item" [src]="safeVideoUrl(restaurantForm.value['res_video'])"
+                          frameborder="0" allowfullscreen>
                 </div>
             </div>
           </div>
@@ -252,13 +260,15 @@
                                     <div class="col-lg-6 col-md-6 col-xs-12">
                                         <div class="form-group">
                                           <span>ຊື່ເມນູອາຫານ</span>
-                                          <input type="text" class="form-control input-sm" id="food_name" formControlName="food_name" placeholder="ຊື່ຮ້ານອາຫານ">
+                                          <span style="color: red;" [hidden]="!food.controls['food_name'].hasError('required')">*</span>
+                                          <input type="text" class="form-control input-sm" id="food_name" formControlName="food_name" placeholder="ຊື່ເມນູອາຫານ">
                                         </div>
                                         <ul class="error-message-one" *ngIf="food.controls['food_name'].errors && food.controls['food_name'].dirty">
                                           <li [hidden]="!food.controls['food_name'].hasError('required')">ຊື່ສື່ອອນໄລຫ້າມວ່າງ</li>
                                         </ul>
                                         <div class="form-group">
                                           <span>ປະເພດອາຫານ</span>
+                                          <span style="color: red;" [hidden]="!food.controls['food_type'].hasError('required')">*</span>
                                           <select class="form-control select2 input-sm" id="food_type" formControlName="food_type" style="width: 100%;">
                                             <option *ngFor="let type of food_types" value="{{type['_id']}}">{{type['name']}}</option>
                                           </select>
@@ -268,6 +278,7 @@
                                         </ul>
                                         <div class="form-group">
                                           <span>ລາຄາ</span>
+                                          <span style="color: red;" [hidden]="!food.controls['food_price'].hasError('required')">*</span>
                                           <input type="number" class="form-control input-sm" id="food_price" formControlName="food_price" placeholder="ລາຄາ">
                                         </div>
                                         <ul class="error-message-many" *ngIf="food.controls['food_price'].errors && food.controls['food_price'].dirty">
@@ -282,7 +293,10 @@
                                     <div class="col-lg-6 col-md-6 col-xs-12">
                                       <div class="small-box">
                                         <div class="box-header">
-                                          <div class="box-title"><strong>ຮູບ</strong></div>
+                                          <div class="box-title">
+                                            <strong>ຮູບ</strong>
+                                            <span style="color: red;" [hidden]="!food.controls['image'].hasError('required')">*</span>
+                                          </div>
                                           <div class="box-tools" *ngIf="food.controls['image'].errors && food.controls['image'].dirty">
                                               <span class="error-message-one" [hidden]="!food.controls['image'].hasError('required')">ບໍ່ມີຮູບ</span>
                                           </div>

@@ -248,6 +248,7 @@ export class CompanyUpdateComponent implements OnInit {
   }
 
   croppedImage() {
+    const new_image = this.data['image'];
     this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ອັບໂຫຼດ',
@@ -257,7 +258,6 @@ export class CompanyUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         this.uploadPercent = 0;
-        const new_image = this.data['image'];
         this.uploadImageChecked = true;
         const companyRef = this.firebaseStorage.ref('Companies');
         const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
@@ -273,7 +273,7 @@ export class CompanyUpdateComponent implements OnInit {
                 this.uploadImageChecked = false;
                 this.savingChecked = true;
                 const data = {
-                  ano_id: this.tour_company['_id'],
+                  com_id: this.tour_company['_id'],
                   img_url: image_url
                 };
 
@@ -908,7 +908,7 @@ export class CompanyUpdateComponent implements OnInit {
       }).subscribe((res) => {
         if (res) {
           const data = {
-            ano_id: this.tour_company['_id'],
+            com_id: this.tour_company['_id'],
             social: this.addNewSocialForm.value
           };
           this.tourCompanyService.insertSocial(data).subscribe((success) => {
@@ -1008,7 +1008,7 @@ export class CompanyUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         const data = {
-          internet_id: this.tour_company['_id'],
+          company_id: this.tour_company['_id'],
           imageUrl: image
         };
         this.tourCompanyService.deleteImage(data).subscribe((success) => {

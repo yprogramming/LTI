@@ -149,7 +149,7 @@
   
                   </agm-map>
                 </div>
-                <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation" (click)="checkEditLocation=true"></i>
+                <i tooltip="ປ່ຽນຈຸດທີ່ຕັ້ງ" class="fa fa-edit editLocation bg-white" (click)="checkEditLocation=true"></i>
                 <div class="text-right saveLocationButton" *ngIf="checkEditLocation">
                   <button tooltip="ບັນທືກຈຸດທີ່ຕັ້ງໃໝ່" type="button" class="btn btn-primary btn-sm" (click)="updateLocation()"><i class="fa fa-save"></i></button>
                   <button tooltip="ຍົກເລີກ" type="button" class="btn btn-danger btn-sm" (click)="cancelLocation()"><i class="fa fa-close"></i></button>
@@ -172,8 +172,8 @@
                     <textarea class="textarea" placeholder="ລາຍລະອຽດ" formControlName="tran_detail"
                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                     <div class="text-right">
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> ບັນທຶກ</button>
                         <button type="button" class="btn btn-danger btn-sm" (click)="checkEditDetail=false"><i class="fa fa-close"></i> ຍົກເລີກ</button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> ບັນທຶກ</button>
                     </div>
                   </form>
               </div>
@@ -190,6 +190,10 @@
                           <div class="form-group">
                             <input type="text" class="form-control" id="tran_video" formControlName="tran_video" placeholder="ວີດີໂອ URL">
                           </div>
+                          <ul class="error-message-one" *ngIf="updateVideoForm.controls['tran_video'].errors && updateVideoForm.controls['tran_video'].dirty">
+                            <li [hidden]="!updateVideoForm.controls['tran_video'].hasError('required')">ວີດີໂອ URL ຫ້າມວ່າງ</li>
+                            <li [hidden]="!updateVideoForm.controls['tran_video'].hasError('url')">(https://www.youtube.com/...)</li>
+                          </ul>
                         </td>
                         <td style="width: 10px">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ບັນທືກ</button>
@@ -204,10 +208,10 @@
               </div>
               <div class="col-lg-12 col-xs-12">
                 <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" [src]="safeVideoUrl()"
-                          frameborder="0" allowfullscreen *ngIf="safeVideoUrl()"></iframe>
+                  <embed class="embed-responsive-item" [src]="safeVideoUrl()"
+                          frameborder="0" allowfullscreen *ngIf="safeVideoUrl()">
                 </div>
-                <i tooltip="ແກ້ໄຂວີດີໂອ" class="fa fa-edit editLocation" *ngIf="!checkEditVideo" (click)="checkEditVideo=true"></i>
+                <i tooltip="ແກ້ໄຂວີດີໂອ" class="fa fa-edit editLocation bg-white" *ngIf="!checkEditVideo" (click)="checkEditVideo=true"></i>
               </div>
               <!-- Video Update -->
 
@@ -426,11 +430,18 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control input-sm" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                                 </div>
+                                <ul class="error-message-one" *ngIf="addNewSocialForm.controls['name'].errors && addNewSocialForm.controls['name'].dirty">
+                                  <li [hidden]="!addNewSocialForm.controls['name'].hasError('required')">ຫ້າມວ່າງ</li>
+                                </ul>
                             </td>
                             <td>
                               <div class="form-group">
                                   <input type="text" class="form-control input-sm" formControlName="url" placeholder="URL">
                               </div>
+                              <ul class="error-message-one" *ngIf="addNewSocialForm.controls['url'].errors && addNewSocialForm.controls['url'].dirty">
+                                <li [hidden]="!addNewSocialForm.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                                <li [hidden]="!addNewSocialForm.controls['url'].hasError('url')">(https://www.example.com/...)</li>
+                              </ul>
                             </td>
                             <td style="width: 10px;">
                               <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
@@ -453,11 +464,18 @@
                               <div class="form-group">
                                   <input type="text" class="form-control" id="name" formControlName="name" placeholder="ຊື່ຂອງສື່ອອນໄລ">
                               </div>
+                              <ul class="error-message-one" *ngIf="updateSocailForm.controls['name'].errors && updateSocailForm.controls['name'].dirty">
+                                <li [hidden]="!updateSocailForm.controls['name'].hasError('required')">ຫ້າມວ່າງ</li>
+                              </ul>
                           </td>
                           <td>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="url" formControlName="url" placeholder="URL">
                             </div>
+                            <ul class="error-message-one" *ngIf="updateSocailForm.controls['url'].errors && updateSocailForm.controls['url'].dirty">
+                              <li [hidden]="!updateSocailForm.controls['url'].hasError('required')">URL ຫ້າມວ່າງ</li>
+                              <li [hidden]="!updateSocailForm.controls['url'].hasError('url')">(https://www.example.com/...)</li>
+                            </ul>
                           </td>
                           <td style="width: 10px;">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
@@ -559,7 +577,7 @@
                       <td>
                         <p style="padding-top: 5px;" *ngIf="!checkEditDistances[j]">{{dtance['price']}}</p>
                         <div class="form-group" *ngIf="checkEditDistances[j]">
-                          <input type="text" class="form-control input-sm" [(ngModel)]="distance['price']" placeholder="ລາຄາ">
+                          <input type="number" class="form-control input-sm" [(ngModel)]="distance['price']" placeholder="ລາຄາ">
                         </div>
                       </td>
                       <td>

@@ -219,6 +219,7 @@ export class AnotherUpdateComponent implements OnInit {
   }
 
   croppedImage() {
+    const new_image = this.data['image'];
     this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ອັບໂຫຼດ',
@@ -228,7 +229,6 @@ export class AnotherUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         this.uploadPercent = 0;
-        const new_image = this.data;
         this.uploadImageChecked = true;
         const anotherRef = this.firebaseStorage.ref('Anothers');
         const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64

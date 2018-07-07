@@ -18,6 +18,7 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <label>ຊື່ສະຖານທີ່ພັກແຮມ</label>
+                    <span style="color: red;" [hidden]="!shelterForm.controls['shelt_name'].hasError('required')">*</span>
                     <input type="text" class="form-control" id="shelt_name" formControlName="shelt_name" placeholder="ຊື່ສະຖານທີ່ພັກແຮມ">
                   </div>
                   <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_name'].errors && shelterForm.controls['shelt_name'].dirty">
@@ -27,10 +28,14 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດສະຖານທີ່ພັກແຮມ</span>
+                  <span style="color: red;" [hidden]="!shelterForm.controls['shelt_type'].hasError('required')">*</span>
                   <select class="form-control select2" id="shelt_type" formControlName="shelt_type" style="width: 100%;">
                     <option *ngFor="let type of shelter_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
-                  </div>
+                </div>
+                <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_type'].errors && shelterForm.controls['shelt_type'].dirty">
+                  <li [hidden]="!shelterForm.controls['shelt_type'].hasError('required')">ຍັງບໍ່ເລືອກປະເພດສະຖານທີ່ພັກແຮມ</li>
+                </ul>
               </div>
             </div>
             <!-- Attraction row -->
@@ -58,6 +63,7 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ບ້ານ</span>
+                    <span style="color: red;" [hidden]="!shelterForm.controls['shelt_village'].hasError('required')">*</span>
                     <input 
                           type="text" 
                           class="form-control" 
@@ -101,12 +107,14 @@
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                   <span>ລັດຕິຈຸດ</span>
+                  <span style="color: red;" [hidden]="!shelterForm.controls['shelt_lat'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly formControlName="shelt_lat" id="shelt_lat" placeholder="ລັດຕິຈຸດ">
                 </div>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                     <span>ລອງຕິຈຸດ</span>
+                    <span style="color: red;" [hidden]="!shelterForm.controls['shelt_long'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly formControlName="shelt_long" id="shelt_long" placeholder="ລອງຕິຈຸດ">
                 </div>
               </div>
@@ -134,6 +142,7 @@
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ເບີໂທ</span>
+                    <span style="color: red;" [hidden]="!shelterForm.controls['shelt_tel'].hasError('required')">*</span>
                     <input type="text" class="form-control"  id="shelt_tel" formControlName="shelt_tel" placeholder="ເບີໂທຕິດຕໍ່">
                   </div>
                   <ul class="error-message-one" *ngIf="shelterForm.controls['shelt_tel'].errors && shelterForm.controls['shelt_tel'].dirty">
@@ -143,6 +152,7 @@
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ອີເມວ</span>
+                    <span style="color: red;" [hidden]="!shelterForm.controls['shelt_email'].hasError('required')">*</span>
                     <input type="email" class="form-control"  id="shelt_email" formControlName="shelt_email" placeholder="ອີເມວຕິດຕໍ່">
                   </div>
                   <ul class="error-message-many" *ngIf="shelterForm.controls['shelt_email'].errors && shelterForm.controls['shelt_email'].dirty">
@@ -199,6 +209,7 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <span style="color: red;" [hidden]="shelterForm.value['images'].length">*</span>
                   <input type="file" accept="image/*" id="shelt_images" (change)="fileChangeListener($event, null)">
                 </div>
                 <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
@@ -229,8 +240,8 @@
               </div>
               <div class="col-lg-12 col-xs-12" *ngIf="shelterForm.value['shelt_video'] && shelterForm.controls['shelt_video'].valid">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" [src]="safeVideoUrl(shelterForm.value['shelt_video'])"
-                            frameborder="0" allowfullscreen></iframe>
+                    <embed class="embed-responsive-item" [src]="safeVideoUrl(shelterForm.value['shelt_video'])"
+                            frameborder="0" allowfullscreen>
                   </div>
               </div>
             </div>
@@ -262,6 +273,7 @@
                                     <div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                           <span>ແບບຫ້ອງນອນ</span>
+                                          <span style="color: red;" [hidden]="!room.controls['style'].hasError('required')">*</span>
                                           <input type="text" class="form-control input-sm" formControlName="style" placeholder="ແບບຫ້ອງນອນ">
                                         </div>
                                         <ul class="error-message-one" *ngIf="room.controls['style'].errors && room.controls['style'].dirty">
@@ -269,6 +281,7 @@
                                         </ul>
                                         <div class="form-group">
                                           <span>ລາຄາ</span>
+                                          <span style="color: red;" [hidden]="!room.controls['price'].hasError('required')">*</span>
                                           <input type="number" class="form-control input-sm" formControlName="price" placeholder="ລາຄາ">
                                         </div>
                                         <ul class="error-message-many" *ngIf="room.controls['price'].errors && room.controls['price'].dirty">
@@ -277,6 +290,7 @@
                                         </ul>
                                         <div class="form-group">
                                           <span for="room_images">ເລືອກຮູບ</span>
+                                          <span style="color: red;" [hidden]="!room.controls['room_image'].hasError('required')">*</span>
                                           <input type="file" accept="image/*" id="room_image" (change)="fileChangeListener($event, j)">
                                         </div>
                                     </div>

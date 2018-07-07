@@ -68,7 +68,7 @@ export class AttractionInsertComponent implements OnInit {
       att_district: [null, [Validators.required]],
       att_village: [null, [Validators.required]],
       att_price: formBuilder.group({
-        adult: new FormControl(null, [Validators.required, Validators.min(0)]),
+        adult: new FormControl(null, [Validators.min(0)]),
         foreign: new FormControl(null, [Validators.min(0)]),
         children: new FormControl(null, [Validators.min(0)])
       }),
@@ -356,6 +356,7 @@ export class AttractionInsertComponent implements OnInit {
                   }
                 }
                 this.attractionsForm.reset();
+                this.attractionsForm.get('att_top').setValue('false');
                 this.initAddress();
               }, 3000);
             }, (error) => {

@@ -14,6 +14,7 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <label>ຊື່ສະຖານີ</label>
+                    <span style="color: red;" [hidden]="!transportationForm.controls['tran_name'].hasError('required')">*</span>
                     <input type="text" class="form-control" id="tran_name" formControlName="tran_name" placeholder="ຊື່ສະຖານີ">
                   </div>
                   <ul class="error-message-one" *ngIf="transportationForm.controls['tran_name'].errors && transportationForm.controls['tran_name'].dirty">
@@ -23,12 +24,13 @@
               <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="form-group" style="margin-top: 5px;">
                   <span>ປະເພດສະຖານີ</span>
+                  <span style="color: red;" [hidden]="!transportationForm.controls['tran_type'].hasError('required')">*</span>
                   <select class="form-control select2" id="tran_type" formControlName="tran_type" style="width: 100%;" (change)="getServiceAutocomplete()">
                     <option *ngFor="let type of transportation_types" value="{{type['_id']}}">{{type['name']}}</option>
                   </select>
                 </div>
                 <ul class="error-message-one" *ngIf="transportationForm.controls['tran_type'].errors && transportationForm.controls['tran_type'].dirty">
-                  <li [hidden]="!transportationForm.controls['tran_type'].hasError('required')">ເພີ່ມປະເພດສະຖານີຂົນສົ່ງໂດຍສານກ່ອນ</li>
+                  <li [hidden]="!transportationForm.controls['tran_type'].hasError('required')">ຍັງບໍ່ເລືອກປະເພດສະຖານີຂົນສົ່ງໂດຍສານ</li>
                 </ul>
               </div>
             </div>
@@ -55,6 +57,7 @@
                 <div class="col-lg-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <span>ບ້ານ</span>
+                    <span style="color: red;" [hidden]="!transportationForm.controls['tran_village'].hasError('required')">*</span>
                     <input 
                           type="text" 
                           class="form-control" 
@@ -95,12 +98,14 @@
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                   <span>ລັດຕິຈຸດ</span>
+                  <span style="color: red;" [hidden]="!transportationForm.controls['tran_lat'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly formControlName="tran_lat" id="tran_lat" placeholder="ລັດຕິຈຸດ">
                 </div>
               </div>
               <div class="col-lg-6 col-xs-12">
                 <div class="form-group">
                     <span>ລອງຕິຈຸດ</span>
+                    <span style="color: red;" [hidden]="!transportationForm.controls['tran_long'].hasError('required')">*</span>
                   <input type="text" class="form-control" readonly id="tran_long" formControlName="tran_long" placeholder="ລອງຕິຈຸດ">
                 </div>
               </div>
@@ -125,6 +130,7 @@
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ເບີໂທ</span>
+                    <span style="color: red;" [hidden]="!transportationForm.controls['tran_tel'].hasError('required')">*</span>
                     <input type="text" class="form-control"  id="tran_tel" formControlName="tran_tel" placeholder="ເບີໂທຕິດຕໍ່">
                   </div>
                   <ul class="error-message-one" *ngIf="transportationForm.controls['tran_tel'].errors && transportationForm.controls['tran_tel'].dirty">
@@ -134,6 +140,7 @@
                 <div class="col-lg-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                     <span>ອີເມວ</span>
+                    <span style="color: red;" [hidden]="!transportationForm.controls['tran_email'].hasError('required')">*</span>
                     <input type="email" class="form-control"  id="tran_email" formControlName="tran_email" placeholder="ອີເມວຕິດຕໍ່">
                   </div>
                   <ul class="error-message-many" *ngIf="transportationForm.controls['tran_email'].errors && transportationForm.controls['tran_email'].dirty">
@@ -190,6 +197,7 @@
               <div class="col-lg-12 col-xs-12">
                 <div class="form-group">
                   <label for="res_images">ເລືອກຮູບ</label> (<span class="help-text">ສາມາດເລືອກໄດ້ຫຼາຍຮູບ</span>)
+                  <span style="color: red;" [hidden]="transportationForm.value['images'].length">*</span>
                   <input type="file" accept="image/*" id="res_images" (change)="fileChangeListener($event)">
                 </div>
                 <ul class="error-message-one" *ngIf="checkImageAfterTrigerForm">
@@ -220,8 +228,8 @@
             </div>
             <div class="col-lg-12 col-xs-12" *ngIf="transportationForm.value['tran_video'] && transportationForm.controls['tran_video'].valid">
               <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" [src]="safeVideoUrl(transportationForm.value['tran_video'])"
-                          frameborder="0" allowfullscreen></iframe>
+                  <embed class="embed-responsive-item" [src]="safeVideoUrl(transportationForm.value['tran_video'])"
+                          frameborder="0" allowfullscreen>
                 </div>
             </div>
           </div>
@@ -250,6 +258,7 @@
                                 <div class="box-body">
                                   <div class="form-group">
                                     <span>ຍານພາຫະນະບໍລິການ</span>
+                                    <span style="color: red;" [hidden]="!service.controls['service_name'].hasError('required')">*</span>
                                     <input 
                                           type="text" 
                                           class="form-control" 

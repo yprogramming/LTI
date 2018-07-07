@@ -282,7 +282,7 @@ export class ShelterUpdateComponent implements OnInit {
   }
 
   croppedImage() {
-    const newImage = this.data.image;
+    const new_image = this.data['image'];
     if ( this.roomIndex === null) {
       this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
@@ -293,7 +293,6 @@ export class ShelterUpdateComponent implements OnInit {
       }).subscribe((res) => {
         if (res) {
           this.uploadPercent = 0;
-          const new_image = this.data['image'];
           this.uploadImageChecked = true;
           const shelterRef = this.firebaseStorage.ref('Shelters');
           const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
@@ -374,10 +373,10 @@ export class ShelterUpdateComponent implements OnInit {
         }
       });
     } else if ( this.roomIndex >= 0 ) {
-      this.updateRoomForm.get('image').setValue(newImage);
+      this.updateRoomForm.get('image').setValue(new_image);
       this.cropImageChecked = false;
     } else if ( this.roomIndex === 'add') {
-      this.addNewRoomForm.get('room_image').setValue(newImage);
+      this.addNewRoomForm.get('room_image').setValue(new_image);
       this.cropImageChecked = false;
     }
     this.roomIndex = null;

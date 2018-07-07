@@ -297,7 +297,7 @@ export class RestaurantUpdateComponent implements OnInit {
   }
 
   croppedImage() {
-    const newImage = this.data.image;
+    const new_image = this.data['image'];
     if ( this.foodIndex === null) {
       this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
         theme: 'material', // available themes: 'default' | 'material' | 'dark'
@@ -309,7 +309,6 @@ export class RestaurantUpdateComponent implements OnInit {
         if (res) {
           this.uploadPercent = 0;
           this.uploadImageChecked = true;
-          const new_image = this.data['image'];
           const restaurantRef = this.firebaseStorage.ref('Restaurant');
           const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
           const imageName = StaticFunc.ramdomText() + Date.now().toString() + '.' + imageObject; // ກຳນົດຊີ່ຮູບໃຫມ່
@@ -324,7 +323,7 @@ export class RestaurantUpdateComponent implements OnInit {
                   this.uploadImageChecked = false;
                   this.savingChecked = true;
                   const data = {
-                    res_id: this.restaurant['_id'],
+                    restaurant_id: this.restaurant['_id'],
                     img_url: image_url
                   };
 
@@ -389,10 +388,10 @@ export class RestaurantUpdateComponent implements OnInit {
         }
       });
     } else if ( this.foodIndex >= 0 ) {
-      this.updateFoodForm.get('image').setValue(newImage);
+      this.updateFoodForm.get('image').setValue(new_image);
       this.cropImageChecked = false;
     } else if ( this.foodIndex === 'add') {
-      this.addNewFoodForm.get('add_image').setValue(newImage);
+      this.addNewFoodForm.get('add_image').setValue(new_image);
       this.cropImageChecked = false;
     }
     this.foodIndex = null;
@@ -1056,7 +1055,7 @@ export class RestaurantUpdateComponent implements OnInit {
                       res_id: this.restaurant['_id'],
                       res_name: this.restaurant['name'],
                       food: {
-                        id: this.updateFoodForm.value['id'],
+                        id: this.updateFoodForm.value['_id'],
                         food_name: this.updateFoodForm.value['food_name'],
                         food_type: this.updateFoodForm.value['food_type'],
                         food_price: this.updateFoodForm.value['food_price'],

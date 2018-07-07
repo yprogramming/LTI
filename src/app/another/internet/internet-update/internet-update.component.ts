@@ -219,6 +219,7 @@ export class InternetUpdateComponent implements OnInit {
   }
 
   croppedImage() {
+    const new_image = this.data['image'];
     this.coolDialogs.confirm('ອັບໂຫຼດ ແລະ ບັນທືກຮູບນີ້ແທ້ບໍ?', {
       theme: 'material', // available themes: 'default' | 'material' | 'dark'
       okButtonText: 'ອັບໂຫຼດ',
@@ -228,7 +229,6 @@ export class InternetUpdateComponent implements OnInit {
     }).subscribe((res) => {
       if (res) {
         this.uploadPercent = 0;
-        const new_image = this.data['image'];
         this.uploadImageChecked = true;
         const internetRef = this.firebaseStorage.ref('Internets');
         const imageObject = new_image.split(',')[0].split('/')[1].split(';')[0]; // ຕັດເອົານາດສະກຸນອອກຈາກຮູບທີ່ເປັນ Base 64
@@ -826,7 +826,6 @@ export class InternetUpdateComponent implements OnInit {
             social: this.addNewSocialForm.value
           };
           this.internetService.insertSocial(data).subscribe((success) => {
-            console.log(success.json()['data']);
             this.internet_center['socials'].push(success.json()['data']);
             this.addNewSocialForm.reset();
           }, (error) => {
